@@ -1,5 +1,5 @@
 <template>
-    <div>{{ res }}</div>
+    <div class="text-3xl font-bold underline">{{ res }}</div>
 </template>
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue';
