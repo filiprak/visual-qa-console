@@ -14,9 +14,15 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "strict": true
+        "strict": true,
+        "paths": {
+            "@/types": [
+                "../shared/types.d.ts"
+            ]
+        }
     },
     "include": [
-        "./src/**/*"
+        "./src/**/*",
+        "../shared/*.d.ts"
     ]
 }

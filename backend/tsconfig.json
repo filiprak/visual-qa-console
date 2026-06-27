@@ -10,9 +10,15 @@
         "outDir": "../dist/backend",
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "paths": {
+            "@/types": [
+                "../shared/types.d.ts"
+            ]
+        }
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "../shared/*.d.ts"
     ]
 }

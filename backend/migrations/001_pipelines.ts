@@ -4,6 +4,7 @@ export async function up(knex: Knex) {
     await knex.schema.createTable('pipelines', table => {
         table.increments('id');
         table.string('name');
+        table.string('hash');
         table.timestamps(true, true);
     });
 }
