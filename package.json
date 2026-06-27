@@ -5,7 +5,7 @@
   "main": "./src/backend/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"pnpm run build:back:watch\" \"pnpm run watch\"",
+    "dev": "concurrently --kill-others-on-fail \"pnpm run build:back:watch\" \"sleep 5 && pnpm run watch\"",
     "build:front": "vite build",
     "build:back": "tsc -p backend/tsconfig.json",
     "build:back:watch": "tsc --watch -p backend/tsconfig.json",

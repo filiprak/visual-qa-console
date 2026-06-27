@@ -5,7 +5,7 @@
                 <template #header>
                     {{ p.name }}
                 </template>
-                {{ p.hash }}
+                {{ p }}
             </Panel>
         </div>
     </div>
