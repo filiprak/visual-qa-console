@@ -7,13 +7,13 @@ import tailwindcss from '@tailwindcss/vite'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.');
 
 export default defineConfig({
-    root: './frontend',
+    root: path.resolve(root, 'frontend/'),
     plugins: [
         vue(),
         tailwindcss(),
     ],
     build: {
-        outDir: '../dist/frontend/',
+        outDir: path.resolve(root, 'dist/frontend/'),
         rolldownOptions: {
             input: path.resolve(root, 'frontend/index.html'),
         },

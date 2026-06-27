@@ -11,8 +11,8 @@ import { PipelinesService } from './services/pipelines/pipelines.service.js';
 import type { ServiceTypes } from './services/services.d.ts';
 
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const isDev = process.env.NODE_ENV === 'development';
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
+const isDev = process.argv[2] === 'development';
 const port = parseInt(process.env.PORT || '8080');
 const host = process.env.HOST || 'localhost';
 
@@ -35,7 +35,7 @@ async function createServer() {
         app.use(koaConnect(vite.middlewares));
     } else {
         // 1. Serve assets from production build folder
-        app.use(koaStatic(path.resolve(root, 'frontend'), { index: false }));
+        app.use(koaStatic(path.resolve(root, 'dist/frontend'), { index: false }));
     }
 
     // API Services
@@ -57,7 +57,7 @@ async function createServer() {
                 template = await vite.transformIndexHtml(url, template);
             } else {
                 template = fs.readFileSync(
-                    path.resolve(root, 'frontend/index.html'),
+                    path.resolve(root, 'dist/frontend/index.html'),
                     'utf-8'
                 );
             }
