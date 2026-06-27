@@ -1,7 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import express from 'express';
+import { feathers } from '@feathersjs/feathers';
+import { koa } from '@feathersjs/koa';
+import koaConnect from 'koa-connect';
+import koaStatic from 'koa-static';
+import type { ViteDevServer } from 'vite';
+
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const isDev = process.env.NODE_ENV === 'development';
@@ -9,8 +14,9 @@ const port = parseInt(process.env.PORT || '8080');
 const host = process.env.HOST || 'localhost';
 
 async function createServer() {
-    const app = express();
-    let vite: any;
+    const app = koa(feathers());
+
+    let vite: ViteDevServer;
 
     if (isDev) {
         const { createServer: createViteServer } = await import('vite');
@@ -19,35 +25,56 @@ async function createServer() {
             server: { middlewareMode: true },
             appType: 'custom',
         });
-        app.use(vite.middlewares);
+        app.use(koaConnect(vite.middlewares));
     } else {
         // 1. Serve assets from production build folder
-        app.use(express.static(path.resolve(root, 'frontend'), { index: false }));
+        app.use(koaStatic(path.resolve(root, 'frontend'), { index: false }));
     }
 
     // API Routes
-    app.get('/api', (req, res) => {
-        res.json({ message: 'Hello from the backend!' });
+    app.use(async (ctx, next) => {
+        if (ctx.path === '/api' && ctx.method === 'GET') {
+            ctx.body = {
+                message: 'Hello from the backend!',
+            };
+            return;
+        }
+
+        await next();
     });
 
-    // 3. Fallback: Serve index.html for Single Page Applications (SPA)
-    app.use(async (req, res, next) => {
-        const url = req.originalUrl;
-
+    // SPA fallback
+    app.use(async (ctx, next) => {
         try {
+            const url = ctx.originalUrl;
+
             let template: string;
 
-            if (isDev) {
-                template = fs.readFileSync(path.resolve(root, 'frontend/index.html'), 'utf-8');
+            if (isDev && vite) {
+                template = fs.readFileSync(
+                    path.resolve(root, 'frontend/index.html'),
+                    'utf-8'
+                );
+
                 template = await vite.transformIndexHtml(url, template);
             } else {
-                template = fs.readFileSync(path.resolve(root, 'frontend/index.html'), 'utf-8');
+                template = fs.readFileSync(
+                    path.resolve(root, 'frontend/index.html'),
+                    'utf-8'
+                );
             }
 
-            res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
-        } catch (e) {
-            if (isDev) vite.ssrFixStacktrace(e as Error);
-            next(e);
+            ctx.type = 'text/html';
+            ctx.status = 200;
+            ctx.body = template;
+
+        } catch (error) {
+            if (isDev && vite) {
+                vite.ssrFixStacktrace(error as Error);
+            }
+
+            await next();
+            throw error;
         }
     });
 
