@@ -4,7 +4,7 @@
         v-tooltip="'Switch dark/light mode'"
         :icon="theme == 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
         severity="secondary"
-        variant="outlined"
+        variant="text"
     >
     </Button>
 </template>
