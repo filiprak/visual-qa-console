@@ -8,15 +8,15 @@
 
         <!-- Menu -->
         <nav class="flex flex-col gap-4 grow">
-            <Button v-for="item in menuItems"
-                    :key="item.label"
-                    tag="a"
-                    href="#"
-                    severity="secondary"
-                    variant="outlined"
-                    :icon="'pi ' + item.icon"
-                    v-tooltip="item.label">
-            </Button>
+            <RouterLink v-for="item in menuItems"
+                        :key="item.label"
+                        :to="item.path">
+                <Button severity="secondary"
+                        variant="outlined"
+                        :icon="'pi ' + item.icon"
+                        v-tooltip="item.label">
+                </Button>
+            </RouterLink>
             <Divider></Divider>
             <ThemeSwitch></ThemeSwitch>
         </nav>
@@ -32,20 +32,24 @@ import Divider from 'primevue/divider';
 interface MenuItem {
     label: string;
     icon: string;
+    path: string;
 }
 
 const menuItems: MenuItem[] = [
     {
         label: "Dashboard",
         icon: "pi-home",
+        path: '/',
     },
     {
         label: "Analytics",
         icon: "pi-chart-bar",
+        path: '/analytics',
     },
     {
         label: "Settings",
         icon: "pi-cog",
+        path: '/settings',
     },
 ];
 </script>
