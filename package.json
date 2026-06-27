@@ -9,6 +9,7 @@
     "build:front": "vite build",
     "build:back": "tsc -p backend/tsconfig.json",
     "build": "pnpm build:front && pnpm build:back",
+    "prev": "pnpm build && pnpm start",
     "clean": "rm -rf dist/",
     "start": "node dist/backend/src/index.js"
   },
