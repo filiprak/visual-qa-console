@@ -2,10 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { feathers } from '@feathersjs/feathers';
-import { koa } from '@feathersjs/koa';
+import { koa, rest, bodyParser, errorHandler } from '@feathersjs/koa';
 import koaConnect from 'koa-connect';
 import koaStatic from 'koa-static';
 import type { ViteDevServer } from 'vite';
+import { db } from './db.js';
+import { PipelinesService } from './services/pipelines/pipelines.service.js';
 
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -15,6 +17,10 @@ const host = process.env.HOST || 'localhost';
 
 async function createServer() {
     const app = koa(feathers());
+
+    app.use(errorHandler())
+    app.use(bodyParser())
+    app.configure(rest());
 
     let vite: ViteDevServer;
 
@@ -31,17 +37,8 @@ async function createServer() {
         app.use(koaStatic(path.resolve(root, 'frontend'), { index: false }));
     }
 
-    // API Routes
-    app.use(async (ctx, next) => {
-        if (ctx.path === '/api' && ctx.method === 'GET') {
-            ctx.body = {
-                message: 'Hello from the backend!',
-            };
-            return;
-        }
-
-        await next();
-    });
+    // API Services
+    app.use('/api/pipelines', PipelinesService.factory(db));
 
     // SPA fallback
     app.use(async (ctx, next) => {

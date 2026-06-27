@@ -5,12 +5,13 @@
   "main": "./src/backend/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --watch backend/src --ext ts --exec ts-node backend/src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --watch backend/src --ext ts --exec node --loader ts-node/esm backend/src/index.ts",
     "build:front": "vite build",
     "build:back": "tsc -p backend/tsconfig.json",
     "build": "pnpm build:front && pnpm build:back",
     "prev": "pnpm build && pnpm start",
     "clean": "rm -rf dist/",
+    "migrate": "pnpm exec ts-node backend/migrate.ts",
     "start": "node dist/backend/src/index.js"
   },
   "keywords": [],
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@feathersjs/feathers": "^5.0.45",
+    "@feathersjs/knex": "^5.0.45",
     "@feathersjs/koa": "^5.0.45",
     "@primeuix/themes": "^2.0.3",
     "@tailwindcss/vite": "^4.3.1",

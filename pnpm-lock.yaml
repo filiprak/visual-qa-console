@@ -210,6 +210,9 @@ importers:
       '@feathersjs/feathers':
         specifier: ^5.0.45
         version: 5.0.45
+      '@feathersjs/knex':
+        specifier: ^5.0.45
+        version: 5.0.45(knex@3.3.0(sqlite3@6.0.1))
       '@feathersjs/koa':
         specifier: ^5.0.45
         version: 5.0.45(typescript@5.9.3)
@@ -361,6 +364,12 @@ packages:
   '@feathersjs/hooks@0.9.0':
     resolution: {integrity: sha512-kLfWnuhbC25CPkR1/TDcVs0rSiv0JLNxrpUivLwc7FUnkyeciRi5VOmC1SOzL2SOagcozu3+m4VQiONyzgfY7w==}
     engines: {node: '>= 14'}
+
+  '@feathersjs/knex@5.0.45':
+    resolution: {integrity: sha512-Uh1j+cYgcP57P66IkBH02jkSNcgi6kvyfxrXeMI/xHCXoWDrJnUoF7xDebhcSNjFBnwAYEznyk/mmG+FsGCGww==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      knex: '>=3.2.8'
 
   '@feathersjs/koa@5.0.45':
     resolution: {integrity: sha512-Uwk4Z4ZdVLtqOga78+X5FdLO9Rl6vKV133mt7qIqh69JtUdI2UOoWOAA5J4mUngmTHlpA83IPaPAdX7bVI3xOw==}
@@ -2118,6 +2127,14 @@ snapshots:
       events: 3.3.0
 
   '@feathersjs/hooks@0.9.0': {}
+
+  '@feathersjs/knex@5.0.45(knex@3.3.0(sqlite3@6.0.1))':
+    dependencies:
+      '@feathersjs/adapter-commons': 5.0.45
+      '@feathersjs/commons': 5.0.45
+      '@feathersjs/errors': 5.0.45
+      '@feathersjs/feathers': 5.0.45
+      knex: 3.3.0(sqlite3@6.0.1)
 
   '@feathersjs/koa@5.0.45(typescript@5.9.3)':
     dependencies:
