@@ -1,9 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "typeRoots": [
-            "node"
-        ],
+        "typeRoots": ["node"],
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "rootDir": ".",
@@ -12,13 +10,8 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "paths": {
-            "@/types": [
-                "../shared/types.d.ts"
-            ]
+            "@/types": ["../shared/types.d.ts"]
         }
     },
-    "include": [
-        "src/**/*",
-        "../shared/*.d.ts"
-    ]
+    "include": ["src/**/*", "../shared/*.d.ts"]
 }

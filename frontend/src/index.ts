@@ -6,7 +6,7 @@ import ThemePreset from '@primeuix/themes/aura';
 import App from './App.vue';
 import router from './router';
 
-const app = createApp(App)
+const app = createApp(App);
 
 app.use(router);
 app.use(PrimeVue, {
@@ -15,6 +15,6 @@ app.use(PrimeVue, {
         options: {
             darkModeSelector: '.dark',
         },
-    }
+    },
 });
 app.mount('#app');

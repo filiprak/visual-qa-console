@@ -1,59 +1,61 @@
 {
-  "name": "visual-qa-console",
-  "version": "1.0.0",
-  "description": "A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows.",
-  "main": "./src/backend/index.ts",
-  "type": "module",
-  "scripts": {
-    "dev": "concurrently --kill-others-on-fail \"pnpm run build:back:watch\" \"sleep 5 && pnpm run watch\"",
-    "build:front": "vite build",
-    "build:back": "tsc -p backend/tsconfig.json",
-    "build:back:watch": "tsc --watch -p backend/tsconfig.json",
-    "watch": "nodemon --watch dist/backend/ --ext js dist/backend/src/index.js development",
-    "build": "pnpm build:front && pnpm build:back",
-    "prev": "pnpm build && pnpm start",
-    "clean": "rm -rf dist/",
-    "migrate": "pnpm exec ts-node backend/migrate.ts",
-    "start": "node dist/backend/src/index.js"
-  },
-  "keywords": [],
-  "author": "Filip Rak",
-  "license": "MIT",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.5.3",
-      "onFail": "download"
+    "name": "visual-qa-console",
+    "version": "1.0.0",
+    "description": "A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows.",
+    "main": "./src/backend/index.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "concurrently --kill-others-on-fail \"pnpm run build:back:watch\" \"sleep 5 && pnpm run watch\"",
+        "build:front": "vite build",
+        "build:back": "tsc -p backend/tsconfig.json",
+        "build:back:watch": "tsc --watch -p backend/tsconfig.json",
+        "watch": "nodemon --watch dist/backend/ --ext js dist/backend/src/index.js development",
+        "build": "pnpm build:front && pnpm build:back",
+        "prev": "pnpm build && pnpm start",
+        "clean": "rm -rf dist/",
+        "fix": "prettier --write .",
+        "migrate": "pnpm exec ts-node backend/migrate.ts",
+        "start": "node dist/backend/src/index.js"
+    },
+    "keywords": [],
+    "author": "Filip Rak",
+    "license": "MIT",
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "^11.5.3",
+            "onFail": "download"
+        }
+    },
+    "dependencies": {
+        "@feathersjs/feathers": "^5.0.45",
+        "@feathersjs/knex": "^5.0.45",
+        "@feathersjs/koa": "^5.0.45",
+        "@feathersjs/rest-client": "^5.0.45",
+        "@primeuix/themes": "^2.0.3",
+        "@tailwindcss/vite": "^4.3.1",
+        "knex": "^3.3.0",
+        "koa-connect": "^2.1.1",
+        "koa-static": "^5.0.0",
+        "primeicons": "^7.0.0",
+        "primevue": "^4.5.5",
+        "sqlite3": "^6.0.1",
+        "tailwindcss": "^4.3.1",
+        "tailwindcss-primeui": "^0.6.1",
+        "vue": "^3.5.39",
+        "vue-router": "^5.1.0"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.6",
+        "@types/koa-static": "^4.0.4",
+        "@types/node": "^26.0.1",
+        "@vitejs/plugin-vue": "^6.0.7",
+        "concurrently": "^10.0.3",
+        "cross-env": "^10.1.0",
+        "nodemon": "^3.1.14",
+        "prettier": "^3.8.5",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3",
+        "vite": "^8.1.0"
     }
-  },
-  "dependencies": {
-    "@feathersjs/feathers": "^5.0.45",
-    "@feathersjs/knex": "^5.0.45",
-    "@feathersjs/koa": "^5.0.45",
-    "@feathersjs/rest-client": "^5.0.45",
-    "@primeuix/themes": "^2.0.3",
-    "@tailwindcss/vite": "^4.3.1",
-    "knex": "^3.3.0",
-    "koa-connect": "^2.1.1",
-    "koa-static": "^5.0.0",
-    "primeicons": "^7.0.0",
-    "primevue": "^4.5.5",
-    "sqlite3": "^6.0.1",
-    "tailwindcss": "^4.3.1",
-    "tailwindcss-primeui": "^0.6.1",
-    "vue": "^3.5.39",
-    "vue-router": "^5.1.0"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/koa-static": "^4.0.4",
-    "@types/node": "^26.0.1",
-    "@vitejs/plugin-vue": "^6.0.7",
-    "concurrently": "^10.0.3",
-    "cross-env": "^10.1.0",
-    "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
-    "vite": "^8.1.0"
-  }
 }

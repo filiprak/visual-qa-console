@@ -21,5 +21,4 @@ const pipelines = ref<Pipeline[]>([]);
 onBeforeMount(async () => {
     pipelines.value = (await api.pipelines.find()).data;
 });
-
 </script>

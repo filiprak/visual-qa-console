@@ -1,5 +1,5 @@
-import type { PipelinesService } from "./pipelines/pipelines.service.ts";
+import type { PipelinesService } from './pipelines/pipelines.service.ts';
 
 export interface ServiceTypes {
-    '/api/v1/pipelines': PipelinesService,
+    '/api/v1/pipelines': PipelinesService;
 }

@@ -10,7 +10,6 @@ import { db } from './db.js';
 import { PipelinesService } from './services/pipelines/pipelines.service.js';
 import type { ServiceTypes } from './services/services.d.ts';
 
-
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const isDev = process.argv[2] === 'development';
 const port = parseInt(process.env.PORT || '8080');
@@ -19,8 +18,8 @@ const host = process.env.HOST || 'localhost';
 async function createServer() {
     const app = koa(feathers<ServiceTypes>());
 
-    app.use(errorHandler())
-    app.use(bodyParser())
+    app.use(errorHandler());
+    app.use(bodyParser());
     app.configure(rest());
 
     let vite: ViteDevServer;
@@ -49,23 +48,16 @@ async function createServer() {
             let template: string;
 
             if (isDev && vite) {
-                template = fs.readFileSync(
-                    path.resolve(root, 'frontend/index.html'),
-                    'utf-8'
-                );
+                template = fs.readFileSync(path.resolve(root, 'frontend/index.html'), 'utf-8');
 
                 template = await vite.transformIndexHtml(url, template);
             } else {
-                template = fs.readFileSync(
-                    path.resolve(root, 'dist/frontend/index.html'),
-                    'utf-8'
-                );
+                template = fs.readFileSync(path.resolve(root, 'dist/frontend/index.html'), 'utf-8');
             }
 
             ctx.type = 'text/html';
             ctx.status = 200;
             ctx.body = template;
-
         } catch (error) {
             if (isDev && vite) {
                 vite.ssrFixStacktrace(error as Error);
