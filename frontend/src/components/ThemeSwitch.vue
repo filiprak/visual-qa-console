@@ -9,8 +9,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-
-type Theme = "light" | "dark" | "system";
+import type { Theme } from "../types";
 
 const theme = ref<Theme>("system");
 
