@@ -1,0 +1,38 @@
+{
+  "name": "visual-qa-console",
+  "version": "1.0.0",
+  "description": "A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows.",
+  "main": "./src/backend/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon --watch backend/src --ext ts --exec ts-node backend/src/index.ts",
+    "build:front": "vite build",
+    "build:back": "tsc -p backend/tsconfig.json",
+    "build": "pnpm build:front && pnpm build:back",
+    "clean": "rm -rf dist/",
+    "start": "node dist/backend/src/index.js"
+  },
+  "keywords": [],
+  "author": "Filip Rak",
+  "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.5.3",
+      "onFail": "download"
+    }
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "vue": "^3.5.39"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "cross-env": "^10.1.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.0"
+  }
+}
