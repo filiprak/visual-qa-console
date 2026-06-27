@@ -1,53 +1,47 @@
 <template>
-    <select v-model="theme"
-            @change="applyTheme(theme)"
-            class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800">
-        <option value="light">☀️ Light</option>
-        <option value="dark">🌙 Dark</option>
-        <option value="system">💻 System</option>
-    </select>
+    <Button @click="toggle()"
+            v-tooltip="'Switch dark/light mode'"
+            :icon="theme == 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
+            severity="secondary"
+            variant="outlined">
+    </Button>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import Button from "primevue/button";
+import vTooltip from 'primevue/tooltip';
 import type { Theme } from "../types";
 
-const theme = ref<Theme>("system");
-
+const theme = ref<Theme>(localStorage.theme || systemTheme());
 const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+function systemTheme() {
+    return mediaQuery.matches ? 'dark' : 'light';
+}
+
+function toggle() {
+    const seq: Theme[] = ['light', 'dark'];
+    applyTheme(seq[(seq.indexOf(theme.value) + 1) % seq.length]);
+}
+
 function applyTheme(selected: Theme) {
-    const isDark =
-        selected === "dark" ||
-        (selected === "system" && mediaQuery.matches);
+    const isDark = selected === "dark";
 
     document.documentElement.classList.toggle("dark", isDark);
 
-    if (selected === "system") {
-        localStorage.removeItem("theme");
-    } else {
-        localStorage.theme = selected;
-    }
-
+    localStorage.theme = selected;
     theme.value = selected;
 }
 
 function loadTheme() {
-    if (localStorage.theme === "light") {
-        applyTheme("light");
-    } else if (localStorage.theme === "dark") {
+    if (localStorage.theme === "dark") {
         applyTheme("dark");
     } else {
-        applyTheme("system");
+        applyTheme("light");
     }
 }
 
 onMounted(() => {
     loadTheme();
-
-    mediaQuery.addEventListener("change", () => {
-        if (theme.value === "system") {
-            applyTheme("system");
-        }
-    });
 });
 </script>
