@@ -8,7 +8,8 @@ import koaStatic from 'koa-static';
 import type { ViteDevServer } from 'vite';
 import { db } from './db.js';
 import { PipelinesService } from './services/pipelines/pipelines.service.js';
-import type { ServiceTypes } from './services/services.d.ts';
+import { timestamps } from './hooks/timestamps.hook.js';
+import type { ServiceTypes, Configuration } from './declarations.d.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const isDev = process.argv[2] === 'development';
@@ -16,7 +17,7 @@ const port = parseInt(process.env.PORT || '8080');
 const host = process.env.HOST || 'localhost';
 
 async function createServer() {
-    const app = koa(feathers<ServiceTypes>());
+    const app = koa(feathers<ServiceTypes, Configuration>());
 
     app.use(errorHandler());
     app.use(bodyParser());
@@ -39,6 +40,11 @@ async function createServer() {
 
     // API Services
     app.use('/api/v1/pipelines', PipelinesService.factory(db));
+    app.hooks({
+        before: {
+            all: [timestamps],
+        },
+    });
 
     // SPA fallback
     app.use(async (ctx, next) => {
