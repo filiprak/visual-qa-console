@@ -8,7 +8,7 @@ import koaStatic from 'koa-static';
 import type { ViteDevServer } from 'vite';
 import { db } from './db.js';
 import { PipelinesService } from './services/pipelines/pipelines.service.js';
-import { timestamps } from './hooks/timestamps.hook.js';
+import { hooks } from './app.hooks.js';
 import type { ServiceTypes, Configuration } from './declarations.d.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -22,6 +22,7 @@ async function createServer() {
     app.use(errorHandler());
     app.use(bodyParser());
     app.configure(rest());
+    app.hooks(hooks);
 
     let vite: ViteDevServer;
 
@@ -40,11 +41,6 @@ async function createServer() {
 
     // API Services
     app.use('/api/v1/pipelines', PipelinesService.factory(db));
-    app.hooks({
-        before: {
-            all: [timestamps],
-        },
-    });
 
     // SPA fallback
     app.use(async (ctx, next) => {
