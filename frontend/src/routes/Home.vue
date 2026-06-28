@@ -19,12 +19,14 @@ import type { Pipeline } from '@/types';
 const pipelines = ref<Pipeline[]>([]);
 
 onBeforeMount(async () => {
-    pipelines.value = (await api.pipelines.find({
-        query: {
-            $sort: {
-                name: -1
+    pipelines.value = (
+        await api.pipelines.find({
+            query: {
+                $sort: {
+                    name: -1,
+                },
             },
-        },
-    })).data;
+        })
+    ).data;
 });
 </script>

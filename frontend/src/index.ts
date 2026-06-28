@@ -23,9 +23,6 @@ app.use(ToastService);
 app.config.errorHandler = (err, instance, info) => {
     console.error(err);
 
-    showError(
-        err instanceof Error ? [err.name, err.message].join(': ') : String(err),
-        "Application Error"
-    );
+    showError(err instanceof Error ? [err.name, err.message].join(': ') : String(err), 'Application Error');
 };
 app.mount('#app');
