@@ -4,6 +4,6 @@ import { timestamps } from './hooks/timestamps.hook.js';
 
 export const hooks: ApplicationHookOptions<Application> = {
     before: {
-        all: [timestamps],
+        all: [],
     },
 };

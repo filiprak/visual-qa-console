@@ -273,6 +273,12 @@ importers:
       '@feathersjs/rest-client':
         specifier: ^5.0.45
         version: 5.0.45
+      '@feathersjs/schema':
+        specifier: ^5.0.45
+        version: 5.0.45(typescript@5.9.3)
+      '@feathersjs/typebox':
+        specifier: ^5.0.45
+        version: 5.0.45(typescript@5.9.3)
       '@primeuix/themes':
         specifier: ^2.0.3
         version: 2.0.3
@@ -455,6 +461,10 @@ packages:
     resolution: {integrity: sha512-AsrcsHwp89nfjHKOUMPb0n8F1REt3NbjT03hBnzMznbRMoGNpV8SnlwSlulW60aF69R6lr61doGC2ye4hpYFzA==}
     engines: {node: '>= 12'}
 
+  '@feathersjs/typebox@5.0.45':
+    resolution: {integrity: sha512-ZqeMjwVX/HlmLwILNPDdkCuNQAiOv8Ye4HqFrzxp0FKI+szQrFY4EOx+8MwbVK3mZRqcvL3XAUgfC8enYfbUXw==}
+    engines: {node: '>= 12'}
+
   '@hapi/bourne@3.0.0':
     resolution: {integrity: sha512-Waj1cwPXJDucOib4a3bAISsKJVb15MKi9IvmTI/7ssVEm6sywXGjVJDhl6/umt1pK1ZS7PacXU3A1PmFKHEZ2w==}
 
@@ -622,6 +632,9 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
+
+  '@sinclair/typebox@0.25.24':
+    resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
 
   '@tailwindcss/node@4.3.1':
     resolution: {integrity: sha512-6NDaqRoAMSXD1mr/RXu0HBvNE9a2n5tHPsxu9XHLws8o4Twes5rBM2205SUUiJ9goAtadrN6xTGX0UDEwp/N4A==}
@@ -2391,6 +2404,13 @@ snapshots:
       encodeurl: 2.0.0
       lodash: 4.18.1
 
+  '@feathersjs/typebox@5.0.45(typescript@5.9.3)':
+    dependencies:
+      '@feathersjs/schema': 5.0.45(typescript@5.9.3)
+      '@sinclair/typebox': 0.25.24
+    transitivePeerDependencies:
+      - typescript
+
   '@hapi/bourne@3.0.0': {}
 
   '@isaacs/fs-minipass@4.0.1':
@@ -2517,6 +2537,8 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.1': {}
+
+  '@sinclair/typebox@0.25.24': {}
 
   '@tailwindcss/node@4.3.1':
     dependencies:

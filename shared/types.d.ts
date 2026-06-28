@@ -1,5 +1,1 @@
-export interface Pipeline {
-    id: number;
-    name: string;
-    hash: string;
-}
+export { Pipeline } from '../backend/src/services/pipelines/pipelines.schema.ts';
