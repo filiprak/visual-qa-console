@@ -23,7 +23,7 @@ import type { Pipeline } from '@/types';
 const pipelines = ref<Pipeline[]>([]);
 
 function updateItem(item: Pipeline) {
-    api.pipelines.patch(item.id, { hash: (Math.random() * 10e8).toFixed(0) });
+    api.pipelines.patch(item.id, { commit_sha: (Math.random() * 10e8).toFixed(0) });
 }
 
 onBeforeMount(async () => {
