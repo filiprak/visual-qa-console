@@ -4,7 +4,7 @@ import { getValidateHooks } from '../../utils/hooks.js';
 import { KnexService } from '@feathersjs/knex';
 import { notAllowed } from '../../hooks/notAllowed.hook.js';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class PipelinesService extends KnexService<Pipeline> {}
 
 const ROUTE = '/api/v1/pipelines';
 
