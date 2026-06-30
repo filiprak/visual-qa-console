@@ -7,6 +7,10 @@ export async function up(knex: Knex) {
         table.string('commit_sha');
         table.string('branch_name');
         table.timestamps(true, true);
+
+        table.index(['commit_sha']);
+        table.index(['branch_name']);
+        table.index(['name', 'commit_sha', 'branch_name']);
     });
 }
 

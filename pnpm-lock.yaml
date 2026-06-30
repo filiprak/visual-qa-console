@@ -261,6 +261,9 @@ importers:
 
   .:
     dependencies:
+      '@feathersjs/errors':
+        specifier: ^5.0.46
+        version: 5.0.46
       '@feathersjs/feathers':
         specifier: ^5.0.45
         version: 5.0.45
@@ -428,8 +431,8 @@ packages:
     resolution: {integrity: sha512-dCe9Kfi+T6wRvhXLii1PJWaRAvqiJRMmBFsNzrrOi/wacph14NijUK63H8u/iy8Ni3gYIRaEYyBnKTfTbxbiRQ==}
     engines: {node: '>= 12'}
 
-  '@feathersjs/errors@5.0.45':
-    resolution: {integrity: sha512-BwMYJ62FMcB9yNyPW5ghr49k44Xv8tM+4lz2Sv9q2Gcf9Br2ZYBNOTH+2OAWVcdaCm/xAYdd/RWgUzzCIVRspg==}
+  '@feathersjs/errors@5.0.46':
+    resolution: {integrity: sha512-hdO59+xM7xPKMpARlWxpOHxKOpBAxQ/6XuPpsW0cvO/NkI6+6SB5KHIGBa9vEs/OZG5z+lJzn611PeMaGp0rXw==}
     engines: {node: '>= 12'}
 
   '@feathersjs/feathers@5.0.45':
@@ -2321,13 +2324,13 @@ snapshots:
   '@feathersjs/adapter-commons@5.0.45':
     dependencies:
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
 
   '@feathersjs/authentication@5.0.45(typescript@5.9.3)':
     dependencies:
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       '@feathersjs/hooks': 0.9.0
       '@feathersjs/schema': 5.0.45(typescript@5.9.3)
@@ -2342,7 +2345,7 @@ snapshots:
 
   '@feathersjs/commons@5.0.45': {}
 
-  '@feathersjs/errors@5.0.45': {}
+  '@feathersjs/errors@5.0.46': {}
 
   '@feathersjs/feathers@5.0.45':
     dependencies:
@@ -2356,7 +2359,7 @@ snapshots:
     dependencies:
       '@feathersjs/adapter-commons': 5.0.45
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       knex: 3.3.0(sqlite3@6.0.1)
 
@@ -2364,7 +2367,7 @@ snapshots:
     dependencies:
       '@feathersjs/authentication': 5.0.45(typescript@5.9.3)
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       '@feathersjs/transport-commons': 5.0.45
       '@koa/cors': 5.0.0
@@ -2384,7 +2387,7 @@ snapshots:
   '@feathersjs/rest-client@5.0.45':
     dependencies:
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       '@types/superagent': 8.1.10
       qs: 6.15.3
@@ -2393,7 +2396,7 @@ snapshots:
     dependencies:
       '@feathersjs/adapter-commons': 5.0.45
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       '@feathersjs/hooks': 0.9.0
       '@types/json-schema': 7.0.15
@@ -2405,7 +2408,7 @@ snapshots:
   '@feathersjs/transport-commons@5.0.45':
     dependencies:
       '@feathersjs/commons': 5.0.45
-      '@feathersjs/errors': 5.0.45
+      '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
       encodeurl: 2.0.0
       lodash: 4.18.1
