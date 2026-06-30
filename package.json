@@ -36,6 +36,7 @@
         "@feathersjs/schema": "^5.0.45",
         "@feathersjs/typebox": "^5.0.45",
         "@primeuix/themes": "^2.0.3",
+        "dayjs": "^1.11.21",
         "knex": "^3.3.0",
         "koa-connect": "^2.1.1",
         "koa-static": "^5.0.0",

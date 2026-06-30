@@ -6,6 +6,7 @@ import { querySyntax } from '@feathersjs/typebox';
 import type { TObject } from '@feathersjs/typebox';
 import { dataValidator, queryValidator } from '../validators.js';
 import type { Application, ServiceTypes } from '../declarations.js';
+import type { HookOptions } from '@feathersjs/feathers';
 
 // Define options needed for our auto-validation
 export interface AutoValidatingOptions<L, D, P, Q> extends KnexAdapterOptions {
@@ -30,7 +31,7 @@ export class DbServiceBase<
         this.opts = options;
     }
 
-    install(app: Application) {
+    install(app: Application, custom_hooks?: HookOptions<Application, this>) {
         const options = this.opts;
 
         app.use(this.opts.route, this as any);
@@ -54,5 +55,7 @@ export class DbServiceBase<
                 },
             });
         }
+
+        app.service(this.opts.route).hooks(custom_hooks as any);
     }
 }

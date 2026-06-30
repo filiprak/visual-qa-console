@@ -2,8 +2,9 @@ import type { Pipeline } from '@/types';
 import type { Application } from '../../declarations.js';
 import { DbServiceBase } from '../DbServiceBase.js';
 import { dataSchema, patchSchema, querySchema } from './pipelines.schema.js';
+import { timestamps } from '../../hooks/timestamps.hook.js';
 
-export class PipelinesService extends DbServiceBase<Pipeline> {}
+export class PipelinesService extends DbServiceBase<Pipeline> { }
 
 export default (app: Application) => {
     const service = new PipelinesService({
@@ -20,5 +21,10 @@ export default (app: Application) => {
             query: querySchema,
         },
     });
-    service.install(app);
+    service.install(app, {
+        before: {
+            patch: [timestamps],
+            update: [timestamps],
+        },
+    });
 };

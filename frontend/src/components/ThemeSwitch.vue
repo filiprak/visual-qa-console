@@ -1,11 +1,9 @@
 <template>
-    <Button
-        @click="toggle()"
-        v-tooltip="'Switch dark/light mode'"
-        :icon="theme == 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
-        severity="secondary"
-        variant="text"
-    >
+    <Button @click="toggle()"
+            v-tooltip="'Switch dark/light mode'"
+            :icon="theme == 'dark' ? 'pi pi-moon' : 'pi pi-sun'"
+            severity="secondary"
+            variant="text">
     </Button>
 </template>
 <script setup lang="ts">
@@ -14,8 +12,8 @@ import Button from 'primevue/button';
 import vTooltip from 'primevue/tooltip';
 import type { Theme } from '../types';
 
-const theme = ref<Theme>(localStorage.theme || systemTheme());
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const theme = ref<Theme>(localStorage.theme || systemTheme());
 
 function systemTheme() {
     return mediaQuery.matches ? 'dark' : 'light';

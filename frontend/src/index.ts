@@ -22,7 +22,11 @@ app.use(PrimeVue, {
 app.use(ToastService);
 app.config.errorHandler = (err, instance, info) => {
     console.error(err);
-
     showError(err instanceof Error ? [err.name, err.message].join(': ') : String(err), 'Application Error');
 };
+window.addEventListener('unhandledrejection', (e) => {
+    const err = e.reason;
+    console.error(err);
+    showError(err instanceof Error ? [err.name, err.message].join(': ') : String(err), 'Application Error');
+});
 app.mount('#app');

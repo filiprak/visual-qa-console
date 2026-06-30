@@ -282,6 +282,9 @@ importers:
       '@primeuix/themes':
         specifier: ^2.0.3
         version: 2.0.3
+      dayjs:
+        specifier: ^1.11.21
+        version: 1.11.21
       knex:
         specifier: ^3.3.0
         version: 3.3.0(sqlite3@6.0.1)
@@ -1086,6 +1089,9 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
 
   debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -3028,6 +3034,8 @@ snapshots:
       which: 2.0.2
 
   csstype@3.2.3: {}
+
+  dayjs@1.11.21: {}
 
   debug@3.2.7:
     dependencies:
