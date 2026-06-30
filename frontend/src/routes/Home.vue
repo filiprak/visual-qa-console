@@ -5,10 +5,12 @@
             <DataPaginated :service="api.pipelines">
                 <template #list="{ items }">
                     <div>
-                        <RouterLink v-for="item in items"
-                                    class="flex p-4 border-b border-b-gray-200 hover:bg-primary-50"
-                                    :to="{ path: `/pipelines/${item.id}` }"
-                                    :key="item.id">
+                        <RouterLink
+                            v-for="item in items"
+                            class="flex p-4 border-b border-b-gray-200 hover:bg-primary-50"
+                            :to="{ path: `/pipelines/${item.id}` }"
+                            :key="item.id"
+                        >
                             {{ item }}
                         </RouterLink>
                     </div>

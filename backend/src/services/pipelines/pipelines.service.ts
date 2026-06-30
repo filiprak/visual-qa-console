@@ -2,7 +2,7 @@ import type { Application } from '../../declarations.js';
 import { dataSchema, patchSchema, querySchema, type Pipeline } from './pipelines.schema.js';
 import { getValidateHooks } from '../../utils/hooks.js';
 import { KnexService } from '@feathersjs/knex';
-import { notAllowed } from '../../hooks/notAllowed.hook.js';
+import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 
 export class PipelinesService extends KnexService<Pipeline> {}
 
@@ -25,10 +25,10 @@ export default (app: Application) => {
     app.use(ROUTE, service);
     app.service(ROUTE).hooks({
         before: {
-            update: [notAllowed],
-            create: [notAllowed],
-            patch: [notAllowed],
-            remove: [notAllowed],
+            update: [notAllowedPublic],
+            create: [notAllowedPublic],
+            patch: [notAllowedPublic],
+            remove: [notAllowedPublic],
         },
     });
     app.service(ROUTE).hooks(validateHooks);

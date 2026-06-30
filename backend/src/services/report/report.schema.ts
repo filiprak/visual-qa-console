@@ -1,21 +1,14 @@
 import { Type, type Static } from '@feathersjs/typebox';
+import { publicSchema as testcaseSchema } from '../testcases/testcases.schema.js';
 
 const schema = Type.Object(
     {
         name: Type.String({ minLength: 3 }),
         commit_sha: Type.String(),
         branch_name: Type.String(),
-        testcases: Type.Array(
-            Type.Object(
-                {
-                    name: Type.String({ minLength: 3 }),
-                    result_img: Type.String(),
-                    diff_img: Type.Optional(Type.String()),
-                },
-                { additionalProperties: false },
-            ),
-            { maxItems: 10000 },
-        ),
+        testcases: Type.Array(Type.Pick(testcaseSchema, ['name', 'status', 'group', 'diff_img', 'result_img']), {
+            maxItems: 10000,
+        }),
     },
     { additionalProperties: false },
 );

@@ -5,8 +5,12 @@
             <div class="flex mb-6 bg-white dark:bg-black shadow shadow-gray-300 p-6 rounded-md">
                 {{ pipeline }}
             </div>
-            <div>
-                <DataPaginated :service="api.testcases"></DataPaginated>
+            <div v-if="pipeline">
+                <DataPaginated
+                    :service="api.testcases"
+                    :query="{ pipeline_id: pipeline.id }"
+                >
+                </DataPaginated>
             </div>
         </div>
     </div>
