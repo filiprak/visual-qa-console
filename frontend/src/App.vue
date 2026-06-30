@@ -1,7 +1,7 @@
 <template>
     <div class="app">
         <Nav></Nav>
-        <div class="grow bg-surface-200 dark:bg-surface-800">
+        <div>
             <RouterView></RouterView>
         </div>
     </div>
@@ -25,7 +25,6 @@ onBeforeMount(() => {
 </script>
 <style scoped>
 .app {
-    display: grid;
-    grid-template-columns: var(--nav-w) auto;
+    padding-left: var(--nav-w);
 }
 </style>
