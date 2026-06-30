@@ -5,11 +5,12 @@
             <DataPaginated :service="api.pipelines">
                 <template #list="{ items }">
                     <div>
-                        <div v-for="item in items"
-                             class="p-4 border-b border-b-gray-200"
-                             :key="item.id">
+                        <RouterLink v-for="item in items"
+                                    class="flex p-4 border-b border-b-gray-200 hover:bg-primary-50"
+                                    :to="{ path: `/pipelines/${item.id}` }"
+                                    :key="item.id">
                             {{ item }}
-                        </div>
+                        </RouterLink>
                     </div>
                 </template>
             </DataPaginated>
@@ -17,6 +18,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { RouterLink } from 'vue-router';
 import Panel from 'primevue/panel';
 import Button from 'primevue/button';
 import { api } from '../api';

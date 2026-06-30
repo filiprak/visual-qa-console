@@ -1,23 +1,34 @@
 <template>
-    <DataView
-        :value="rows"
-        lazy
-        paginator
-        :loading="loading"
-        :rows="rowsPerPage"
-        :totalRecords="total"
-        :first="first"
-        :sortField="sortField"
-        :sortOrder="sortOrder"
-        @page="onPage"
-        @sort="onSort"
-    >
+    <DataView :value="rows"
+              lazy
+              paginator
+              :loading="loading"
+              :rows="rowsPerPage"
+              :totalRecords="total"
+              :first="first"
+              :sortField="sortField"
+              :sortOrder="sortOrder"
+              @page="onPage"
+              @sort="onSort">
         <template #list="{ items }">
-            <slot
-                name="list"
-                :items="typeItems(items)"
-            >
+            <slot name="list"
+                  :items="typeItems(items)">
+                <div class="rounded-md"
+                     v-if="items.length > 0">
+                    <div v-for="item in items"
+                         class="flex p-4 border-b border-b-gray-200 hover:bg-primary-50">
+                        {{ item }}
+                    </div>
+                </div>
+                <div v-else>
+                    asds
+                </div>
             </slot>
+        </template>
+        <template #empty>
+            <div class="flex justify-center p-6">
+                <span>No items found</span>
+            </div>
         </template>
     </DataView>
 </template>
