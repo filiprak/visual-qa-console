@@ -1,24 +1,27 @@
 <template>
-    <div class="p-8">
-        <div class="grid grid-cols-4 gap-3">
-            <Panel v-for="p in pipelines">
-                <template #header>
-                    {{ p.name }}
+    <div class="p-8 flex justify-center">
+        <div class="max-w-[1600px] grow">
+            <h1 class="text-5xl font-semibold my-8">Pipelines</h1>
+            <DataPaginated :service="api.pipelines">
+                <template #list="{ items }">
+                    <div v-for="item in items"
+                         class="p-4"
+                         :key="item.id">
+                        {{ item }}
+                    </div>
                 </template>
-                {{ p }}
-                <template #footer>
-                    <Button @click="updateItem(p)">update</Button>
-                </template>
-            </Panel>
+            </DataPaginated>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import Panel from 'primevue/panel';
 import Button from 'primevue/button';
+import Column from 'primevue/column';
 import { api } from '../api';
 import { onBeforeMount, ref } from 'vue';
 import type { Pipeline } from '@/types';
+import DataPaginated from '../components/DataPaginated.vue';
 
 const pipelines = ref<Pipeline[]>([]);
 
