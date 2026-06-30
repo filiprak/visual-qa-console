@@ -14,7 +14,8 @@
         "prev": "pnpm build && pnpm start",
         "clean": "rm -rf dist/",
         "tsc": "concurrently \"vue-tsc --noEmit -p backend/tsconfig.json\" \"vue-tsc --noEmit -p frontend/tsconfig.json\"",
-        "fix": "prettier --write .",
+        "format": "prettier --write .",
+        "fix": "pnpm format && pnpm tsc",
         "migrate": "pnpm exec ts-node backend/migrate.ts",
         "start": "node dist/backend/src/index.js"
     },
@@ -36,6 +37,7 @@
         "@feathersjs/rest-client": "^5.0.45",
         "@feathersjs/schema": "^5.0.45",
         "@feathersjs/typebox": "^5.0.45",
+        "@primeicons/vue": "8.0.0-alpha.1",
         "@primeuix/themes": "^2.0.3",
         "dayjs": "^1.11.21",
         "knex": "^3.3.0",

@@ -23,7 +23,7 @@
                 >
                     <div
                         v-for="item in items"
-                        class="flex p-4 border-b border-b-gray-200 hover:bg-primary-50"
+                        class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
                     >
                         {{ item }}
                     </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import type { ClientService, FeathersService, Service } from '@feathersjs/feathers';
+import type { ClientService, FeathersService } from '@feathersjs/feathers';
 import DataView from 'primevue/dataview';
 import { ref, watch, onMounted } from 'vue';
 
