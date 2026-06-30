@@ -3,7 +3,7 @@ import { Type, type Static } from '@feathersjs/typebox';
 const schema = Type.Object(
     {
         name: Type.String({ minLength: 3 }),
-        commit_hash: Type.String(),
+        commit_sha: Type.String(),
         branch_name: Type.String(),
         testcases: Type.Array(
             Type.Object(
@@ -20,7 +20,7 @@ const schema = Type.Object(
     { additionalProperties: false },
 );
 
-export const dataSchema = Type.Pick(schema, ['name', 'commit_hash', 'branch_name', 'testcases']);
+export const dataSchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'testcases']);
 export const publicSchema = schema;
 
 export type Report = Static<typeof publicSchema>;
