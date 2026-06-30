@@ -4,9 +4,11 @@
             <h1 class="text-5xl font-semibold my-8">Pipelines</h1>
             <DataPaginated :service="api.pipelines">
                 <template #list="{ items }">
-                    <div v-for="item in items"
-                         class="p-4"
-                         :key="item.id">
+                    <div
+                        v-for="item in items"
+                        class="p-4"
+                        :key="item.id"
+                    >
                         {{ item }}
                     </div>
                 </template>
