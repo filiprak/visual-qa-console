@@ -7,11 +7,9 @@ import { getValidateHooks } from '../../utils/hooks.js';
 const ROUTE = '/api/v1/report';
 
 export class ReportService implements ServiceInterface<any, Partial<Report>> {
-
     async create(data: Report, params: Params) {
         return { ok: true };
     }
-
 }
 
 export default (app: Application) => {

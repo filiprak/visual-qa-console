@@ -14,8 +14,8 @@ const schema = Type.Object(
                 },
                 { additionalProperties: false },
             ),
-            { maxItems: 10000 }
-        )
+            { maxItems: 10000 },
+        ),
     },
     { additionalProperties: false },
 );

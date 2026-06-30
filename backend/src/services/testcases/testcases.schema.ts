@@ -5,10 +5,7 @@ const schema = Type.Object(
         id: Type.Number(),
         name: Type.String(),
         slug: Type.String(),
-        status: Type.Union([
-            Type.Literal('passed'),
-            Type.Literal('failed'),
-        ]),
+        status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
         pipeline_id: Type.Number(),
         updated_at: Type.String(),
         created_at: Type.String(),

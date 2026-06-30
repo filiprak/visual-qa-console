@@ -3,7 +3,7 @@ import { dataSchema, patchSchema, querySchema, type Pipeline } from './pipelines
 import { KnexService } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class PipelinesService extends KnexService<Pipeline> {}
 
 const ROUTE = '/api/v1/pipelines';
 

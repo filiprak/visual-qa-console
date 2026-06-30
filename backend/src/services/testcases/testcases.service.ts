@@ -3,7 +3,7 @@ import { dataSchema, patchSchema, querySchema, type TestCase } from './testcases
 import { KnexService } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 
-export class TestCasesService extends KnexService<TestCase> { }
+export class TestCasesService extends KnexService<TestCase> {}
 
 const ROUTE = '/api/v1/testcases';
 
