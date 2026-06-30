@@ -1,16 +1,16 @@
 import type { Application } from '../../declarations.js';
-import { dataSchema, patchSchema, querySchema, type Pipeline } from './pipelines.schema.js';
+import { dataSchema, patchSchema, querySchema, type TestCase } from './testcases.schema.js';
 import { KnexService } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class TestCasesService extends KnexService<TestCase> { }
 
-const ROUTE = '/api/v1/pipelines';
+const ROUTE = '/api/v1/testcases';
 
 export default (app: Application) => {
-    const service = new PipelinesService({
+    const service = new TestCasesService({
         Model: app.get('db'),
-        name: 'pipelines',
+        name: 'testcases',
         paginate: {
             max: 300,
             default: 30,
