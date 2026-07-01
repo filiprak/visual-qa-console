@@ -6,10 +6,17 @@ const schema = Type.Object(
         name: Type.String(),
         commit_sha: Type.String(),
         branch_name: Type.String(),
+        details: Type.Object({
+            status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
+            groups: Type.Number(),
+            total: Type.Number(),
+            failed: Type.Number(),
+            passed: Type.Number(),
+        }, { additionalProperties: false }),
         updated_at: Type.String(),
         created_at: Type.String(),
     },
-    { additionalProperties: false },
+    { additionalProperties: true },
 );
 
 export const dataSchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'updated_at', 'created_at']);

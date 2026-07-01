@@ -28,7 +28,7 @@ export const dataSchema = Type.Pick(schema, [
     'created_at',
 ]);
 export const patchSchema = Type.Partial(Type.Pick(schema, ['name']));
-export const querySchema = Type.Pick(schema, ['name', 'pipeline_id']);
+export const querySchema = Type.Pick(schema, ['name', 'status', 'pipeline_id']);
 export const publicSchema = schema;
 
 export type TestCase = Static<typeof publicSchema>;
