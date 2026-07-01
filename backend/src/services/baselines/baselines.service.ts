@@ -1,6 +1,6 @@
 import type { Application } from '../../declarations.js';
 import { dataSchema, patchSchema, querySchema, type Baseline } from './baselines.schema.js';
-import { KnexService } from '@feathersjs/knex';
+import { KnexService, type KnexAdapterParams } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import type { Static } from '@feathersjs/typebox';
 import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
@@ -8,10 +8,11 @@ import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 type BaselineData = Static<typeof dataSchema>;
 
 export class BaselinesService extends KnexService<Baseline> {
-    async createOrPatch(data: BaselineData[]) {
-        return this.Model.table('testcases')
+    async createOrPatch(data: BaselineData[], params?: KnexAdapterParams) {
+        return this.db(params)
+            .table('baselines')
             .insert(data)
-            .onConflict(['group', 'slug'])
+            .onConflict(['pipeline_name', 'group', 'slug'])
             .merge(['name', 'baseline_img', 'updated_at'])
             .returning('*');
     }

@@ -11,4 +11,5 @@ export const api = {
     pipelines: app.service('/api/v1/pipelines'),
     testcases: app.service('/api/v1/testcases'),
     baselines: app.service('/api/v1/baselines'),
+    review: app.service('/api/v1/review'),
 };

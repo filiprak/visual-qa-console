@@ -14,10 +14,12 @@
                     <div class="mb-3">
                         <RouterLink v-for="item in items"
                                     class="flex gap-3 items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                                    :to="{ path: `/pipelines/${item.id}` }"
+                                    :to="{ path: `/baselines/${item.id}` }"
                                     :key="item.id">
-                            <div class="basis-[28px] flex items-center">
-                                <Image :src="item.baseline_url"></Image>
+                            <div class="basis-[50px] flex items-center">
+                                <img :src="item.baseline_img"
+                                     class="size-[50px] object-cover">
+                                </img>
                             </div>
                             <div class="font-semibold grow-1">#{{ item.id }} {{ item.group }} / {{ item.name }}</div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
