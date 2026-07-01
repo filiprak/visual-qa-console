@@ -1,30 +1,21 @@
 <template>
-    <DataView
-        :value="rows"
-        lazy
-        paginator
-        :loading="loading"
-        :rows="rowsPerPage"
-        :totalRecords="total"
-        :first="first"
-        :sortField="sortField"
-        :sortOrder="sortOrder"
-        @page="onPage"
-        @sort="onSort"
-    >
+    <DataView :value="rows"
+              lazy
+              paginator
+              :loading="loading"
+              :rows="rowsPerPage"
+              :totalRecords="total"
+              :first="first"
+              :sortField="sortField"
+              :sortOrder="sortOrder"
+              @page="onPage">
         <template #list="{ items }">
-            <slot
-                name="list"
-                :items="typeItems(items)"
-            >
-                <div
-                    class="rounded-md"
-                    v-if="items.length > 0"
-                >
-                    <div
-                        v-for="item in items"
-                        class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                    >
+            <slot name="list"
+                  :items="typeItems(items)">
+                <div class="rounded-md"
+                     v-if="items.length > 0">
+                    <div v-for="item in items"
+                         class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface">
                         {{ item }}
                     </div>
                 </div>
@@ -48,6 +39,8 @@ interface Props {
     service: FeathersService<unknown, ClientService<T>>;
     query?: Record<string, unknown>;
     rows?: number;
+    sortField?: string;
+    sortOrder?: number;
 }
 
 function typeItems(items: unknown[]): T[] {
@@ -66,9 +59,6 @@ const loading = ref(false);
 const first = ref(0);
 const rowsPerPage = ref(props.rows);
 
-const sortField = ref<string>();
-const sortOrder = ref<number>();
-
 async function load() {
     loading.value = true;
 
@@ -79,9 +69,9 @@ async function load() {
             $skip: first.value,
         };
 
-        if (sortField.value) {
+        if (props.sortField) {
             query.$sort = {
-                [sortField.value]: sortOrder.value === 1 ? 1 : -1,
+                [props.sortField]: props.sortOrder === 1 ? 1 : -1,
             };
         }
 
@@ -99,12 +89,6 @@ async function load() {
 function onPage(event: any) {
     first.value = event.first;
     rowsPerPage.value = event.rows;
-    load();
-}
-
-function onSort(event: any) {
-    sortField.value = event.sortField;
-    sortOrder.value = event.sortOrder;
     load();
 }
 

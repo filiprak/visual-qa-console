@@ -20,7 +20,9 @@
                     Created
                 </div>
             </div>
-            <DataPaginated :service="api.pipelines">
+            <DataPaginated :service="api.pipelines"
+                           sort-field="created_at"
+                           :sort-order="-1">
                 <template #list="{ items }">
                     <div>
                         <RouterLink v-for="item in items"
