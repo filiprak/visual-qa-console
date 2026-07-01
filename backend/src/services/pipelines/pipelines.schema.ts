@@ -6,13 +6,16 @@ const schema = Type.Object(
         name: Type.String(),
         commit_sha: Type.String(),
         branch_name: Type.String(),
-        details: Type.Object({
-            status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
-            groups: Type.Number(),
-            total: Type.Number(),
-            failed: Type.Number(),
-            passed: Type.Number(),
-        }, { additionalProperties: false }),
+        details: Type.Object(
+            {
+                status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
+                groups: Type.Number(),
+                total: Type.Number(),
+                failed: Type.Number(),
+                passed: Type.Number(),
+            },
+            { additionalProperties: false },
+        ),
         updated_at: Type.String(),
         created_at: Type.String(),
     },

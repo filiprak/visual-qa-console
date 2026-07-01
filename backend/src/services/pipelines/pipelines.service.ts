@@ -6,13 +6,12 @@ import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
 import knex from 'knex';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class PipelinesService extends KnexService<Pipeline> {}
 
 const pipelineResolver = resolve<Pipeline, HookContext>({
     details: virtual(async (pipeline, context) => {
-        const result = await context.app
-            .get('db')
-            .raw(`
+        const result = await context.app.get('db').raw(
+            `
                 SELECT
                     IF(SUM(t.status = 'failed') > 0, 'failed', 'passed') AS status,
                     COUNT(DISTINCT t.\`group\`) AS total_groups,
@@ -23,7 +22,9 @@ const pipelineResolver = resolve<Pipeline, HookContext>({
                     ON t.pipeline_id = p.id
                 WHERE p.id = ?
                 GROUP BY p.id;
-            `, [pipeline.id])
+            `,
+            [pipeline.id],
+        );
 
         return {
             status: result.at(0)?.status || 'passed',
