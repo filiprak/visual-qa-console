@@ -10,14 +10,10 @@ const ROUTE = '/api/v1/review';
 
 const transactionHandler = async (context: HookContext, next: NextFunction) => {
     try {
-        console.log('Start our work')
         await transaction.start()(context)
-        console.log('context.params.transaction', !!context.params.transaction)
         await next()
         await transaction.end()(context)
-        console.log('Work done')
     } catch (err) {
-        console.log('Rollback')
         await transaction.rollback()(context)
         throw err
     }
@@ -35,15 +31,10 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
     }
 
     async create(data: Review, params: Params & { transaction: KnexAdapterTransaction }) {
-        console.log('params.transaction', !!params.transaction)
-
-        console.log(1)
         const testcase = await this.app.service('/api/v1/testcases').get(data.testcase_id, { transaction: params.transaction });
-        console.log(2)
         const pipeline = await this.app.service('/api/v1/pipelines').get(testcase.pipeline_id, { transaction: params.transaction });
 
         if (data.accepted) {
-            console.log(3)
             await this.app.service('/api/v1/baselines').createOrPatch([
                 {
                     pipeline_name: pipeline.name,
@@ -55,8 +46,6 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                     updated_at: utcNow(),
                 }
             ], { transaction: params.transaction });
-            console.log(4)
-            throw Error('test');
             await this.app.service('/api/v1/testcases').patch(testcase.id, {
                 status: 'passed',
                 updated_at: utcNow(),

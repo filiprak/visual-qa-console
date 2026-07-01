@@ -4,13 +4,12 @@ import { getValidateHooks } from '../../utils/hooks.js';
 import { KnexService } from '@feathersjs/knex';
 import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
-import knex from 'knex';
 
-export class PipelinesService extends KnexService<Pipeline> {}
+export class PipelinesService extends KnexService<Pipeline> { }
 
-const pipelineResolver = resolve<Pipeline, HookContext>({
+const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
     details: virtual(async (pipeline, context) => {
-        const result = await context.app.get('db').raw(
+        const result = await context.service.db(context.params).client.raw(
             `
                 SELECT
                     IF(SUM(t.status = 'failed') > 0, 'failed', 'passed') AS status,
