@@ -1,7 +1,7 @@
 <template>
     <div
         ref="container"
-        class="relative outline outline-surface-300 mt-10 overflow-hidden bg-gray-300 select-none"
+        class="relative outline outline-surface-300 overflow-hidden bg-gray-300 select-none"
         :style="{
             width: `${displayWidth}px`,
             height: `${displayHeight}px`,
@@ -48,12 +48,12 @@
 
         <!-- Labels -->
         <div class="absolute top-3 left-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-            <div class="font-semibold">Before</div>
+            <div class="font-semibold">Baseline</div>
             <div v-if="beforeImg">{{ beforeImg.naturalWidth }} × {{ beforeImg.naturalHeight }}</div>
         </div>
 
         <div class="absolute top-3 right-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-            <div class="font-semibold">After</div>
+            <div class="font-semibold">Result</div>
             <div v-if="afterImg">{{ afterImg.naturalWidth }} × {{ afterImg.naturalHeight }}</div>
         </div>
     </div>
