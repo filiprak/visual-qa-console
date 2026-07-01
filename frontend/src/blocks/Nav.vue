@@ -45,19 +45,14 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
     {
-        label: 'Dashboard',
-        icon: 'pi-home',
+        label: 'Pipelines',
+        icon: 'pi-bolt',
         path: '/',
     },
     {
-        label: 'Analytics',
-        icon: 'pi-chart-bar',
-        path: '/analytics',
-    },
-    {
-        label: 'Settings',
-        icon: 'pi-cog',
-        path: '/settings',
+        label: 'Baseline Screenshots',
+        icon: 'pi-image',
+        path: '/baselines',
     },
 ];
 </script>

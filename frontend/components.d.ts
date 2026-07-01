@@ -15,6 +15,7 @@ declare module 'vue' {
     ButtonGroup: typeof import('primevue/buttongroup')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
+    Image: typeof import('primevue/image')['default']
     ImageDiff: typeof import('./src/components/ImageDiff.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

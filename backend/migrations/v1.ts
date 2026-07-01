@@ -30,9 +30,27 @@ export async function up(knex: Knex) {
 
         table.unique(['pipeline_id', 'group', 'slug']);
     });
+
+    await knex.schema.createTable('baselines', (table) => {
+        table.increments('id');
+        table.string('name');
+        table.string('pipeline_name');
+        table.string('slug');
+        table.string('group');
+        table.string('baseline_img').nullable();
+        table.timestamps(true, true);
+
+        table.index(['pipeline_name']);
+        table.index(['slug']);
+        table.index(['group']);
+        table.index(['pipeline_name', 'group', 'slug']);
+
+        table.unique(['pipeline_name', 'group', 'slug']);
+    });
 }
 
 export async function down(knex: Knex) {
     await knex.schema.dropTable('pipelines');
     await knex.schema.dropTable('testcases');
+    await knex.schema.dropTable('baselines');
 }
