@@ -13,15 +13,19 @@
                     {{ pipeline?.details.failed }}
                 </Panel>
                 <Panel header="Status">
-                    <Tag v-if="pipeline?.details.status == 'passed'"
-                         rounded
-                         severity="success">
+                    <Tag
+                        v-if="pipeline?.details.status == 'passed'"
+                        rounded
+                        severity="success"
+                    >
                         <Icon name="check-circle"> </Icon>
                         Passed
                     </Tag>
-                    <Tag v-else
-                         rounded
-                         severity="danger">
+                    <Tag
+                        v-else
+                        rounded
+                        severity="danger"
+                    >
                         <Icon name="times-circle"></Icon>
                         Failed
                     </Tag>
@@ -35,57 +39,74 @@
                     <div class="basis-[200px]">Last updated</div>
                     <div class="basis-[200px]">Actions</div>
                 </div>
-                <DataPaginated :service="api.testcases"
-                               :query="{ pipeline_id: pipeline.id }"
-                               sort-field="group"
-                               :sort-order="1">
+                <DataPaginated
+                    :service="api.testcases"
+                    :query="{ pipeline_id: pipeline.id }"
+                    sort-field="group"
+                    :sort-order="1"
+                >
                     <template #list="{ items }">
                         <div>
-                            <div class="mb-3"
-                                 v-for="entry in groupTestcases(items)">
+                            <div
+                                class="mb-3"
+                                v-for="entry in groupTestcases(items)"
+                            >
                                 <div class="flex items-center gap-3 p-3 font-bold text-primary">
                                     {{ entry[0] }}
                                 </div>
-                                <div v-for="item in entry[1]"
-                                     class="flex cursor-pointer gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                                     @click="openTestcase(item.id)"
-                                     :key="item.id">
+                                <div
+                                    v-for="item in entry[1]"
+                                    class="flex cursor-pointer gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                                    @click="openTestcase(item.id)"
+                                    :key="item.id"
+                                >
                                     <div class="basis-[28px] flex items-center">
-                                        <Icon v-if="item.status == 'passed'"
-                                              name="check"
-                                              size="1.4rem"
-                                              class="text-green-600">
+                                        <Icon
+                                            v-if="item.status == 'passed'"
+                                            name="check"
+                                            size="1.4rem"
+                                            class="text-green-600"
+                                        >
                                         </Icon>
-                                        <Icon v-else
-                                              name="times"
-                                              size="1.4rem"
-                                              class="text-red-600">
+                                        <Icon
+                                            v-else
+                                            name="times"
+                                            size="1.4rem"
+                                            class="text-red-600"
+                                        >
                                         </Icon>
                                     </div>
                                     <div class="font-semibold grow-1">{{ item.name }}</div>
                                     <div class="basis-[200px]">
-                                        <Tag v-if="item.status == 'passed'"
-                                             rounded
-                                             severity="success">
+                                        <Tag
+                                            v-if="item.status == 'passed'"
+                                            rounded
+                                            severity="success"
+                                        >
                                             <Icon name="check"> </Icon>
                                             Passed
                                         </Tag>
-                                        <Tag v-else
-                                             rounded
-                                             severity="danger">
+                                        <Tag
+                                            v-else
+                                            rounded
+                                            severity="danger"
+                                        >
                                             <Icon name="times"></Icon>
                                             Failed
                                         </Tag>
                                     </div>
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
-                                        <span v-tooltip.top="format(item.updated_at)">{{ fromNow(item.updated_at)
-                                            }}</span>
+                                        <span v-tooltip.top="format(item.updated_at)">{{
+                                            fromNow(item.updated_at)
+                                        }}</span>
                                     </div>
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
-                                        <Button v-if="item.status == 'failed'"
-                                                size="small"
-                                                outlined
-                                                @click.stop.prevent="() => { }">
+                                        <Button
+                                            v-if="item.status == 'failed'"
+                                            size="small"
+                                            outlined
+                                            @click.stop.prevent="() => {}"
+                                        >
                                             <Icon name="check"></Icon>
                                             Accept
                                         </Button>
@@ -120,7 +141,7 @@ const { openTestcase } = useTestcaseView();
 function groupTestcases(items: TestCase[]) {
     const by_group: Map<string, TestCase[]> = new Map();
 
-    items.forEach(i => {
+    items.forEach((i) => {
         const group = i.group || 'default';
         if (!by_group.has(group)) {
             by_group.set(group, []);

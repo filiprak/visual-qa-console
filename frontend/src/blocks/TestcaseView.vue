@@ -1,16 +1,20 @@
 <template>
     <div class="flex justify-center">
-        <Drawer v-model:visible="visible"
-                :header="[testcase?.group, testcase?.name].join(': ')"
-                position="full">
+        <Drawer
+            v-model:visible="visible"
+            :header="[testcase?.group, testcase?.name].join(': ')"
+            position="full"
+        >
             <template v-if="testcase">
                 <div>
                     {{ testcase }}
                 </div>
                 <div class="flex justify-center">
-                    <ImageDiff :before="testcase.result_img!"
-                               :after="testcase.diff_img!"
-                               :max-width="1400">
+                    <ImageDiff
+                        :before="testcase.result_img!"
+                        :after="testcase.diff_img!"
+                        :max-width="1400"
+                    >
                     </ImageDiff>
                 </div>
             </template>

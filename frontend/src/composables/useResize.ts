@@ -3,10 +3,7 @@ import { onBeforeUnmount, watch } from 'vue';
 
 export type ResizeObserverCallback = (entry: ResizeObserverEntry) => void;
 
-export function useResize(
-    target: Ref<HTMLElement | null | undefined>,
-    callback: ResizeObserverCallback
-) {
+export function useResize(target: Ref<HTMLElement | null | undefined>, callback: ResizeObserverCallback) {
     let observer: ResizeObserver | null = null;
 
     const stopObserver = () => {
@@ -35,7 +32,7 @@ export function useResize(
         (newEl) => {
             startObserver(newEl);
         },
-        { immediate: true, flush: 'post' } // flush: 'post' ensures the DOM element is mounted
+        { immediate: true, flush: 'post' }, // flush: 'post' ensures the DOM element is mounted
     );
 
     onBeforeUnmount(() => {
@@ -43,6 +40,6 @@ export function useResize(
     });
 
     return {
-        stop: stopObserver
+        stop: stopObserver,
     };
 }
