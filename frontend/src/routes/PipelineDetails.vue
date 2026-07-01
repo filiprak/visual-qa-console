@@ -46,10 +46,10 @@
                                 <div class="flex items-center gap-3 p-3 font-bold text-primary">
                                     {{ entry[0] }}
                                 </div>
-                                <RouterLink v-for="item in entry[1]"
-                                            class="flex gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                                            :to="{ path: `/testcases/${item.id}` }"
-                                            :key="item.id">
+                                <div v-for="item in entry[1]"
+                                     class="flex cursor-pointer gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                                     @click="openTestcase(item.id)"
+                                     :key="item.id">
                                     <div class="basis-[28px] flex items-center">
                                         <Icon v-if="item.status == 'passed'"
                                               name="check"
@@ -90,7 +90,7 @@
                                             Accept
                                         </Button>
                                     </div>
-                                </RouterLink>
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -104,7 +104,6 @@ import Panel from 'primevue/panel';
 import vTooltip from 'primevue/tooltip';
 import Icon from '../components/Icon.vue';
 import Tag from 'primevue/tag';
-import Badge from 'primevue/badge';
 import Button from 'primevue/button';
 import DataPaginated from '../components/DataPaginated.vue';
 import { onBeforeMount, ref } from 'vue';
@@ -112,9 +111,11 @@ import { useRoute } from 'vue-router';
 import type { Pipeline, TestCase } from '@/types';
 import { api } from '../api';
 import { format, fromNow } from '../utils/dates.ts';
+import { useTestcaseView } from '../composables/useTestcaseView.ts';
 
 const route = useRoute();
 const pipeline = ref<Pipeline>();
+const { openTestcase } = useTestcaseView();
 
 function groupTestcases(items: TestCase[]) {
     const by_group: Map<string, TestCase[]> = new Map();
