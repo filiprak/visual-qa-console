@@ -16,7 +16,7 @@
                 :sort-order="-1"
             >
                 <template #list="{ items }">
-                    <div>
+                    <div class="mb-3">
                         <RouterLink
                             v-for="item in items"
                             class="flex gap-3 items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"

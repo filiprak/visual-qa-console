@@ -17,7 +17,7 @@
                 :items="typeItems(items)"
             >
                 <div
-                    class="rounded-md"
+                    class="rounded-md mb-3"
                     v-if="items.length > 0"
                 >
                     <div
@@ -31,7 +31,7 @@
             </slot>
         </template>
         <template #empty>
-            <div class="flex justify-center p-6">
+            <div class="flex justify-center p-6 mb-3">
                 <span>No items found</span>
             </div>
         </template>

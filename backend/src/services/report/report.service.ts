@@ -35,11 +35,15 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
             });
         } else {
             pipeline = find_result.data[0];
+            await this.app.service('/api/v1/pipelines').patch(pipeline.id, {
+                updated_at: utcNow(),
+            });
         }
         if (data.testcases.length > 0) {
             await this.app.service('/api/v1/testcases').createOrPatch([
                 ...data.testcases.map((i) => ({
                     ...i,
+                    group: i.group || 'default',
                     slug: slugify(i.name),
                     pipeline_id: pipeline.id,
                     created_at: utcNow(),
