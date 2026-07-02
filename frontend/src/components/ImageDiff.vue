@@ -102,6 +102,7 @@ function refreshSizes() {
     const a = afterImg.value;
 
     if (!a.naturalHeight || !b.naturalHeight) return;
+    if (!a.naturalWidth || !b.naturalWidth) return;
 
     const virtualW = Math.max(b.naturalWidth, a.naturalWidth);
     const virtualH = Math.max(b.naturalHeight, a.naturalHeight);
@@ -112,13 +113,13 @@ function refreshSizes() {
     displayHeight.value = virtualH * scale;
 
     beforeStyle.value = {
-        width: `${a.naturalWidth * scale}px`,
-        height: `${a.naturalHeight * scale}px`,
+        width: `${b.naturalWidth * scale}px`,
+        height: `${b.naturalHeight * scale}px`,
     };
 
     afterStyle.value = {
-        width: `${b.naturalWidth * scale}px`,
-        height: `${b.naturalHeight * scale}px`,
+        width: `${a.naturalWidth * scale}px`,
+        height: `${a.naturalHeight * scale}px`,
     };
 }
 
