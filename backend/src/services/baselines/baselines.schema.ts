@@ -28,3 +28,4 @@ export const querySchema = Type.Pick(schema, ['name', 'pipeline_name', 'slug', '
 export const publicSchema = schema;
 
 export type Baseline = Static<typeof publicSchema>;
+export type BaselinePipeline = { pipeline_name: string };

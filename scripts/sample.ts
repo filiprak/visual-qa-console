@@ -4,7 +4,7 @@ const getMockImg = (id: number, type: string, w: number, h: number) =>
     `https://picsum.photos/seed/${id}-${type}/${w}/${h}`;
 
 const sampleReport = {
-    name: 'website-apps',
+    name: 'ui-components',
     commit_sha: generateShortSha(),
     branch_name: 'master',
     testcases: [
