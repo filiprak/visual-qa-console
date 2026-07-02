@@ -11,7 +11,7 @@ export function useReview() {
             await api.review.create({
                 testcase_id,
                 accepted: true,
-            })
+            });
         } finally {
             loading.value = false;
         }

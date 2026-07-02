@@ -10,14 +10,14 @@ const ROUTE = '/api/v1/review';
 
 const transactionHandler = async (context: HookContext, next: NextFunction) => {
     try {
-        await transaction.start()(context)
-        await next()
-        await transaction.end()(context)
+        await transaction.start()(context);
+        await next();
+        await transaction.end()(context);
     } catch (err) {
-        await transaction.rollback()(context)
-        throw err
+        await transaction.rollback()(context);
+        throw err;
     }
-}
+};
 
 export class ReviewService implements ServiceInterface<any, Partial<Review>> {
     private readonly app: Application;
@@ -31,25 +31,36 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
     }
 
     async create(data: Review, params: Params & { transaction: KnexAdapterTransaction }) {
-        const testcase = await this.app.service('/api/v1/testcases').get(data.testcase_id, { transaction: params.transaction });
-        const pipeline = await this.app.service('/api/v1/pipelines').get(testcase.pipeline_id, { transaction: params.transaction });
+        const testcase = await this.app
+            .service('/api/v1/testcases')
+            .get(data.testcase_id, { transaction: params.transaction });
+        const pipeline = await this.app
+            .service('/api/v1/pipelines')
+            .get(testcase.pipeline_id, { transaction: params.transaction });
 
         if (data.accepted) {
-            await this.app.service('/api/v1/baselines').createOrPatch([
+            await this.app.service('/api/v1/baselines').createOrPatch(
+                [
+                    {
+                        pipeline_name: pipeline.name,
+                        group: testcase.group,
+                        slug: testcase.slug,
+                        name: testcase.name,
+                        baseline_img: testcase.result_img,
+                        created_at: utcNow(),
+                        updated_at: utcNow(),
+                    },
+                ],
+                { transaction: params.transaction },
+            );
+            await this.app.service('/api/v1/testcases').patch(
+                testcase.id,
                 {
-                    pipeline_name: pipeline.name,
-                    group: testcase.group,
-                    slug: testcase.slug,
-                    name: testcase.name,
-                    baseline_img: testcase.result_img,
-                    created_at: utcNow(),
+                    status: 'passed',
                     updated_at: utcNow(),
-                }
-            ], { transaction: params.transaction });
-            await this.app.service('/api/v1/testcases').patch(testcase.id, {
-                status: 'passed',
-                updated_at: utcNow(),
-            }, { transaction: params.transaction });
+                },
+                { transaction: params.transaction },
+            );
         }
 
         return { message: 'OK! Review processed' };

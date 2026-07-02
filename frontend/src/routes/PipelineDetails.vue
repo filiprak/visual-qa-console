@@ -13,15 +13,19 @@
                     {{ pipeline?.details.failed }}
                 </Panel>
                 <Panel header="Status">
-                    <Tag v-if="pipeline?.details.status == 'passed'"
-                         rounded
-                         severity="success">
+                    <Tag
+                        v-if="pipeline?.details.status == 'passed'"
+                        rounded
+                        severity="success"
+                    >
                         <Icon name="check-circle"> </Icon>
                         Passed
                     </Tag>
-                    <Tag v-else
-                         rounded
-                         severity="danger">
+                    <Tag
+                        v-else
+                        rounded
+                        severity="danger"
+                    >
                         <Icon name="times-circle"></Icon>
                         Failed
                     </Tag>
@@ -35,44 +39,49 @@
                     <div class="basis-[200px]">Last updated</div>
                     <div class="basis-[200px]">Actions</div>
                 </div>
-                <DataPaginated :service="api.testcases"
-                               :query="{ pipeline_id: pipeline.id }"
-                               sort-field="group"
-                               :sort-order="1">
-                    <template #list="{ items }">
+                <DataPaginated
+                    :service="api.testcases"
+                    :query="{ pipeline_id: pipeline.id }"
+                    sort-field="group"
+                    :sort-order="1"
+                >
+                    <template #list="{ items, reload }">
                         <div>
-                            <div class="mb-3"
-                                 v-for="entry in groupTestcases(items)">
+                            <div
+                                class="mb-3"
+                                v-for="entry in groupTestcases(items)"
+                            >
                                 <div class="flex items-center gap-3 p-3 font-bold text-primary">
                                     {{ entry[0] }}
                                 </div>
-                                <div v-for="item in entry[1]"
-                                     class="flex cursor-pointer gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                                     @click="openTestcase(item.id)"
-                                     :key="item.id">
+                                <div
+                                    v-for="item in entry[1]"
+                                    class="flex cursor-pointer h-13 gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                                    @click="openTestcase(item.id)"
+                                    :key="item.id"
+                                >
                                     <div class="basis-[28px] flex items-center">
-                                        <Icon v-if="item.status == 'passed'"
-                                              name="check"
-                                              size="1.4rem"
-                                              class="text-green-600">
-                                        </Icon>
-                                        <Icon v-else
-                                              name="times"
-                                              size="1.4rem"
-                                              class="text-red-600">
+                                        <Icon
+                                            name="image"
+                                            size="1.3rem"
+                                        >
                                         </Icon>
                                     </div>
                                     <div class="font-semibold grow-1">{{ item.name }}</div>
                                     <div class="basis-[200px]">
-                                        <Tag v-if="item.status == 'passed'"
-                                             rounded
-                                             severity="success">
+                                        <Tag
+                                            v-if="item.status == 'passed'"
+                                            rounded
+                                            severity="success"
+                                        >
                                             <Icon name="check"> </Icon>
                                             Passed
                                         </Tag>
-                                        <Tag v-else
-                                             rounded
-                                             severity="danger">
+                                        <Tag
+                                            v-else
+                                            rounded
+                                            severity="danger"
+                                        >
                                             <Icon name="times"></Icon>
                                             Failed
                                         </Tag>
@@ -80,17 +89,32 @@
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
                                         <span v-tooltip.top="format(item.updated_at)">{{
                                             fromNow(item.updated_at)
-                                            }}</span>
+                                        }}</span>
                                     </div>
-                                    <div class="flex flex-col justify-start items-start basis-[200px]">
-                                        <Button v-if="item.status == 'failed'"
-                                                size="small"
-                                                outlined
-                                                :loading="accepting"
-                                                @click.stop.prevent="acceptTestcase(item.id)">
-                                            <Icon name="check"></Icon>
+                                    <div class="flex gap-2 justify-start items-start basis-[200px]">
+                                        <LoadingButton
+                                            v-if="item.status == 'failed'"
+                                            size="small"
+                                            icon="eye"
+                                            rounded
+                                            outlined
+                                            severity="secondary"
+                                            :loading="accepting"
+                                            @click.stop.prevent="openTestcase(item.id)"
+                                        >
+                                            Review
+                                        </LoadingButton>
+                                        <LoadingButton
+                                            v-if="item.status == 'failed'"
+                                            size="small"
+                                            icon="check"
+                                            rounded
+                                            severity="success"
+                                            :loading="accepting"
+                                            @click.stop.prevent="onAcceptTestcase(item, reload)"
+                                        >
                                             Accept
-                                        </Button>
+                                        </LoadingButton>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +159,15 @@ function groupTestcases(items: TestCase[]) {
     return [...by_group.entries()];
 }
 
-onBeforeMount(async () => {
+async function onAcceptTestcase(item: TestCase, reloadTestcases: () => Promise<void>) {
+    await acceptTestcase(item.id);
+    await load();
+    await reloadTestcases();
+}
+
+async function load() {
     pipeline.value = await api.pipelines.get(route.params.id as string);
-});
+}
+
+onBeforeMount(load);
 </script>

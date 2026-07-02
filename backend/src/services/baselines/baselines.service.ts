@@ -41,7 +41,6 @@ export default (app: Application) => {
             update: [notAllowedPublic],
             create: [notAllowedPublic],
             patch: [notAllowedPublic],
-            remove: [notAllowedPublic],
         },
     });
     app.service(ROUTE).hooks(validateHooks);

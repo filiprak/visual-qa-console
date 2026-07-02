@@ -14,6 +14,7 @@
         <template #list="{ items }">
             <slot
                 name="list"
+                :reload="load"
                 :items="typeItems(items)"
             >
                 <div
@@ -102,5 +103,7 @@ function onPage(event: any) {
 
 watch(() => props.query, load, { deep: true });
 
-onMounted(load);
+onMounted(() => {
+    load();
+});
 </script>

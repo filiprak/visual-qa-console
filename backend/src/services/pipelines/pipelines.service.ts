@@ -5,7 +5,7 @@ import { KnexService } from '@feathersjs/knex';
 import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class PipelinesService extends KnexService<Pipeline> {}
 
 const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
     details: virtual(async (pipeline, context) => {
