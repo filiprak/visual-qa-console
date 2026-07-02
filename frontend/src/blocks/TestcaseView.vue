@@ -70,9 +70,14 @@
                     </div>
                     <div class="diff-container flex justify-center">
                         <template v-if="view == 'compare'">
-                            <ImageDiff :before="testcase.result_img!"
-                                       :after="testcase.diff_img!">
+                            <ImageDiff v-if="baseline"
+                                       :before="testcase.result_img!"
+                                       :after="baseline_src">
                             </ImageDiff>
+                            <div v-else>
+                                <img class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                     :src="fallback_url">
+                            </div>
                         </template>
                         <template v-if="view == 'result'">
                             <div>
@@ -87,9 +92,13 @@
                             </div>
                         </template>
                         <template v-if="view == 'baseline'">
-                            <div>
+                            <div v-if="baseline">
                                 <img class="block outline outline-surface-300"
-                                     :src="''" />
+                                     :src="baseline_src" />
+                            </div>
+                            <div v-else>
+                                <img class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                     :src="fallback_url">
                             </div>
                         </template>
                     </div>
@@ -101,16 +110,20 @@
 <script setup lang="ts">
 import Drawer from 'primevue/drawer';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
-import type { Pipeline, TestCase } from '@/types';
-import { ref, watch } from 'vue';
+import type { Baseline, Pipeline, TestCase } from '@/types';
+import { computed, ref, watch } from 'vue';
 import { api } from '../api/api.ts';
 import Skeleton from 'primevue/skeleton';
 import SelectButton from 'primevue/selectbutton';
 import ImageDiff from '../components/ImageDiff.vue';
 import Icon from '../components/Icon.vue';
 
+const fallback_url = '/placeholder.svg';
+
 const testcase = ref<TestCase>();
 const pipeline = ref<Pipeline>();
+const baseline = ref<Baseline>();
+const baseline_src = computed(() => baseline.value?.baseline_img || fallback_url);
 
 const { visible, id } = useTestcaseView();
 const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
@@ -122,6 +135,16 @@ watch(visible, async (v) => {
             loading.value = true;
             testcase.value = await api.testcases.get(id.value);
             pipeline.value = await api.pipelines.get(testcase.value!.pipeline_id);
+
+            if (pipeline.value?.name && testcase.value?.group && testcase.value?.slug) {
+                baseline.value = (await api.baselines.find({
+                    query: {
+                        pipeline_name: pipeline.value?.name,
+                        group: testcase.value?.group,
+                        slug: testcase.value?.slug,
+                    },
+                })).data.at(0);
+            }
         } finally {
             loading.value = false;
         }
