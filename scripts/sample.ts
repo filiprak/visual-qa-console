@@ -20,14 +20,14 @@ const sampleReport = {
             status: 'passed',
             group: 'portal.apps.auth.desktop',
             diff_img: getMockImg(2, 'diff', 1920, 700),
-            result_img: getMockImg(2, 'result', 1920, 700),
+            result_img: getMockImg(2, 'result', 1920, 900),
         },
         {
             name: 'mfa_token_validation',
             status: 'failed',
             group: 'portal.apps.auth.desktop',
             diff_img: getMockImg(3, 'diff', 1920, 700),
-            result_img: getMockImg(3, 'result', 1920, 700),
+            result_img: getMockImg(3, 'result', 1800, 700),
         },
         {
             name: 'oauth_google_redirect',
