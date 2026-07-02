@@ -15,10 +15,16 @@
             >
                 <template #list="{ items, reload }">
                     <div class="mb-3">
-                        <RouterLink
+                        <div
                             v-for="item in items"
-                            class="flex gap-3 items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                            :to="{ path: `/baselines/${item.id}` }"
+                            class="flex gap-3 cursor-pointer items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                            @click="
+                                openImages([
+                                    { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
+                                    { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
+                                    { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
+                                ])
+                            "
                             :key="item.id"
                         >
                             <div class="basis-[50px] flex items-center">
@@ -49,7 +55,7 @@
                                 >
                                 </LoadingButton>
                             </div>
-                        </RouterLink>
+                        </div>
                     </div>
                 </template>
             </DataPaginated>
@@ -57,12 +63,14 @@
     </div>
 </template>
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
 import vTooltip from 'primevue/tooltip';
 import { api } from '../api';
 import DataPaginated from '../components/DataPaginated.vue';
 import { format, fromNow } from '../utils/dates.ts';
 import type { Baseline } from '@/types';
+import { useImageView } from '../composables/useImageView.ts';
+
+const { openImages } = useImageView();
 
 async function onRemove(item: Baseline, reload: () => Promise<void>) {
     if (!confirm()) return;

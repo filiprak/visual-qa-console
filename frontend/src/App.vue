@@ -7,6 +7,7 @@
     </div>
     <div>
         <TestcaseView />
+        <ImageView />
     </div>
     <div>
         <Toast position="top-center" />
@@ -20,6 +21,7 @@ import { RouterView } from 'vue-router';
 import { registerToast } from './errors';
 import { onBeforeMount } from 'vue';
 import TestcaseView from './blocks/TestcaseView.vue';
+import ImageView from './blocks/ImageView.vue';
 
 const toast = useToast();
 
