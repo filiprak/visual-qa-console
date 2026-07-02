@@ -3,6 +3,7 @@
         <Drawer v-model:visible="visible"
                 :show-close-icon="false"
                 block-scroll
+                class="no-transition"
                 position="full">
             <template #header
                       v-if="!loading">
@@ -53,35 +54,44 @@
                 </div>
             </template>
             <template v-else>
-                <div class="mb-4"></div>
-                <div>
+                <div class="flex flex-col items-center">
                     <div class="flex justify-center mb-4">
                         <SelectButton v-model="view"
                                       :allow-empty="false"
                                       option-label="label"
                                       option-value="value"
                                       :options="[
-                                        { label: 'Compare', value: 'slider' },
-                                        { label: 'Side By Side', value: 'all' },
+                                        { label: 'Compare', value: 'compare' },
+                                        { label: 'Result', value: 'result' },
+                                        { label: 'Diff', value: 'diff' },
+                                        { label: 'Baseline', value: 'baseline' },
                                     ]">
                         </SelectButton>
                     </div>
-                    <div v-if="view == 'all'"
-                         class="flex flex-col justify-center">
-                        <div>
-                            <div class="uppercase text-primary text-sm font-bold">Diff</div>
+                    <div class="diff-container flex justify-center">
+                        <template v-if="view == 'compare'">
+                            <ImageDiff :before="testcase.result_img!"
+                                       :after="testcase.diff_img!">
+                            </ImageDiff>
+                        </template>
+                        <template v-if="view == 'result'">
+                            <div>
+                                <img class="block outline outline-surface-300"
+                                     :src="testcase.result_img" />
+                            </div>
+                        </template>
+                        <template v-if="view == 'diff'">
                             <div>
                                 <img class="block outline outline-surface-300"
                                      :src="testcase.diff_img" />
                             </div>
-                        </div>
-                    </div>
-                    <div v-if="view == 'slider'"
-                         class="flex justify-center">
-                        <ImageDiff :before="testcase.result_img!"
-                                   :after="testcase.diff_img!.replace('1920', '1000')"
-                                   :max-height="700">
-                        </ImageDiff>
+                        </template>
+                        <template v-if="view == 'baseline'">
+                            <div>
+                                <img class="block outline outline-surface-300"
+                                     :src="''" />
+                            </div>
+                        </template>
                     </div>
                 </div>
             </template>
@@ -103,7 +113,7 @@ const testcase = ref<TestCase>();
 const pipeline = ref<Pipeline>();
 
 const { visible, id } = useTestcaseView();
-const view = ref<'all' | 'slider'>('slider');
+const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(false);
 
 watch(visible, async (v) => {
@@ -118,3 +128,10 @@ watch(visible, async (v) => {
     }
 });
 </script>
+<style scoped>
+.diff-container {
+    height: calc(100svh - 200px);
+    width: 100%;
+    max-width: 1920px;
+}
+</style>

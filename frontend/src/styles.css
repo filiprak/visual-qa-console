@@ -16,3 +16,11 @@ html {
 :root {
     --nav-w: 80px;
 }
+
+.p-drawer-enter-active {
+    animation-duration: 0s !important;
+}
+
+.p-drawer-leave-active {
+    animation-duration: 0s !important;
+}

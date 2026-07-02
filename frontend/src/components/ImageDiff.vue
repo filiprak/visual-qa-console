@@ -1,11 +1,10 @@
 <template>
     <div ref="container"
          :style="{
-            height: `${maxHeight}px`,
             width: `100%`,
         }"
          class="img-diff flex justify-center">
-        <div class="relative outline outline-surface-300 overflow-hidden bg-gray-300 select-none"
+        <div class="relative outline outline-surface-300 overflow-hidden bg-purple-300 select-none"
              ref="viewport"
              :style="{
                 width: `${displayWidth}px`,
@@ -40,17 +39,6 @@
                     <i class="pi pi-arrows-h text-gray-700" />
                 </div>
             </div>
-
-            <!-- Labels -->
-            <div class="absolute top-3 left-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-                <div class="font-semibold">Baseline</div>
-                <div v-if="beforeImg">{{ beforeImg.naturalWidth }} × {{ beforeImg.naturalHeight }}</div>
-            </div>
-
-            <div class="absolute top-3 right-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-                <div class="font-semibold">Result</div>
-                <div v-if="afterImg">{{ afterImg.naturalWidth }} × {{ afterImg.naturalHeight }}</div>
-            </div>
         </div>
     </div>
 </template>
@@ -63,7 +51,6 @@ import { useResize } from '../composables/useResize';
 interface Props {
     before: string;
     after: string;
-    maxHeight?: number;
     initial?: number;
 }
 
@@ -93,33 +80,45 @@ const overlayClipStyle = computed<CSSProperties>(() => ({
     height: `${displayHeight.value}px`,
 }));
 
+type Box = {
+    width: number;
+    height: number;
+};
+
+function getContainScale(boxA: Box, boxB: Box): number {
+    return Math.min(
+        boxA.width / boxB.width,
+        boxA.height / boxB.height
+    );
+}
+
 function refreshSizes() {
     if (!beforeImg.value || !afterImg.value) return;
 
     const containerWidth = container.value?.getBoundingClientRect().width || 500;
-    const maxHeight = props.maxHeight || 500;
+    const containerHeight = container.value?.getBoundingClientRect().height || 500;
+
     const b = beforeImg.value;
     const a = afterImg.value;
 
     if (!a.naturalHeight || !b.naturalHeight) return;
 
-    // pick a shared canvas based on max width
-    const ratio = Math.max(b.naturalWidth, a.naturalWidth) / Math.max(b.naturalHeight, a.naturalHeight);
-    const maxWidth = (maxHeight * ratio > containerWidth) ? containerWidth : maxHeight * ratio;
-    const scale = maxWidth / Math.max(b.naturalWidth, a.naturalHeight);
+    const virtualW = Math.max(b.naturalWidth, a.naturalWidth);
+    const virtualH = Math.max(b.naturalHeight, a.naturalHeight);
 
-    displayWidth.value = Math.min(containerWidth, maxHeight * ratio);
-    displayHeight.value = Math.min(maxHeight, displayWidth.value / ratio);
+    const scale = getContainScale({ width: containerWidth, height: containerHeight }, { width: virtualW, height: virtualH });
 
-    // IMPORTANT: BOTH fill full canvas width (no independent scaling)
+    displayWidth.value = virtualW * scale;
+    displayHeight.value = virtualH * scale;
+
     beforeStyle.value = {
-        width: `${displayWidth.value}px`,
-        height: 'auto',
+        width: `${a.naturalWidth * scale}px`,
+        height: `${a.naturalHeight * scale}px`,
     };
 
     afterStyle.value = {
-        width: `${displayWidth.value}px`,
-        height: 'auto',
+        width: `${b.naturalWidth * scale}px`,
+        height: `${b.naturalHeight * scale}px`,
     };
 }
 

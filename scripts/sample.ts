@@ -12,8 +12,8 @@ const sampleReport = {
             name: 'login_flow',
             status: 'passed',
             group: 'portal.apps.auth.desktop',
-            diff_img: getMockImg(1, 'diff', 1920, 700),
-            result_img: getMockImg(1, 'result', 1920, 700),
+            diff_img: getMockImg(1, 'diff', 1920, 800),
+            result_img: getMockImg(1, 'result', 2020, 700),
         },
         {
             name: 'forgot_password_email',
@@ -34,14 +34,14 @@ const sampleReport = {
             status: 'passed',
             group: 'portal.apps.auth.desktop',
             diff_img: getMockImg(4, 'diff', 1920, 700),
-            result_img: getMockImg(4, 'result', 1920, 700),
+            result_img: getMockImg(4, 'result', 1700, 600),
         },
         {
             name: 'session_timeout_modal',
             status: 'passed',
             group: 'portal.apps.auth.desktop',
             diff_img: getMockImg(5, 'diff', 1920, 700),
-            result_img: getMockImg(5, 'result', 1920, 700),
+            result_img: getMockImg(5, 'result', 2000, 800),
         },
 
         {
