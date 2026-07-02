@@ -282,9 +282,6 @@ importers:
       '@feathersjs/typebox':
         specifier: ^5.0.45
         version: 5.0.45(typescript@5.9.3)
-      '@primeicons/vue':
-        specifier: 8.0.0-alpha.1
-        version: 8.0.0-alpha.1(vue@3.5.39(typescript@5.9.3))
       '@primeuix/themes':
         specifier: ^2.0.3
         version: 2.0.3
@@ -525,14 +522,6 @@ packages:
 
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
-
-  '@primeicons/core@8.0.0-alpha.1':
-    resolution: {integrity: sha512-FjipxrQKiZae/dhspo4s7zUQEat7SjK4tfoiCR3FQh5biaj7LlZFkMmwHkBCQzlVYAujSjRiOdMjPe2jcT6P7A==}
-
-  '@primeicons/vue@8.0.0-alpha.1':
-    resolution: {integrity: sha512-S1ZmCr3woC0+tbfW0idkwXvjWVrpGjFo7ds/aaDpRQp5l7+9Fa/unXiA3YEoq9SnUHl8csHR1AkRYJ7InfQDsA==}
-    peerDependencies:
-      vue: ^3
 
   '@primeuix/styled@0.7.4':
     resolution: {integrity: sha512-QSO/NpOQg8e9BONWRBx9y8VGMCMYz0J/uKfNJEya/RGEu7ARx0oYW0ugI1N3/KB1AAvyGxzKBzGImbwg0KUiOQ==}
@@ -2507,16 +2496,6 @@ snapshots:
   '@paralleldrive/cuid2@2.3.1':
     dependencies:
       '@noble/hashes': 1.8.0
-
-  '@primeicons/core@8.0.0-alpha.1':
-    dependencies:
-      '@primeuix/utils': 0.6.4
-
-  '@primeicons/vue@8.0.0-alpha.1(vue@3.5.39(typescript@5.9.3))':
-    dependencies:
-      '@primeicons/core': 8.0.0-alpha.1
-      '@primeuix/utils': 0.6.4
-      vue: 3.5.39(typescript@5.9.3)
 
   '@primeuix/styled@0.7.4':
     dependencies:

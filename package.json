@@ -37,7 +37,6 @@
         "@feathersjs/rest-client": "^5.0.45",
         "@feathersjs/schema": "^5.0.45",
         "@feathersjs/typebox": "^5.0.45",
-        "@primeicons/vue": "8.0.0-alpha.1",
         "@primeuix/themes": "^2.0.3",
         "dayjs": "^1.11.21",
         "knex": "^3.3.0",
