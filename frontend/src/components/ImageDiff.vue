@@ -1,73 +1,69 @@
 <template>
-    <div
-        ref="container"
-        class="relative outline outline-surface-300 overflow-hidden bg-gray-300 select-none"
-        :style="{
-            width: `${displayWidth}px`,
-            height: `${displayHeight}px`,
+    <div ref="container"
+         :style="{
+            height: `${maxHeight}px`,
+            width: `100%`,
         }"
-        @mousedown="startDrag"
-        @touchstart.prevent="startDrag"
-    >
-        <!-- BEFORE -->
-        <img
-            ref="beforeImg"
-            :src="before"
-            class="absolute top-0 left-0"
-            :style="beforeStyle"
-            draggable="false"
-            @load="refreshSizes"
-        />
+         class="img-diff flex justify-center">
+        <div class="relative outline outline-surface-300 overflow-hidden bg-gray-300 select-none"
+             ref="viewport"
+             :style="{
+                width: `${displayWidth}px`,
+                height: `${displayHeight}px`,
+            }"
+             @mousedown="startDrag"
+             @touchstart.prevent="startDrag">
+            <!-- BEFORE -->
+            <img ref="beforeImg"
+                 :src="before"
+                 class="absolute top-0 left-0"
+                 :style="beforeStyle"
+                 draggable="false"
+                 @load="refreshSizes" />
 
-        <!-- AFTER (clipped wrapper) -->
-        <div
-            class="absolute top-0 left-0 overflow-hidden bg-purple-600/50"
-            :style="overlayClipStyle"
-        >
-            <img
-                ref="afterImg"
-                :src="after"
-                class="block max-w-none"
-                :style="afterStyle"
-                draggable="false"
-                @load="refreshSizes"
-            />
-        </div>
-
-        <!-- Divider -->
-        <div
-            class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
-            :style="{ left: `${position}%`, transform: 'translateX(-50%)' }"
-        >
-            <div
-                class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white shadow-lg"
-            >
-                <i class="pi pi-arrows-h text-gray-700" />
+            <!-- AFTER (clipped wrapper) -->
+            <div class="absolute top-0 left-0 overflow-hidden bg-purple-600/50"
+                 :style="overlayClipStyle">
+                <img ref="afterImg"
+                     :src="after"
+                     class="block max-w-none"
+                     :style="afterStyle"
+                     draggable="false"
+                     @load="refreshSizes" />
             </div>
-        </div>
 
-        <!-- Labels -->
-        <div class="absolute top-3 left-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-            <div class="font-semibold">Baseline</div>
-            <div v-if="beforeImg">{{ beforeImg.naturalWidth }} × {{ beforeImg.naturalHeight }}</div>
-        </div>
+            <!-- Divider -->
+            <div class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+                 :style="{ left: `${position}%`, transform: 'translateX(-50%)' }">
+                <div
+                     class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white shadow-lg">
+                    <i class="pi pi-arrows-h text-gray-700" />
+                </div>
+            </div>
 
-        <div class="absolute top-3 right-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
-            <div class="font-semibold">Result</div>
-            <div v-if="afterImg">{{ afterImg.naturalWidth }} × {{ afterImg.naturalHeight }}</div>
+            <!-- Labels -->
+            <div class="absolute top-3 left-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
+                <div class="font-semibold">Baseline</div>
+                <div v-if="beforeImg">{{ beforeImg.naturalWidth }} × {{ beforeImg.naturalHeight }}</div>
+            </div>
+
+            <div class="absolute top-3 right-3 rounded bg-black/70 px-3 py-2 text-xs text-white">
+                <div class="font-semibold">Result</div>
+                <div v-if="afterImg">{{ afterImg.naturalWidth }} × {{ afterImg.naturalHeight }}</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import type { CSSProperties } from 'vue';
 import { useResize } from '../composables/useResize';
 
 interface Props {
     before: string;
     after: string;
-    maxWidth?: number;
+    maxHeight?: number;
     initial?: number;
 }
 
@@ -76,6 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const container = ref<HTMLDivElement>();
+const viewport = ref<HTMLDivElement>();
 const beforeImg = ref<HTMLImageElement>();
 const afterImg = ref<HTMLImageElement>();
 
@@ -99,23 +96,20 @@ const overlayClipStyle = computed<CSSProperties>(() => ({
 function refreshSizes() {
     if (!beforeImg.value || !afterImg.value) return;
 
-    const parentWidth = container.value?.parentElement?.getBoundingClientRect().width || 900;
-
-    const maxWidth = Math.min(parentWidth, props.maxWidth || 3000);
+    const containerWidth = container.value?.getBoundingClientRect().width || 500;
+    const maxHeight = props.maxHeight || 500;
     const b = beforeImg.value;
     const a = afterImg.value;
 
+    if (!a.naturalHeight || !b.naturalHeight) return;
+
     // pick a shared canvas based on max width
-    const scale = maxWidth / Math.max(b.naturalWidth, a.naturalWidth);
+    const ratio = Math.max(b.naturalWidth, a.naturalWidth) / Math.max(b.naturalHeight, a.naturalHeight);
+    const maxWidth = (maxHeight * ratio > containerWidth) ? containerWidth : maxHeight * ratio;
+    const scale = maxWidth / Math.max(b.naturalWidth, a.naturalHeight);
 
-    const beforeW = b.naturalWidth * scale;
-    const beforeH = b.naturalHeight * scale;
-
-    const afterW = a.naturalWidth * scale;
-    const afterH = a.naturalHeight * scale;
-
-    displayWidth.value = Math.max(beforeW, afterW);
-    displayHeight.value = Math.max(beforeH, afterH);
+    displayWidth.value = Math.min(containerWidth, maxHeight * ratio);
+    displayHeight.value = Math.min(maxHeight, displayWidth.value / ratio);
 
     // IMPORTANT: BOTH fill full canvas width (no independent scaling)
     beforeStyle.value = {
@@ -133,9 +127,9 @@ function refreshSizes() {
 let dragging = false;
 
 function updatePosition(x: number) {
-    if (!container.value) return;
+    if (!viewport.value) return;
 
-    const rect = container.value.getBoundingClientRect();
+    const rect = viewport.value.getBoundingClientRect();
 
     position.value = Math.min(100, Math.max(0, ((x - rect.left) / rect.width) * 100));
 }
