@@ -8,51 +8,39 @@
                 <div class="basis-[200px]">Created</div>
                 <div class="basis-[200px]">Actions</div>
             </div>
-            <DataPaginated
-                :service="api.baselines"
-                sort-field="group"
-                :sort-order="-1"
-            >
+            <DataPaginated :service="api.baselines"
+                           sort-field="group"
+                           :sort-order="-1">
                 <template #list="{ items, reload }">
                     <div class="mb-3">
-                        <div
-                            v-for="item in items"
-                            class="flex gap-3 cursor-pointer items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                            @click="
+                        <div v-for="item in items"
+                             class="flex gap-3 cursor-pointer items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                             @click="
                                 openImages([
                                     { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
-                                    { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
-                                    { src: item.baseline_img, title: [item.group, item.name].join(' / ') },
                                 ])
-                            "
-                            :key="item.id"
-                        >
+                                "
+                             :key="item.id">
                             <div class="basis-[50px] flex items-center">
-                                <img
-                                    :src="item.baseline_img"
-                                    class="size-[50px] object-cover"
-                                />
+                                <img :src="item.baseline_img"
+                                     class="size-[50px] object-cover" />
                             </div>
                             <div class="font-semibold grow-1">{{ item.group }} / {{ item.name }}</div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.created_at)">{{ fromNow(item.created_at) }}</span>
-                                <span
-                                    class="text-xs"
-                                    v-tooltip.top="format(item.updated_at)"
-                                >
+                                <span class="text-xs"
+                                      v-tooltip.top="format(item.updated_at)">
                                     Last updated: {{ fromNow(item.updated_at) }}
                                 </span>
                             </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
-                                <LoadingButton
-                                    size="small"
-                                    icon-only
-                                    icon="trash"
-                                    rounded
-                                    severity="danger"
-                                    outlined
-                                    @click.stop.prevent="onRemove(item, reload)"
-                                >
+                                <LoadingButton size="small"
+                                               icon-only
+                                               icon="trash"
+                                               rounded
+                                               severity="danger"
+                                               outlined
+                                               @click.stop.prevent="onRemove(item, reload)">
                                 </LoadingButton>
                             </div>
                         </div>

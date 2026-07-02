@@ -4,6 +4,8 @@ import { onBeforeRouteLeave } from 'vue-router';
 export interface ImageView {
     src: string;
     title?: string;
+    width?: number;
+    height?: number;
 }
 
 const visible = ref(false);
