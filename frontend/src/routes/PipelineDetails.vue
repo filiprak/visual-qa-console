@@ -41,11 +41,12 @@
                         <div>
                             <div class="mb-3"
                                  v-for="entry in groupTestcases(items)">
-                                <div class="flex items-center gap-3 p-3 font-bold text-primary">
+                                <div class="flex items-center gap-3 p-3 font-semibold text-primary">
+                                    <Icon name="bookmark"></Icon>
                                     {{ entry[0] }}
                                 </div>
                                 <div v-for="item in entry[1]"
-                                     class="flex cursor-pointer h-13 gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                                     class="flex cursor-pointer h-13 gap-3 items-center px-4 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
                                      @click="openTestcase(item.id)"
                                      :key="item.id">
                                     <div class="basis-10 flex items-center">
@@ -68,7 +69,7 @@
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
                                         <span v-tooltip.top="format(item.updated_at)">{{
                                             fromNow(item.updated_at)
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="flex gap-2 justify-start items-start basis-[200px]">
                                         <LoadingButton v-if="item.status == 'failed'"

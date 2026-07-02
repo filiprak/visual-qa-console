@@ -81,13 +81,13 @@
                         <template v-if="view == 'result'">
                             <div>
                                 <img class="block outline outline-surface-300"
-                                     :src="testcase.result_img" />
+                                     :src="testcase.result_img || fallback_url" />
                             </div>
                         </template>
                         <template v-if="view == 'diff'">
                             <div>
                                 <img class="block outline outline-surface-300"
-                                     :src="testcase.diff_img" />
+                                     :src="testcase.diff_img || fallback_url" />
                             </div>
                         </template>
                         <template v-if="view == 'baseline'">
@@ -124,7 +124,7 @@ const view_options = computed(() => {
         { label: 'Compare', value: 'compare', hide: hide_diff.value },
         { label: 'Result', value: 'result' },
         { label: 'Diff', value: 'diff', hide: hide_diff.value },
-        { label: 'Baseline', value: 'baseline', hide: hide_diff.value },
+        { label: 'Baseline' + (baseline.value ? '' : ' ⚠'), icon: 'home', value: 'baseline' },
     ].filter(i => !i.hide);
 });
 

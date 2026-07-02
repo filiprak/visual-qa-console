@@ -14,7 +14,7 @@
             </div>
             <div class="flex gap-3 items-center p-4 text-muted-color">
                 <div class="basis-[50px]">Prev.</div>
-                <div class="grow">Testcase</div>
+                <div class="grow">Name</div>
                 <div class="basis-[200px]">Created</div>
                 <div class="basis-[200px]">Actions</div>
             </div>
@@ -25,12 +25,17 @@
                            sort-field="group"
                            :sort-order="-1">
                 <template #list="{ items, reload }">
-                    <div class="mb-3">
-                        <div v-for="item in items"
-                             class="flex gap-3 cursor-pointer items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                    <div class="mb-3"
+                         v-for="entry in groupBaselines(items)">
+                        <div class="flex items-center gap-3 p-3 font-semibold text-primary">
+                            <Icon name="bookmark"></Icon>
+                            {{ entry[0] }}
+                        </div>
+                        <div v-for="item in entry[1]"
+                             class="flex gap-3 cursor-pointer items-center p-4 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
                              @click="
                                 openImages([
-                                    { src: item.baseline_img, title: [item.pipeline_name, item.group, item.name].join(' / ') },
+                                    { src: item.baseline_img!, title: [item.pipeline_name, item.group, item.name].join(' / ') },
                                 ])
                                 "
                              :key="item.id">
@@ -38,7 +43,10 @@
                                 <img :src="item.baseline_img"
                                      class="size-[50px] object-contain border border-surface" />
                             </div>
-                            <div class="font-semibold grow-1">{{ item.group }} / {{ item.name }}</div>
+                            <div class="grow-1">
+                                <div class="font-semibold">{{ item.name }}</div>
+                                <div class="text-muted-color text-sm">hash: {{ item.slug }}</div>
+                            </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.created_at)">{{ fromNow(item.created_at) }}</span>
                                 <span class="text-xs"
@@ -73,10 +81,20 @@ const { openImages } = useImageView();
 
 const unique_pipelines = ref<BaselinePipeline[]>([]);
 const pipeline_filter = ref<string>('');
-const unique_pipelines_options = computed(() => unique_pipelines.value.map(i => ({
-    label: i.pipeline_name,
-    value: i.pipeline_name,
-})));
+
+function groupBaselines(items: Baseline[]) {
+    const by_group: Map<string, Baseline[]> = new Map();
+
+    items.forEach((i) => {
+        const group = i.group || 'default';
+        if (!by_group.has(group)) {
+            by_group.set(group, []);
+        }
+        by_group.get(group)?.push(i);
+    });
+
+    return [...by_group.entries()];
+}
 
 async function onRemove(item: Baseline, reload: () => Promise<void>) {
     if (!confirm()) return;
