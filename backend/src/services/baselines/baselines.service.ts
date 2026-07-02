@@ -21,7 +21,7 @@ export class BaselinesService extends KnexService<Baseline> {
 }
 
 export class BaselinesPipelinesService extends KnexAbstract<any, Partial<BaselinePipeline>> {
-    async find(params?: (Params<Query>) | undefined): Promise<BaselinePipeline[]> {
+    async find(params?: Params<Query> | undefined): Promise<BaselinePipeline[]> {
         return this.db(params)
             .select('pipeline_name')
             .distinct('pipeline_name')
@@ -49,9 +49,12 @@ export default (app: Application) => {
         querySchema,
     });
     app.use(ROUTE, service);
-    app.use(ROUTE_PIPELINES, new BaselinesPipelinesService({
-        Model: app.get('db'),
-    }));
+    app.use(
+        ROUTE_PIPELINES,
+        new BaselinesPipelinesService({
+            Model: app.get('db'),
+        }),
+    );
     app.service(ROUTE).hooks({
         before: {
             update: [notAllowedPublic],

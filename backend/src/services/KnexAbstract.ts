@@ -1,25 +1,25 @@
-import type { Application, Params, ServiceInterface } from "@feathersjs/feathers";
-import type { KnexAdapterOptions, KnexAdapterParams } from "@feathersjs/knex";
-import type { Knex } from "knex";
+import type { Application, Params, ServiceInterface } from '@feathersjs/feathers';
+import type { KnexAdapterOptions, KnexAdapterParams } from '@feathersjs/knex';
+import type { Knex } from 'knex';
 
 export class KnexAbstract<R, D = Partial<R>, SP = Params, PD = Partial<D>> implements ServiceInterface<R, D, SP, PD> {
     private readonly options: KnexAdapterOptions;
 
-    constructor(options: Omit<KnexAdapterOptions, "name">) {
+    constructor(options: Omit<KnexAdapterOptions, 'name'>) {
         this.options = { ...options, name: 'none' };
 
         if (!options || !options.Model) {
-            throw new Error('You must provide a Model (the initialized knex object)')
+            throw new Error('You must provide a Model (the initialized knex object)');
         }
     }
 
     get Model() {
-        return this.getModel()
+        return this.getModel();
     }
 
     getModel() {
         const { Model } = this.getOptions();
-        return Model
+        return Model;
     }
 
     getOptions() {
@@ -30,12 +30,12 @@ export class KnexAbstract<R, D = Partial<R>, SP = Params, PD = Partial<D>> imple
         const { Model, name, schema, tableOptions } = this.getOptions();
 
         if (params && params.transaction && params.transaction.trx) {
-            const { trx } = params.transaction
-            return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name)
+            const { trx } = params.transaction;
+            return schema ? (trx.withSchema(schema).table(name) as Knex.QueryBuilder) : trx(name);
         }
 
-        return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name, tableOptions)
+        return schema ? (Model.withSchema(schema).table(name) as Knex.QueryBuilder) : Model(name, tableOptions);
     }
 
-    async setup(app: Application, path: string) { }
+    async setup(app: Application, path: string) {}
 }

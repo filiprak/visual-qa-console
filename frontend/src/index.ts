@@ -18,10 +18,10 @@ const Theme = definePreset(BaseTheme, {
             sm: '0px',
             md: '0px',
             lg: '0px',
-            xl: '0px'
-        }
+            xl: '0px',
+        },
     },
-})
+});
 
 app.use(router);
 app.use(PrimeVue, {

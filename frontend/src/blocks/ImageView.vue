@@ -1,8 +1,10 @@
 <template>
     <div class="flex justify-center">
-        <Drawer v-model:visible="visible"
-                style="background: 'red'"
-                position="full">
+        <Drawer
+            v-model:visible="visible"
+            style="background: 'red'"
+            position="full"
+        >
             <template #header>
                 <div class="flex grow gap-3 justify-center pl-10">
                     <div class="text-center">
@@ -12,22 +14,28 @@
                 </div>
             </template>
             <div class="h-full">
-                <swiper @swiper="onReady"
-                        :style="{
-                            '--swiper-navigation-color': '#fff',
-                            '--swiper-pagination-color': '#fff',
-                        }"
-                        :zoom="{ enabled: true }"
-                        :navigation="true"
-                        class="w-full h-full"
-                        :modules="modules"
-                        @slide-change="onSlideChange"
-                        :space-between="50">
+                <swiper
+                    @swiper="onReady"
+                    :style="{
+                        '--swiper-navigation-color': '#fff',
+                        '--swiper-pagination-color': '#fff',
+                    }"
+                    :zoom="{ enabled: true }"
+                    :navigation="true"
+                    class="w-full h-full"
+                    :modules="modules"
+                    @slide-change="onSlideChange"
+                    :space-between="50"
+                >
                     <swiper-slide v-for="item in current_images">
-                        <div class="swiper-zoom-container"
-                             @wheel="onMouseWheel">
-                            <img :src="item.src"
-                                 @load="onImgLoad($event, item)" />
+                        <div
+                            class="swiper-zoom-container"
+                            @wheel="onMouseWheel"
+                        >
+                            <img
+                                :src="item.src"
+                                @load="onImgLoad($event, item)"
+                            />
                         </div>
                     </swiper-slide>
                 </swiper>
