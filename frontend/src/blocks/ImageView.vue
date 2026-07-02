@@ -45,7 +45,7 @@ import Drawer from 'primevue/drawer';
 import { Zoom, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { ImageView, useImageView } from '../composables/useImageView';
-import { Swiper as SwiperInstance } from 'swiper/types';
+import type { Swiper as SwiperInstance } from 'swiper/types';
 import { ref } from 'vue';
 
 const { visible, current_images } = useImageView();

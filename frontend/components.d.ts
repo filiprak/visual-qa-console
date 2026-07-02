@@ -12,18 +12,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    ButtonGroup: typeof import('primevue/buttongroup')['default']
-    copy: typeof import('./src/components/Icon copy.vue')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
-    Galleria: typeof import('primevue/galleria')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
-    Image: typeof import('primevue/image')['default']
     ImageDiff: typeof import('./src/components/ImageDiff.vue')['default']
-    ImageView: typeof import('./src/components/ImageView.vue')['default']
     LoadingButton: typeof import('./src/components/LoadingButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Tag: typeof import('primevue/tag')['default']
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
   }
 }
