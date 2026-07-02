@@ -17,6 +17,7 @@
         "format": "prettier --write .",
         "fix": "pnpm format && pnpm tsc",
         "migrate": "pnpm exec ts-node backend/migrate.ts",
+        "sample": "pnpm exec ts-node scripts/sample.ts",
         "start": "node dist/backend/src/index.js"
     },
     "keywords": [],
