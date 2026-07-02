@@ -18,7 +18,7 @@
                 :items="typeItems(items)"
             >
                 <div
-                    class="rounded-md mb-3"
+                    class="mb-3"
                     v-if="items.length > 0"
                 >
                     <div

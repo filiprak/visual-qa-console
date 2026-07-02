@@ -2,18 +2,31 @@ import './styles.css';
 import 'primeicons/primeicons.css';
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
-import ThemePreset from '@primeuix/themes/aura';
+import BaseTheme from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
+import { definePreset } from '@primeuix/themes';
 import App from './App.vue';
 import router from './router';
 import { showError } from './errors';
 
 const app = createApp(App);
+const Theme = definePreset(BaseTheme, {
+    semantic: {
+        borderRadius: {
+            none: '0px',
+            xs: '0px',
+            sm: '0px',
+            md: '0px',
+            lg: '0px',
+            xl: '0px'
+        }
+    },
+})
 
 app.use(router);
 app.use(PrimeVue, {
     theme: {
-        preset: ThemePreset,
+        preset: Theme,
         options: {
             darkModeSelector: '.dark',
         },

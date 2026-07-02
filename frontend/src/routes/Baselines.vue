@@ -34,12 +34,9 @@
                                 </span>
                             </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
-                                <LoadingButton size="small"
-                                               icon-only
+                                <LoadingButton icon-only
                                                icon="trash"
-                                               rounded
                                                severity="danger"
-                                               outlined
                                                @click.stop.prevent="onRemove(item, reload)">
                                 </LoadingButton>
                             </div>
