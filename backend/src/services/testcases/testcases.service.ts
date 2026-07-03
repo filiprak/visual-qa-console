@@ -12,8 +12,8 @@ export class TestCasesService extends KnexService<TestCase> {
         return this.db(params)
             .table('testcases')
             .insert(data)
-            .onConflict(['unique_key'])
-            .merge(['name', 'status', 'result_img', 'diff_img', 'updated_at'])
+            .onConflict(['pipeline_id', 'unique_key'])
+            .merge(['name', 'group', 'status', 'result_img', 'diff_img', 'accepted_at', 'updated_at'])
             .returning('*');
     }
 }

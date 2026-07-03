@@ -30,7 +30,7 @@ export async function up(knex: Knex) {
         table.index(['status']);
         table.index(['unique_key']);
 
-        table.unique(['unique_key']);
+        table.unique(['pipeline_id', 'unique_key']);
     });
 
     await knex.schema.createTable('baselines', (table) => {

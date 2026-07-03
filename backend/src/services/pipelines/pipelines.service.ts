@@ -17,7 +17,7 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
                     SUM(t.status = 'failed') AS failed_testcases,
                     COUNT(*) AS total_testcases
                 FROM pipelines p
-                LEFT JOIN testcases t
+                INNER JOIN testcases t
                     ON t.pipeline_id = p.id
                 WHERE p.id = ?
                 GROUP BY p.id;
