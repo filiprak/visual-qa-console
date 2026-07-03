@@ -6,6 +6,7 @@ import {
     patchSchema,
     querySchema,
     type Baseline,
+    type BaselineMatchResponse,
     type BaselinePipeline,
 } from './baselines.schema.js';
 import { KnexService, transaction, type KnexAdapterOptions, type KnexAdapterParams } from '@feathersjs/knex';
@@ -46,9 +47,9 @@ export class BaselinesMatchService extends KnexAbstract<any, Partial<BaselineMat
         super(options);
         this.app = app;
     }
-    async create(data: BaselineMatch, params?: KnexAdapterParams): Promise<Baseline[]> {
+    async create(data: BaselineMatch, params?: KnexAdapterParams): Promise<BaselineMatchResponse> {
         if (data.testcases.length > 0) {
-            return this.app
+            const baselines = await this.app
                 .service('/api/v1/baselines')
                 .find({
                     query: {
@@ -60,6 +61,13 @@ export class BaselinesMatchService extends KnexAbstract<any, Partial<BaselineMat
                     transaction: params?.transaction,
                 })
                 .then((r) => r.data);
+            const baselines_map = new Map(baselines.map(i => [i.unique_key, i]));
+            return data.testcases.map(t => {
+                return {
+                    ...t,
+                    baseline: baselines_map.get(testcaseKey(data.pipeline_name, t.name, t.group)),
+                };
+            });
         } else {
             return [];
         }
