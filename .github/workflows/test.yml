@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,5 +23,7 @@ jobs:
         run: pnpm install
       - name: Prepare data
         run: mkdir data
+      - name: Typecheck code
+        run: pnpm tsc
       - name: Run tests
         run: pnpm test
