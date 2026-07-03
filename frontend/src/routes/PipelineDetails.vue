@@ -26,7 +26,7 @@
                 </Panel>
             </div>
             <div v-if="pipeline">
-                <div class="flex gap-5 justify-between items-center w-full bg-surface-0 pr-2">
+                <div class="flex justify-between items-stretch w-full bg-surface-0 dark:bg-surface-900">
                     <Tabs v-model:value="status_filter"
                           class="grow">
                         <TabList>
@@ -41,16 +41,18 @@
                             </Tab>
                         </TabList>
                     </Tabs>
-                    <div>
-                        <IconField>
-                            <InputIcon>
-                                <Icon name="search" />
-                            </InputIcon>
-                            <InputText v-model="text_filter"
-                                       type="text"
-                                       fluid
-                                       placeholder="Search by suite name" />
-                        </IconField>
+                    <div class="px-3 border-b border-surface">
+                        <div class="flex items-center h-full">
+                            <IconField>
+                                <InputIcon>
+                                    <Icon name="search" />
+                                </InputIcon>
+                                <InputText v-model="text_filter"
+                                           type="text"
+                                           fluid
+                                           placeholder="Search by suite name" />
+                            </IconField>
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-3 items-center p-4 text-muted-color">
@@ -101,7 +103,7 @@
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
                                         <span v-tooltip.top="format(item.updated_at)">{{
                                             fromNow(item.updated_at)
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                     <div class="flex gap-2 justify-start items-start basis-[200px]">
                                         <LoadingButton v-if="item.status == 'failed'"
