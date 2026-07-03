@@ -5,14 +5,13 @@ let app: Application;
 
 beforeAll(async () => {
     app = await setupServer();
-})
+});
 
 afterAll(async () => {
     await teardownServer(app);
-})
+});
 
 describe('report service', () => {
-
     it('responds 400 when no payload', async () => {
         const response = await request('/api/v1/report', {
             method: 'post',
@@ -34,7 +33,7 @@ describe('report service', () => {
         const response = await request('/api/v1/report', {
             method: 'post',
             payload: {
-                test: 1
+                test: 1,
             },
         });
 
@@ -74,5 +73,4 @@ describe('report service', () => {
         `);
         expect(response.status).toBe(201);
     });
-
 });

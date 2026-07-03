@@ -60,8 +60,8 @@ export class BaselinesMatchService extends KnexAbstract<any, Partial<BaselineMat
                     transaction: params?.transaction,
                 })
                 .then((r) => r.data);
-            const baselines_map = new Map(baselines.map(i => [i.unique_key, i]));
-            return data.testcases.map(t => {
+            const baselines_map = new Map(baselines.map((i) => [i.unique_key, i]));
+            return data.testcases.map((t) => {
                 return {
                     ...t,
                     baseline: baselines_map.get(testcaseKey(data.pipeline_name, t.name, t.group)),

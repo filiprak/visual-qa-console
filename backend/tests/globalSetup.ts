@@ -1,7 +1,3 @@
-export async function setup() {
+export async function setup() {}
 
-}
-
-export async function teardown() {
-
-}
+export async function teardown() {}

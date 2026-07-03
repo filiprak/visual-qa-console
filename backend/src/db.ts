@@ -9,6 +9,6 @@ export const db = knex({
     },
     useNullAsDefault: true,
     migrations: {
-        directory: './backend/migrations'
+        directory: './backend/migrations',
     },
 });

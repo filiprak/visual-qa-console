@@ -45,4 +45,4 @@ export const publicSchema = schema;
 export type Baseline = Static<typeof publicSchema>;
 export type BaselinePipeline = { pipeline_name: string };
 export type BaselineMatch = Static<typeof matchSchema>;
-export type BaselineMatchResponse = { name: string, group: string, baseline?: Baseline }[];
+export type BaselineMatchResponse = { name: string; group: string; baseline?: Baseline }[];
