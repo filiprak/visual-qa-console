@@ -31,7 +31,7 @@
                             <Icon name="flag"></Icon>
                             Report issue
                         </Button>
-                        <LoadingButton v-if="testcase?.status == 'failed'"
+                        <LoadingButton v-if="testcase?.status == 'failed' || !baseline"
                                        @click="onAccept"
                                        severity="success">
                             <Icon name="check"></Icon>
