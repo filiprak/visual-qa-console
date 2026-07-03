@@ -119,7 +119,8 @@
                                             :src="baseline_src" />
                                 </div>
                                 <div v-else>
-                                    <Sample class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                    <Sample class="block outline outline-surface-300 w-full h-full"
+                                            :style="{ width: `${result_info.width}px`, aspectRatio: result_info.width / result_info.height }"
                                             :src="fallback_url" />
                                 </div>
                             </template>
