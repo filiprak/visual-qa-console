@@ -1,23 +1,13 @@
-import type { Pipeline, Review } from '@/types';
-import type { Application, HookContext } from '../../declarations.js';
+import type { Review } from '@/types';
+import type { Application } from '../../declarations.js';
 import { dataSchema } from './review.schema.js';
-import type { NextFunction, Params, Query, ServiceInterface } from '@feathersjs/feathers';
+import type { Params, ServiceInterface } from '@feathersjs/feathers';
 import { getValidateHooks } from '../../utils/hooks.js';
 import { utcNow } from '../../utils/dates.js';
-import { transaction, type KnexAdapterTransaction } from '@feathersjs/knex';
+import { type KnexAdapterTransaction } from '@feathersjs/knex';
+import { transactionHandler } from '../../hooks/transaction.hook.js';
 
 const ROUTE = '/api/v1/review';
-
-const transactionHandler = async (context: HookContext, next: NextFunction) => {
-    try {
-        await transaction.start()(context);
-        await next();
-        await transaction.end()(context);
-    } catch (err) {
-        await transaction.rollback()(context);
-        throw err;
-    }
-};
 
 export class ReviewService implements ServiceInterface<any, Partial<Review>> {
     private readonly app: Application;

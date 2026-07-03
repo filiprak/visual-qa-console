@@ -3,7 +3,7 @@ const generateShortSha = () => Math.random().toString(16).substring(2, 9);
 const getMockImg = (id: number, type: string, w: number, h: number) =>
     `https://picsum.photos/seed/${id}-${type}/${w}/${h}`;
 
-const sampleReport = {
+const sampleReport = () => ({
     name: 'ui-components',
     commit_sha: generateShortSha(),
     branch_name: 'master',
@@ -296,13 +296,19 @@ const sampleReport = {
             result_img: getMockImg(40, 'result', 390, 700),
         },
     ],
-};
+});
 
-(async () => {
+async function report() {
     const res = await fetch('http://localhost:8080/api/v1/report', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(sampleReport),
+        body: JSON.stringify(sampleReport()),
     }).then((r) => r.json());
     console.log(JSON.stringify(res, null, 2));
+}
+
+(async () => {
+    await Promise.all([
+        report(),
+    ])
 })();
