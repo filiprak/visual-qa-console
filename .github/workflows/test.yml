@@ -1,9 +1,9 @@
-name: Test
+name: CI
 on:
   push:
 
 jobs:
-  test:
+  typecheck-and-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
