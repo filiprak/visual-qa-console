@@ -1,5 +1,5 @@
 import type { Application } from '../../src/declarations.js';
-import { request, setupServer, teardownServer } from '../utils.js';
+import { expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application;
 
@@ -72,5 +72,40 @@ describe('report service', () => {
           }
         `);
         expect(response.status).toBe(201);
+
+        const pipelines = await request('/api/v1/pipelines');
+
+        expect(pipelines.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "branch_name": "master",
+                "commit_sha": "f7d93421",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 1,
+                  "groups": 1,
+                  "passed": 1,
+                  "status": "failed",
+                  "total": 2,
+                },
+                "id": 1,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
     });
 });
