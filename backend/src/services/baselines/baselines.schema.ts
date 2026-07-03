@@ -24,7 +24,11 @@ export const dataSchema = Type.Pick(schema, [
     'created_at',
 ]);
 export const patchSchema = Type.Partial(Type.Pick(schema, ['name']));
-export const querySchema = querySyntax(Type.Pick(schema, ['name', 'pipeline_name', 'slug', 'group']));
+export const querySchema = querySyntax(Type.Pick(schema, ['name', 'pipeline_name', 'slug', 'group']), {
+    group: {
+        $like: Type.String(),
+    },
+});
 export const publicSchema = schema;
 
 export type Baseline = Static<typeof publicSchema>;

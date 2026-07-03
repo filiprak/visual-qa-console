@@ -2,9 +2,9 @@
     <div class="p-12 flex justify-center">
         <div class="max-w-[1600px] grow">
             <h1 class="text-5xl font-semibold my-8">Baseline Screenshots</h1>
-            <div v-if="unique_pipelines.length > 0"
-                 class="mb-3">
-                <Tabs v-model:value="pipeline_filter">
+            <div class="flex justify-between items-stretch w-full bg-surface-0 dark:bg-surface-900">
+                <Tabs v-model:value="pipeline_filter"
+                      class="grow">
                     <TabList>
                         <Tab v-for="p in unique_pipelines"
                              :value="p.pipeline_name">
@@ -12,6 +12,19 @@
                         </Tab>
                     </TabList>
                 </Tabs>
+                <div class="px-3 border-b border-surface">
+                    <div class="flex items-center h-full">
+                        <IconField>
+                            <InputIcon>
+                                <Icon name="search" />
+                            </InputIcon>
+                            <InputText v-model="text_filter"
+                                       type="text"
+                                       fluid
+                                       placeholder="Search by suite name" />
+                        </IconField>
+                    </div>
+                </div>
             </div>
             <div class="flex gap-3 items-center p-4 text-muted-color">
                 <div class="basis-[50px]">Prev.</div>
@@ -22,9 +35,9 @@
 
             <DataPaginated v-if="pipeline_filter || unique_pipelines.length < 1"
                            :service="api.baselines"
-                           :query="{ pipeline_name: pipeline_filter }"
+                           :query="{ pipeline_name: pipeline_filter, group: { $like: `%${text_filter_d}%` } }"
                            sort-field="group"
-                           :sort-order="-1">
+                           :sort-order="1">
                 <template #list="{ items }">
                     <div class="mb-3"
                          v-for="entry in groupBaselines(items)">
@@ -81,12 +94,15 @@ import type { Baseline, BaselinePipeline } from '@/types';
 import { useImageView } from '../composables/useImageView.ts';
 import { onBeforeMount, ref } from 'vue';
 import { useConfirmDialog } from '../composables/useConfirmDialog';
+import { useDebounce } from '../composables/useDebounce';
 
 const { openImages } = useImageView();
 const { confirmDialog } = useConfirmDialog();
 
 const unique_pipelines = ref<BaselinePipeline[]>([]);
 const pipeline_filter = ref<string>('');
+const text_filter = ref<string>('');
+const text_filter_d = useDebounce(text_filter);
 
 function groupBaselines(items: Baseline[]) {
     const by_group: Map<string, Baseline[]> = new Map();
