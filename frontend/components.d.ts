@@ -11,12 +11,16 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     copy: typeof import('./src/components/Sample copy.vue')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
+    IconField: typeof import('primevue/iconfield')['default']
     ImageDiff: typeof import('./src/components/ImageDiff.vue')['default']
+    InputIcon: typeof import('primevue/inputicon')['default']
+    InputText: typeof import('primevue/inputtext')['default']
     LoadingButton: typeof import('./src/components/LoadingButton.vue')['default']
     Message: typeof import('primevue/message')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -24,6 +28,7 @@ declare module 'vue' {
     Sample: typeof import('./src/components/Sample.vue')['default']
     SampleInfo: typeof import('./src/components/SampleInfo.vue')['default']
     SampleSize: typeof import('./src/components/SampleSize.vue')['default']
+    SelectButton: typeof import('primevue/selectbutton')['default']
     Tab: typeof import('primevue/tab')['default']
     TabList: typeof import('primevue/tablist')['default']
     Tabs: typeof import('primevue/tabs')['default']

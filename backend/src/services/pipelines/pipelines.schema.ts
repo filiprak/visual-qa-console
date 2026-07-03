@@ -1,4 +1,4 @@
-import { Type, type Static } from '@feathersjs/typebox';
+import { querySyntax, Type, type Static } from '@feathersjs/typebox';
 
 const schema = Type.Object(
     {
@@ -24,7 +24,7 @@ const schema = Type.Object(
 
 export const dataSchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'updated_at', 'created_at']);
 export const patchSchema = Type.Partial(Type.Pick(schema, []));
-export const querySchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'created_at']);
+export const querySchema = querySyntax(Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'created_at']));
 export const publicSchema = schema;
 
 export type Pipeline = Static<typeof publicSchema>;

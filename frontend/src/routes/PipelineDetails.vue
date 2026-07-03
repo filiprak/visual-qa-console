@@ -3,15 +3,6 @@
         <div class="max-w-[1600px] grow">
             <h1 class="text-5xl font-semibold my-8">Pipeline #{{ pipeline?.id }} {{ pipeline?.name }}</h1>
             <div class="grid grid-cols-4 gap-3 mb-6">
-                <Panel header="Test suites">
-                    {{ pipeline?.details.groups }}
-                </Panel>
-                <Panel header="Total tests">
-                    {{ pipeline?.details.total }}
-                </Panel>
-                <Panel header="Failed tests">
-                    {{ pipeline?.details.failed }}
-                </Panel>
                 <Panel header="Status">
                     <Tag v-if="pipeline?.details.status == 'passed'"
                          severity="success">
@@ -24,8 +15,43 @@
                         Failed
                     </Tag>
                 </Panel>
+                <Panel header="Test suites">
+                    {{ pipeline?.details.groups }}
+                </Panel>
+                <Panel header="Total tests">
+                    {{ pipeline?.details.total }}
+                </Panel>
+                <Panel header="Failed tests">
+                    {{ pipeline?.details.failed }}
+                </Panel>
             </div>
             <div v-if="pipeline">
+                <div class="flex gap-5 justify-between items-center w-full bg-surface-0 pr-2">
+                    <Tabs v-model:value="status_filter">
+                        <TabList>
+                            <Tab v-for="s in tabs_opts"
+                                 :value="s.value">
+                                {{ s.label }}
+                                <Badge v-if="s.count"
+                                       size="small"
+                                       severity="secondary">
+                                    {{ s.count }}
+                                </Badge>
+                            </Tab>
+                        </TabList>
+                    </Tabs>
+                    <div>
+                        <IconField>
+                            <InputIcon>
+                                <Icon name="search" />
+                            </InputIcon>
+                            <InputText v-model="text_filter"
+                                       type="text"
+                                       fluid
+                                       placeholder="Search by suite name" />
+                        </IconField>
+                    </div>
+                </div>
                 <div class="flex gap-3 items-center p-4 text-muted-color">
                     <div class="basis-[28px]">#</div>
                     <div class="grow-1">Testcase name</div>
@@ -34,7 +60,11 @@
                     <div class="basis-[200px]">Actions</div>
                 </div>
                 <DataPaginated :service="api.testcases"
-                               :query="{ pipeline_id: pipeline.id }"
+                               :query="{
+                                pipeline_id: pipeline.id,
+                                status: status_filter !== 'all' ? status_filter : undefined,
+                                group: { $like: `%${text_filter_d}%` },
+                            }"
                                :reload="[api.review]"
                                sort-field="group"
                                :sort-order="1">
@@ -100,7 +130,7 @@ import vTooltip from 'primevue/tooltip';
 import Icon from '../components/Icon.vue';
 import Tag from 'primevue/tag';
 import DataPaginated from '../components/DataPaginated.vue';
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Pipeline, TestCase } from '@/types';
 import { api } from '../api';
@@ -109,11 +139,27 @@ import { useTestcaseView } from '../composables/useTestcaseView.ts';
 import { useReview } from '../composables/useReview.ts';
 import { onBackendModified } from '../api/api.ts';
 import TestStatus from '../components/TestStatus.vue';
+import { testcaseStatusOpts } from '../utils/statuses';
+import { useDebounce } from '../composables/useDebounce';
 
 const route = useRoute();
 const pipeline = ref<Pipeline>();
+const status_filter = ref<string>('all');
+const text_filter = ref<string>('');
+const text_filter_d = useDebounce(text_filter);
 const { openTestcase } = useTestcaseView();
 const { acceptTestcase, loading: accepting } = useReview();
+
+const tabs_opts = computed(() => {
+    const details = (pipeline.value?.details || {});
+    return [
+        { value: 'all', label: 'All tests', count: pipeline.value?.details.total },
+        ...testcaseStatusOpts.map(i => ({
+            ...i,
+            count: details[i.value as keyof typeof details],
+        })),
+    ];
+});
 
 function groupTestcases(items: TestCase[]) {
     const by_group: Map<string, TestCase[]> = new Map();
