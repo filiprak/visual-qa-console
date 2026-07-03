@@ -84,7 +84,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -107,7 +108,8 @@ describe('report service', () => {
             "skip": 0,
             "total": 1,
           }
-        `);
+        `,
+        );
 
         const testcases = await request('/api/v1/testcases');
 
@@ -123,7 +125,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -157,7 +160,8 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
     });
 
     it('merges into existing pipeline if matching', async () => {
@@ -197,7 +201,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -220,7 +225,8 @@ describe('report service', () => {
             "skip": 0,
             "total": 1,
           }
-        `);
+        `,
+        );
 
         const testcases = await request('/api/v1/testcases');
 
@@ -240,7 +246,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -287,6 +294,7 @@ describe('report service', () => {
             "skip": 0,
             "total": 3,
           }
-        `);
+        `,
+        );
     });
 });

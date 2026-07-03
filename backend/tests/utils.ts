@@ -25,8 +25,8 @@ export async function request(
             options.rawPayload !== undefined
                 ? options.rawPayload
                 : options.payload !== undefined
-                    ? JSON.stringify(options.payload)
-                    : undefined,
+                  ? JSON.stringify(options.payload)
+                  : undefined,
     });
     const json = await res.json();
 
@@ -62,6 +62,4 @@ export async function teardownServer(app: Application) {
     // await db.seed.run();
 }
 
-export const expectSqlTimestamp = expect.stringMatching(
-    /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
-);
+export const expectSqlTimestamp = expect.stringMatching(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
