@@ -1,6 +1,5 @@
 import { hooks } from '@feathersjs/schema';
 import { getValidator } from '@feathersjs/typebox';
-import { querySyntax } from '@feathersjs/typebox';
 import type { TObject } from '@feathersjs/typebox';
 import { dataValidator, queryValidator } from '../validators.js';
 

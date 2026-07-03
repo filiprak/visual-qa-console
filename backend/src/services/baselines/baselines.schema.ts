@@ -23,6 +23,17 @@ export const dataSchema = Type.Pick(schema, [
     'updated_at',
     'created_at',
 ]);
+
+export const matchSchema = Type.Object({
+    pipeline_name: Type.String(),
+    testcases: Type.Array(
+        Type.Object({
+            name: Type.String(),
+            group: Type.String(),
+        }),
+        { maxItems: 10000 }
+    ),
+});
 export const patchSchema = Type.Partial(Type.Pick(schema, ['name']));
 export const querySchema = querySyntax(Type.Pick(schema, ['name', 'pipeline_name', 'slug', 'group']), {
     group: {
@@ -33,3 +44,4 @@ export const publicSchema = schema;
 
 export type Baseline = Static<typeof publicSchema>;
 export type BaselinePipeline = { pipeline_name: string };
+export type BaselineMatch = Static<typeof matchSchema>;
