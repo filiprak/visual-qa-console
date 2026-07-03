@@ -1,30 +1,22 @@
 <template>
-    <DataView
-        :value="rows"
-        lazy
-        paginator
-        :loading="loading"
-        :rows="rowsPerPage"
-        :totalRecords="total"
-        :first="first"
-        :sortField="sortField"
-        :sortOrder="sortOrder"
-        @page="onPage"
-    >
+    <DataView :value="rows"
+              lazy
+              paginator
+              :loading="loading"
+              :rows="rowsPerPage"
+              :totalRecords="total"
+              :first="first"
+              :sortField="sortField"
+              :sortOrder="sortOrder"
+              @page="onPage">
         <template #list="{ items }">
-            <slot
-                name="list"
-                :reload="load"
-                :items="typeItems(items)"
-            >
-                <div
-                    class="mb-3"
-                    v-if="items.length > 0"
-                >
-                    <div
-                        v-for="item in items"
-                        class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                    >
+            <slot name="list"
+                  :reload="load"
+                  :items="typeItems(items)">
+                <div class="mb-3"
+                     v-if="items.length > 0">
+                    <div v-for="item in items"
+                         class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface">
                         {{ item }}
                     </div>
                 </div>
@@ -42,12 +34,14 @@
 <script setup lang="ts" generic="T">
 import type { ClientService, FeathersService } from '@feathersjs/feathers';
 import DataView from 'primevue/dataview';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, resolveComponent } from 'vue';
+import { onBackendModified } from '../api/api';
 
 interface Props {
     service: FeathersService<unknown, ClientService<T>>;
     query?: Record<string, unknown>;
     rows?: number;
+    watchApis?: ClientService[];
     sortField?: string;
     sortOrder?: number;
 }
@@ -58,6 +52,7 @@ function typeItems(items: unknown[]): T[] {
 
 const props = withDefaults(defineProps<Props>(), {
     query: () => ({}),
+    watchApis: () => ([]),
     rows: 30,
 });
 
@@ -102,6 +97,10 @@ function onPage(event: any) {
 }
 
 watch(() => props.query, load, { deep: true });
+
+onBackendModified([...props.watchApis, props.service], () => {
+    load();
+});
 
 onMounted(() => {
     load();

@@ -35,9 +35,10 @@
                 </div>
                 <DataPaginated :service="api.testcases"
                                :query="{ pipeline_id: pipeline.id }"
+                               :reload="[api.review]"
                                sort-field="group"
                                :sort-order="1">
-                    <template #list="{ items, reload }">
+                    <template #list="{ items }">
                         <div>
                             <div class="mb-3"
                                  v-for="entry in groupTestcases(items)">
@@ -87,7 +88,7 @@
                                                        icon="check"
                                                        severity="success"
                                                        :loading="accepting"
-                                                       @click.stop.prevent="onAcceptTestcase(item, reload)">
+                                                       @click.stop.prevent="onAcceptTestcase(item)">
                                             Accept
                                         </LoadingButton>
                                     </div>
@@ -105,7 +106,6 @@ import Panel from 'primevue/panel';
 import vTooltip from 'primevue/tooltip';
 import Icon from '../components/Icon.vue';
 import Tag from 'primevue/tag';
-import Button from 'primevue/button';
 import DataPaginated from '../components/DataPaginated.vue';
 import { onBeforeMount, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -114,6 +114,7 @@ import { api } from '../api';
 import { format, fromNow } from '../utils/dates.ts';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
 import { useReview } from '../composables/useReview.ts';
+import { onBackendModified } from '../api/api.ts';
 
 const route = useRoute();
 const pipeline = ref<Pipeline>();
@@ -134,15 +135,16 @@ function groupTestcases(items: TestCase[]) {
     return [...by_group.entries()];
 }
 
-async function onAcceptTestcase(item: TestCase, reloadTestcases: () => Promise<void>) {
+async function onAcceptTestcase(item: TestCase) {
     await acceptTestcase(item.id);
-    await load();
-    await reloadTestcases();
 }
 
 async function load() {
     pipeline.value = await api.pipelines.get(route.params.id as string);
 }
 
+onBackendModified([api.review], async () => {
+    await load();
+});
 onBeforeMount(load);
 </script>

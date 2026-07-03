@@ -24,7 +24,7 @@
                            :query="{ pipeline_name: pipeline_filter }"
                            sort-field="group"
                            :sort-order="-1">
-                <template #list="{ items, reload }">
+                <template #list="{ items }">
                     <div class="mb-3"
                          v-for="entry in groupBaselines(items)">
                         <div class="flex items-center gap-3 p-3 font-semibold text-primary">
@@ -61,7 +61,7 @@
                                 <LoadingButton icon-only
                                                icon="trash"
                                                severity="danger"
-                                               @click.stop.prevent="onRemove(item, reload)">
+                                               @click.stop.prevent="onRemove(item)">
                                 </LoadingButton>
                             </div>
                         </div>
@@ -99,10 +99,9 @@ function groupBaselines(items: Baseline[]) {
     return [...by_group.entries()];
 }
 
-async function onRemove(item: Baseline, reload: () => Promise<void>) {
+async function onRemove(item: Baseline) {
     if (!confirm()) return;
     await api.baselines.remove(item.id);
-    await reload();
 }
 
 onBeforeMount(async () => {
