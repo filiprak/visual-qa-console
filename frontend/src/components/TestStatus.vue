@@ -1,12 +1,15 @@
 <template>
-
-    <Tag v-if="status == 'passed'"
-         severity="success">
+    <Tag
+        v-if="status == 'passed'"
+        severity="success"
+    >
         <Icon name="check"> </Icon>
         Passed
     </Tag>
-    <Tag v-else
-         severity="danger">
+    <Tag
+        v-else
+        severity="danger"
+    >
         <Icon name="times"></Icon>
         Failed
     </Tag>

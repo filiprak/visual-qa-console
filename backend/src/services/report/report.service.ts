@@ -4,7 +4,7 @@ import { dataSchema } from './report.schema.js';
 import type { Params, ServiceInterface } from '@feathersjs/feathers';
 import { getValidateHooks } from '../../utils/hooks.js';
 import { utcNow } from '../../utils/dates.js';
-import { slugify } from '../../utils/func.js';
+import { testcaseKey } from '../../utils/func.js';
 import type { KnexAdapterTransaction } from '@feathersjs/knex';
 import { transactionHandler } from '../../hooks/transaction.hook.js';
 
@@ -59,7 +59,7 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
                     ...data.testcases.map((i) => ({
                         ...i,
                         group: i.group || 'default',
-                        slug: slugify(i.name),
+                        unique_key: testcaseKey(pipeline.name, i.name, i.group),
                         pipeline_id: pipeline.id,
                         created_at: utcNow(),
                         updated_at: utcNow(),

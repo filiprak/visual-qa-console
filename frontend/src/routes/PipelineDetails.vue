@@ -4,13 +4,17 @@
             <h1 class="text-5xl font-semibold my-8">Pipeline #{{ pipeline?.id }} {{ pipeline?.name }}</h1>
             <div class="grid grid-cols-4 gap-3 mb-6">
                 <Panel header="Status">
-                    <Tag v-if="pipeline?.details.status == 'passed'"
-                         severity="success">
+                    <Tag
+                        v-if="pipeline?.details.status == 'passed'"
+                        severity="success"
+                    >
                         <Icon name="check-circle"> </Icon>
                         Passed
                     </Tag>
-                    <Tag v-else
-                         severity="danger">
+                    <Tag
+                        v-else
+                        severity="danger"
+                    >
                         <Icon name="times-circle"></Icon>
                         Failed
                     </Tag>
@@ -27,15 +31,21 @@
             </div>
             <div v-if="pipeline">
                 <div class="flex justify-between items-stretch w-full bg-surface-0 dark:bg-surface-900">
-                    <Tabs v-model:value="status_filter"
-                          class="grow">
+                    <Tabs
+                        v-model:value="status_filter"
+                        class="grow"
+                    >
                         <TabList>
-                            <Tab v-for="s in tabs_opts"
-                                 :value="s.value">
+                            <Tab
+                                v-for="s in tabs_opts"
+                                :value="s.value"
+                            >
                                 {{ s.label }}
-                                <Badge v-if="s.count"
-                                       size="small"
-                                       severity="secondary">
+                                <Badge
+                                    v-if="s.count"
+                                    size="small"
+                                    severity="secondary"
+                                >
                                     {{ s.count }}
                                 </Badge>
                             </Tab>
@@ -47,10 +57,12 @@
                                 <InputIcon>
                                     <Icon name="search" />
                                 </InputIcon>
-                                <InputText v-model="text_filter"
-                                           type="text"
-                                           fluid
-                                           placeholder="Search by suite name" />
+                                <InputText
+                                    v-model="text_filter"
+                                    type="text"
+                                    fluid
+                                    placeholder="Search by suite name"
+                                />
                             </IconField>
                         </div>
                     </div>
@@ -62,42 +74,54 @@
                     <div class="basis-[200px]">Last updated</div>
                     <div class="basis-[200px]">Actions</div>
                 </div>
-                <DataPaginated :service="api.testcases"
-                               :query="{
-                                pipeline_id: pipeline.id,
-                                status: status_filter !== 'all' ? status_filter : undefined,
-                                group: { $like: `%${text_filter_d}%` },
-                            }"
-                               :reload="[api.review]"
-                               sort-field="group"
-                               :sort-order="1">
+                <DataPaginated
+                    :service="api.testcases"
+                    :query="{
+                        pipeline_id: pipeline.id,
+                        status: status_filter !== 'all' ? status_filter : undefined,
+                        group: { $like: `%${text_filter_d}%` },
+                    }"
+                    :reload="[api.review]"
+                    sort-field="group"
+                    :sort-order="1"
+                >
                     <template #list="{ items }">
                         <div>
-                            <div class="mb-3"
-                                 v-for="entry in groupTestcases(items)">
+                            <div
+                                class="mb-3"
+                                v-for="entry in groupTestcases(items)"
+                            >
                                 <div class="flex items-center gap-3 p-3 font-semibold text-primary">
                                     <Icon name="bookmark"></Icon>
                                     {{ entry[0] }}
                                 </div>
-                                <div v-for="item in entry[1]"
-                                     class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
-                                     @click="openTestcase(item.id)"
-                                     :key="item.id">
+                                <div
+                                    v-for="item in entry[1]"
+                                    class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
+                                    @click="openTestcase(item.id)"
+                                    :key="item.id"
+                                >
                                     <div class="basis-10 flex items-center">
-                                        <img :src="item.result_img"
-                                             :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
-                                             class="block size-10 object-contain border" />
+                                        <img
+                                            :src="item.result_img"
+                                            :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
+                                            class="block size-10 object-contain border"
+                                        />
                                     </div>
-                                    <div class="grow-1"
-                                         :class="{ 'text-red-600': item.status == 'failed' }">
+                                    <div
+                                        class="grow-1"
+                                        :class="{ 'text-red-600': item.status == 'failed' }"
+                                    >
                                         {{ item.name }}
                                     </div>
                                     <div class="basis-[200px] flex gap-2 items-center">
                                         <TestStatus :status="item.status" />
-                                        <Icon v-if="item.accepted_at"
-                                              v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
-                                              class="text-green-700"
-                                              name="user">
+                                        <Icon
+                                            v-if="item.accepted_at"
+                                            v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
+                                            class="text-green-700"
+                                            name="user"
+                                        >
                                         </Icon>
                                     </div>
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
@@ -106,20 +130,24 @@
                                         }}</span>
                                     </div>
                                     <div class="flex gap-2 justify-start items-start basis-[200px]">
-                                        <LoadingButton v-if="item.status == 'failed'"
-                                                       size="small"
-                                                       icon="eye"
-                                                       severity="secondary"
-                                                       :loading="accepting"
-                                                       @click.stop.prevent="openTestcase(item.id)">
+                                        <LoadingButton
+                                            v-if="item.status == 'failed'"
+                                            size="small"
+                                            icon="eye"
+                                            severity="secondary"
+                                            :loading="accepting"
+                                            @click.stop.prevent="openTestcase(item.id)"
+                                        >
                                             Review
                                         </LoadingButton>
-                                        <LoadingButton v-if="item.status == 'failed'"
-                                                       size="small"
-                                                       icon="check"
-                                                       severity="success"
-                                                       :loading="accepting"
-                                                       @click.stop.prevent="onAcceptTestcase(item)">
+                                        <LoadingButton
+                                            v-if="item.status == 'failed'"
+                                            size="small"
+                                            icon="check"
+                                            severity="success"
+                                            :loading="accepting"
+                                            @click.stop.prevent="onAcceptTestcase(item)"
+                                        >
                                             Accept
                                         </LoadingButton>
                                     </div>
@@ -159,10 +187,10 @@ const { openTestcase } = useTestcaseView();
 const { acceptTestcase, loading: accepting } = useReview();
 
 const tabs_opts = computed(() => {
-    const details = (pipeline.value?.details || {});
+    const details = pipeline.value?.details || {};
     return [
         { value: 'all', label: 'All tests', count: pipeline.value?.details.total },
-        ...testcaseStatusOpts.map(i => ({
+        ...testcaseStatusOpts.map((i) => ({
             ...i,
             count: details[i.value as keyof typeof details],
         })),

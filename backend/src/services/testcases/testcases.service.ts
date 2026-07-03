@@ -12,7 +12,7 @@ export class TestCasesService extends KnexService<TestCase> {
         return this.db(params)
             .table('testcases')
             .insert(data)
-            .onConflict(['pipeline_id', 'group', 'slug'])
+            .onConflict(['unique_key'])
             .merge(['name', 'status', 'result_img', 'diff_img', 'updated_at'])
             .returning('*');
     }

@@ -1,11 +1,14 @@
-export function slugify(input: string): string {
-    return input
-        .toString()
-        .replace(/[\s_-]+/g, '-') // collapse whitespace/underscores into -
-        .normalize('NFKD') // split accented characters
-        .replace(/[\u0300-\u036f]/g, '') // remove diacritics
-        .toLowerCase()
+export function normalizeStr(value: string): string {
+    return value
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
         .trim()
-        .replace(/[^a-z0-9\s-]/g, '') // remove invalid chars
-        .replace(/^-+|-+$/g, ''); // trim leading/trailing -
+        .replace(/\s+/g, ' ')
+        .toLowerCase();
+}
+
+export function testcaseKey(pipeline_name: string, name: string, group?: string): string {
+    return [normalizeStr(pipeline_name), normalizeStr(group || 'default'), normalizeStr(name)]
+        .map((v) => `${v.length}:${v}`)
+        .join('|');
 }

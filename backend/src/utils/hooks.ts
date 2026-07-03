@@ -12,9 +12,7 @@ interface ValidateHooksOptions {
 export function getValidateHooks(options: ValidateHooksOptions) {
     const createValidator = options.dataSchema ? getValidator(options.dataSchema, dataValidator) : null;
     const patchValidator = options.patchSchema ? getValidator(options.patchSchema, dataValidator) : null;
-    const queryRequestValidator = options.querySchema
-        ? getValidator(options.querySchema, queryValidator)
-        : null;
+    const queryRequestValidator = options.querySchema ? getValidator(options.querySchema, queryValidator) : null;
 
     return {
         before: {

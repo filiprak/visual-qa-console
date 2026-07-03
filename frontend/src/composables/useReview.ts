@@ -8,11 +8,14 @@ export function useReview() {
     const loading = ref(false);
 
     async function acceptTestcase(testcase_id: number) {
-
-        if (!await confirmDialog({
-            message: 'Are you sure you want to accept this UI visual test? This action will mark the screenshot as approved and update baseline screenshot.',
-            icon: 'pi pi-exclamation-triangle',
-        })) return false;
+        if (
+            !(await confirmDialog({
+                message:
+                    'Are you sure you want to accept this UI visual test? This action will mark the screenshot as approved and update baseline screenshot.',
+                icon: 'pi pi-exclamation-triangle',
+            }))
+        )
+            return false;
         try {
             loading.value = true;
             await api.review.create({

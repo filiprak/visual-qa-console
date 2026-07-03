@@ -17,6 +17,7 @@ export const api = {
     testcases: app.service('/api/v1/testcases'),
     baselines: app.service('/api/v1/baselines'),
     baselines_pipelines: app.service('/api/v1/baselines/pipelines'),
+    baselines_match: app.service('/api/v1/baselines/match'),
     review: app.service('/api/v1/review'),
 };
 

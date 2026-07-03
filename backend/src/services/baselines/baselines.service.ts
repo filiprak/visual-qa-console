@@ -1,11 +1,20 @@
 import type { Application } from '../../declarations.js';
-import { BaselineMatch, dataSchema, matchSchema, patchSchema, querySchema, type Baseline, type BaselinePipeline } from './baselines.schema.js';
-import { KnexService, type KnexAdapterParams } from '@feathersjs/knex';
+import {
+    BaselineMatch,
+    dataSchema,
+    matchSchema,
+    patchSchema,
+    querySchema,
+    type Baseline,
+    type BaselinePipeline,
+} from './baselines.schema.js';
+import { KnexService, transaction, type KnexAdapterOptions, type KnexAdapterParams } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import type { Static } from '@feathersjs/typebox';
 import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 import type { Params, Query } from '@feathersjs/feathers';
 import { KnexAbstract } from '../KnexAbstract.js';
+import { testcaseKey } from '../../utils/func.js';
 
 type BaselineData = Static<typeof dataSchema>;
 
@@ -14,7 +23,7 @@ export class BaselinesService extends KnexService<Baseline> {
         return this.db(params)
             .table('baselines')
             .insert(data)
-            .onConflict(['pipeline_name', 'group', 'slug'])
+            .onConflict(['unique_key'])
             .merge(['name', 'baseline_img', 'updated_at'])
             .returning('*');
     }
@@ -31,12 +40,29 @@ export class BaselinesPipelinesService extends KnexAbstract<any, Partial<Baselin
 }
 
 export class BaselinesMatchService extends KnexAbstract<any, Partial<BaselineMatch>> {
-    async create(data: BaselineMatch, params?: Params<Query> | undefined): Promise<Baseline[]> {
-        return this.db(params)
-            .select('*')
-            .from('baselines')
-            .where('pipeline_name', data.pipeline_name)
-            .orderBy('pipeline_name');
+    private readonly app: Application;
+
+    constructor(options: Omit<KnexAdapterOptions, 'name'>, app: Application) {
+        super(options);
+        this.app = app;
+    }
+    async create(data: BaselineMatch, params?: KnexAdapterParams): Promise<Baseline[]> {
+        if (data.testcases.length > 0) {
+            return this.app
+                .service('/api/v1/baselines')
+                .find({
+                    query: {
+                        $limit: 1000,
+                        unique_key: {
+                            $in: data.testcases.map((i) => testcaseKey(data.pipeline_name, i.name, i.group)),
+                        },
+                    },
+                    transaction: params?.transaction,
+                })
+                .then((r) => r.data);
+        } else {
+            return [];
+        }
     }
 }
 
@@ -50,7 +76,7 @@ export default (app: Application) => {
         name: 'baselines',
         multi: true,
         paginate: {
-            max: 300,
+            max: 1000,
             default: 30,
         },
     });
@@ -68,9 +94,12 @@ export default (app: Application) => {
     );
     app.use(
         ROUTE_MATCH,
-        new BaselinesMatchService({
-            Model: app.get('db'),
-        }),
+        new BaselinesMatchService(
+            {
+                Model: app.get('db'),
+            },
+            app,
+        ),
     );
     app.service(ROUTE).hooks({
         before: {
@@ -83,6 +112,6 @@ export default (app: Application) => {
     app.service(ROUTE_MATCH).hooks(
         getValidateHooks({
             dataSchema: matchSchema,
-        })
+        }),
     );
 };

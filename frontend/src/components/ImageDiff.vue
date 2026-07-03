@@ -1,56 +1,65 @@
 <template>
-    <div ref="container"
-         :style="{
+    <div
+        ref="container"
+        :style="{
             width: `100%`,
             height: `100%`,
         }"
-         class="img-diff flex justify-center">
-        <div class="relative outline outline-surface-300 overflow-visible bg-purple-300 select-none"
-             ref="viewport"
-             :style="{
+        class="img-diff flex justify-center"
+    >
+        <div
+            class="relative outline outline-surface-300 overflow-visible bg-purple-300 select-none"
+            ref="viewport"
+            :style="{
                 width: `${displayWidth}px`,
                 height: `${displayHeight}px`,
             }"
-             @mouseenter="hovering = true"
-             @mouseleave="hovering = false"
-             @mousedown="startDrag"
-             @touchstart.prevent="startDrag">
+            @mouseenter="hovering = true"
+            @mouseleave="hovering = false"
+            @mousedown="startDrag"
+            @touchstart.prevent="startDrag"
+        >
             <!-- BEFORE -->
-            <img ref="beforeImg"
-                 :src="before"
-                 class="absolute top-0 left-0"
-                 :style="beforeStyle"
-                 draggable="false"
-                 @load="refreshSizes" />
+            <img
+                ref="beforeImg"
+                :src="before"
+                class="absolute top-0 left-0"
+                :style="beforeStyle"
+                draggable="false"
+                @load="refreshSizes"
+            />
 
             <!-- AFTER (clipped wrapper) -->
-            <div class="absolute top-0 left-0 overflow-hidden bg-purple-600/50"
-                 :style="overlayClipStyle">
-                <img ref="afterImg"
-                     :src="after"
-                     class="block max-w-none"
-                     :style="afterStyle"
-                     draggable="false"
-                     @load="refreshSizes" />
+            <div
+                class="absolute top-0 left-0 overflow-hidden bg-purple-600/50"
+                :style="overlayClipStyle"
+            >
+                <img
+                    ref="afterImg"
+                    :src="after"
+                    class="block max-w-none"
+                    :style="afterStyle"
+                    draggable="false"
+                    @load="refreshSizes"
+                />
             </div>
 
             <!-- Divider -->
-            <div class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
-                 :style="{ left: `${position}%`, transform: 'translateX(-50%)' }">
+            <div
+                class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+                :style="{ left: `${position}%`, transform: 'translateX(-50%)' }"
+            >
                 <div
-                     class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white shadow-lg">
+                    class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white shadow-lg"
+                >
                     <i class="pi pi-arrows-h text-gray-700" />
                 </div>
             </div>
 
             <!-- Labels -->
             <template v-if="!hovering">
-                <div class="absolute px-3 py-1 top-3 left-3 bg-black/70 shadow-lg text-white">
-                    Result
-                </div>
-                <div class="absolute px-3 py-1 top-3 right-3 bg-black/70 shadow-lg text-white">
-                    Baseline
-                </div>
+                <div class="absolute px-3 py-1 top-3 left-3 bg-black/70 shadow-lg text-white">Result</div>
+                <div class="absolute px-3 py-1 top-3 right-3 bg-black/70 shadow-lg text-white">Baseline</div>
             </template>
         </div>
     </div>

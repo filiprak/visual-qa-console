@@ -1,15 +1,15 @@
 import { computed, onBeforeMount, onBeforeUnmount, Ref, ref, watch, watchEffect, WatchSource } from 'vue';
 
 export interface SampleData {
-    src: string,
-    width: number,
-    height: number,
-    error?: boolean,
-    empty: boolean,
+    src: string;
+    width: number;
+    height: number;
+    error?: boolean;
+    empty: boolean;
 }
 
 export interface SampleOptions {
-    src: string,
+    src: string;
 }
 
 const cache = new Map<string, SampleData>();
@@ -24,32 +24,36 @@ const getDefaults: () => SampleData = () => ({
 export function useSample(src: WatchSource<string | undefined>) {
     const info = ref<SampleData>(getDefaults());
 
-    watch(src, (url) => {
-        if (url) {
-            info.value.src = url;
+    watch(
+        src,
+        (url) => {
+            if (url) {
+                info.value.src = url;
 
-            if (cache.has(url)) {
-                info.value = cache.get(url)!;
-            } else {
-                const img = new Image();
-                img.src = url;
-                img.onload = (e: Event) => {
-                    const img = e.target as HTMLImageElement;
+                if (cache.has(url)) {
+                    info.value = cache.get(url)!;
+                } else {
+                    const img = new Image();
+                    img.src = url;
+                    img.onload = (e: Event) => {
+                        const img = e.target as HTMLImageElement;
 
-                    info.value.src = img.src;
-                    info.value.width = img.naturalWidth;
-                    info.value.height = img.naturalHeight;
-                    info.value.empty = false;
-                };
-                img.onerror = () => {
-                    info.value.error = true;
-                    info.value.empty = true;
+                        info.value.src = img.src;
+                        info.value.width = img.naturalWidth;
+                        info.value.height = img.naturalHeight;
+                        info.value.empty = false;
+                    };
+                    img.onerror = () => {
+                        info.value.error = true;
+                        info.value.empty = true;
+                    };
                 }
+            } else {
+                info.value = getDefaults();
             }
-        } else {
-            info.value = getDefaults();
-        }
-    }, { immediate: true });
+        },
+        { immediate: true },
+    );
 
     return info;
 }
