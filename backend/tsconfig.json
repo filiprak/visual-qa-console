@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "typeRoots": ["node"],
+        "types": ["node"],
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "rootDir": ".",
@@ -13,5 +13,5 @@
             "@/types": ["../shared/types.d.ts"]
         }
     },
-    "include": ["src/**/*", "../shared/*.d.ts"]
+    "include": ["tests/**/*", "src/**/*", "../shared/*.d.ts"]
 }
