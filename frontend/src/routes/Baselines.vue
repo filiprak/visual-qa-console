@@ -2,13 +2,12 @@
     <div class="p-12 flex justify-center">
         <div class="max-w-[1600px] grow">
             <h1 class="text-5xl font-semibold my-8">Baseline Screenshots</h1>
-            <div class="mb-3">
+            <div v-if="unique_pipelines.length > 0"
+                 class="mb-3">
                 <Tabs v-model:value="pipeline_filter">
                     <TabList>
-                        <Tab
-                            v-for="p in unique_pipelines"
-                            :value="p.pipeline_name"
-                        >
+                        <Tab v-for="p in unique_pipelines"
+                             :value="p.pipeline_name">
                             {{ p.pipeline_name }}
                         </Tab>
                     </TabList>
@@ -21,40 +20,32 @@
                 <div class="basis-[200px]">Actions</div>
             </div>
 
-            <DataPaginated
-                v-if="pipeline_filter"
-                :service="api.baselines"
-                :query="{ pipeline_name: pipeline_filter }"
-                sort-field="group"
-                :sort-order="-1"
-            >
+            <DataPaginated v-if="pipeline_filter || unique_pipelines.length < 1"
+                           :service="api.baselines"
+                           :query="{ pipeline_name: pipeline_filter }"
+                           sort-field="group"
+                           :sort-order="-1">
                 <template #list="{ items }">
-                    <div
-                        class="mb-3"
-                        v-for="entry in groupBaselines(items)"
-                    >
+                    <div class="mb-3"
+                         v-for="entry in groupBaselines(items)">
                         <div class="flex items-center gap-3 p-3 font-semibold text-primary">
                             <Icon name="bookmark"></Icon>
                             {{ entry[0] }}
                         </div>
-                        <div
-                            v-for="item in entry[1]"
-                            class="flex gap-3 cursor-pointer items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
-                            @click="
+                        <div v-for="item in entry[1]"
+                             class="flex gap-3 cursor-pointer items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
+                             @click="
                                 openImages([
                                     {
                                         src: item.baseline_img!,
                                         title: [item.pipeline_name, item.group, item.name].join(' / '),
                                     },
                                 ])
-                            "
-                            :key="item.id"
-                        >
+                                "
+                             :key="item.id">
                             <div class="basis-[50px] flex items-center">
-                                <img
-                                    :src="item.baseline_img"
-                                    class="size-[50px] object-contain border border-surface"
-                                />
+                                <img :src="item.baseline_img"
+                                     class="size-[50px] object-contain border border-surface" />
                             </div>
                             <div class="grow-1">
                                 <div>{{ item.name }}</div>
@@ -62,20 +53,16 @@
                             </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.created_at)">{{ fromNow(item.created_at) }}</span>
-                                <span
-                                    class="text-xs"
-                                    v-tooltip.top="format(item.updated_at)"
-                                >
+                                <span class="text-xs"
+                                      v-tooltip.top="format(item.updated_at)">
                                     Last updated: {{ fromNow(item.updated_at) }}
                                 </span>
                             </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
-                                <LoadingButton
-                                    icon-only
-                                    icon="trash"
-                                    severity="danger"
-                                    @click.stop.prevent="onRemove(item)"
-                                >
+                                <LoadingButton icon-only
+                                               icon="trash"
+                                               severity="danger"
+                                               @click.stop.prevent="onRemove(item)">
                                 </LoadingButton>
                             </div>
                         </div>
