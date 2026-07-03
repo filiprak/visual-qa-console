@@ -12,15 +12,20 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
+    copy: typeof import('./src/components/Icon copy.vue')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
     ImageDiff: typeof import('./src/components/ImageDiff.vue')['default']
     LoadingButton: typeof import('./src/components/LoadingButton.vue')['default']
+    Message: typeof import('primevue/message')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tab: typeof import('primevue/tab')['default']
     TabList: typeof import('primevue/tablist')['default']
     Tabs: typeof import('primevue/tabs')['default']
+    Tag: typeof import('primevue/tag')['default']
+    TestStatus: typeof import('./src/components/TestStatus.vue')['default']
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
   }
 }

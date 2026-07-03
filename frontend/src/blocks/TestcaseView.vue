@@ -6,13 +6,19 @@
                 class="no-transition"
                 position="full">
             <template #header>
-                <template v-if="!loading">
+                <template v-if="!loading && testcase">
                     <div class="flex items-center gap-3">
                         <Button icon="pi pi-chevron-left"
                                 severity="secondary"
                                 @click="visible = false">
                         </Button>
-                        <div class="text-xl font-extrabold">{{ testcase?.group }} / {{ testcase?.name }}</div>
+                        <div class="text-xl font-semibold">
+                            <span class="text-primary">{{ testcase?.group }}</span> /
+                            <span>{{ testcase?.name }}</span>
+                        </div>
+                        <div>
+                            <TestStatus :status="testcase.status" />
+                        </div>
                     </div>
                     <div class="flex gap-3">
                         <Button @click="visible = false"
@@ -122,6 +128,7 @@ import SelectButton from 'primevue/selectbutton';
 import ImageDiff from '../components/ImageDiff.vue';
 import Icon from '../components/Icon.vue';
 import { useReview } from '../composables/useReview.ts';
+import TestStatus from '../components/TestStatus.vue';
 
 const fallback_url = '/placeholder.svg';
 const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
@@ -145,8 +152,11 @@ const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
 
 async function onAccept() {
-    await acceptTestcase(id.value!);
-    visible.value = false;
+    const comitted = await acceptTestcase(id.value!);
+
+    if (comitted) {
+        visible.value = false;
+    }
 }
 
 watch(visible, async (v) => {

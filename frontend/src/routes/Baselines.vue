@@ -79,9 +79,11 @@ import DataPaginated from '../components/DataPaginated.vue';
 import { format, fromNow } from '../utils/dates.ts';
 import type { Baseline, BaselinePipeline } from '@/types';
 import { useImageView } from '../composables/useImageView.ts';
-import { computed, onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useConfirmDialog } from '../composables/useConfirmDialog';
 
 const { openImages } = useImageView();
+const { confirmDialog } = useConfirmDialog();
 
 const unique_pipelines = ref<BaselinePipeline[]>([]);
 const pipeline_filter = ref<string>('');
@@ -101,7 +103,11 @@ function groupBaselines(items: Baseline[]) {
 }
 
 async function onRemove(item: Baseline) {
-    if (!confirm()) return;
+    if (!await confirmDialog({
+        message: 'Do you want to remove baseline screenshot?',
+        acceptLabel: 'Remove',
+        severity: 'danger',
+    })) return;
     await api.baselines.remove(item.id);
 }
 

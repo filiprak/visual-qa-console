@@ -13,17 +13,13 @@
                     {{ pipeline?.details.failed }}
                 </Panel>
                 <Panel header="Status">
-                    <Tag
-                        v-if="pipeline?.details.status == 'passed'"
-                        severity="success"
-                    >
+                    <Tag v-if="pipeline?.details.status == 'passed'"
+                         severity="success">
                         <Icon name="check-circle"> </Icon>
                         Passed
                     </Tag>
-                    <Tag
-                        v-else
-                        severity="danger"
-                    >
+                    <Tag v-else
+                         severity="danger">
                         <Icon name="times-circle"></Icon>
                         Failed
                     </Tag>
@@ -37,82 +33,55 @@
                     <div class="basis-[200px]">Last updated</div>
                     <div class="basis-[200px]">Actions</div>
                 </div>
-                <DataPaginated
-                    :service="api.testcases"
-                    :query="{ pipeline_id: pipeline.id }"
-                    :reload="[api.review]"
-                    sort-field="group"
-                    :sort-order="1"
-                >
+                <DataPaginated :service="api.testcases"
+                               :query="{ pipeline_id: pipeline.id }"
+                               :reload="[api.review]"
+                               sort-field="group"
+                               :sort-order="1">
                     <template #list="{ items }">
                         <div>
-                            <div
-                                class="mb-3"
-                                v-for="entry in groupTestcases(items)"
-                            >
+                            <div class="mb-3"
+                                 v-for="entry in groupTestcases(items)">
                                 <div class="flex items-center gap-3 p-3 font-semibold text-primary">
                                     <Icon name="bookmark"></Icon>
                                     {{ entry[0] }}
                                 </div>
-                                <div
-                                    v-for="item in entry[1]"
-                                    class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
-                                    @click="openTestcase(item.id)"
-                                    :key="item.id"
-                                >
+                                <div v-for="item in entry[1]"
+                                     class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface"
+                                     @click="openTestcase(item.id)"
+                                     :key="item.id">
                                     <div class="basis-10 flex items-center">
-                                        <img
-                                            :src="item.result_img"
-                                            :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
-                                            class="block size-10 object-contain border"
-                                        />
+                                        <img :src="item.result_img"
+                                             :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
+                                             class="block size-10 object-contain border" />
                                     </div>
-                                    <div
-                                        class="grow-1"
-                                        :class="{ 'text-red-600': item.status == 'failed' }"
-                                    >
+                                    <div class="grow-1"
+                                         :class="{ 'text-red-600': item.status == 'failed' }">
                                         {{ item.name }}
                                     </div>
                                     <div class="basis-[200px]">
-                                        <Tag
-                                            v-if="item.status == 'passed'"
-                                            severity="success"
-                                        >
-                                            <Icon name="check"> </Icon>
-                                            Passed
-                                        </Tag>
-                                        <Tag
-                                            v-else
-                                            severity="danger"
-                                        >
-                                            <Icon name="times"></Icon>
-                                            Failed
-                                        </Tag>
+                                        <TestStatus :status="item.status" />
                                     </div>
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
                                         <span v-tooltip.top="format(item.updated_at)">{{
                                             fromNow(item.updated_at)
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="flex gap-2 justify-start items-start basis-[200px]">
-                                        <LoadingButton
-                                            v-if="item.status == 'failed'"
-                                            size="small"
-                                            icon="eye"
-                                            severity="secondary"
-                                            :loading="accepting"
-                                            @click.stop.prevent="openTestcase(item.id)"
-                                        >
+                                        <LoadingButton v-if="item.status == 'failed'"
+                                                       size="small"
+                                                       icon="eye"
+                                                       severity="secondary"
+                                                       :loading="accepting"
+                                                       @click.stop.prevent="openTestcase(item.id)">
                                             Review
                                         </LoadingButton>
-                                        <LoadingButton
-                                            v-if="item.status == 'failed'"
-                                            size="small"
-                                            icon="check"
-                                            severity="success"
-                                            :loading="accepting"
-                                            @click.stop.prevent="onAcceptTestcase(item)"
-                                        >
+                                        <LoadingButton v-if="item.status == 'failed'"
+                                                       size="small"
+                                                       icon="check"
+                                                       severity="success"
+                                                       :loading="accepting"
+                                                       @click.stop.prevent="onAcceptTestcase(item)">
                                             Accept
                                         </LoadingButton>
                                     </div>
@@ -139,6 +108,7 @@ import { format, fromNow } from '../utils/dates.ts';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
 import { useReview } from '../composables/useReview.ts';
 import { onBackendModified } from '../api/api.ts';
+import TestStatus from '../components/TestStatus.vue';
 
 const route = useRoute();
 const pipeline = ref<Pipeline>();

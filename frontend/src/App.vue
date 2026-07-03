@@ -11,6 +11,7 @@
     </div>
     <div>
         <Toast position="top-center" />
+        <ConfirmDialog class="max-w-200"></ConfirmDialog>
     </div>
 </template>
 <script setup lang="ts">
