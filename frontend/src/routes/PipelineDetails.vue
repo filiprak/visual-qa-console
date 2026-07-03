@@ -27,7 +27,8 @@
             </div>
             <div v-if="pipeline">
                 <div class="flex gap-5 justify-between items-center w-full bg-surface-0 pr-2">
-                    <Tabs v-model:value="status_filter">
+                    <Tabs v-model:value="status_filter"
+                          class="grow">
                         <TabList>
                             <Tab v-for="s in tabs_opts"
                                  :value="s.value">
@@ -89,8 +90,13 @@
                                          :class="{ 'text-red-600': item.status == 'failed' }">
                                         {{ item.name }}
                                     </div>
-                                    <div class="basis-[200px]">
+                                    <div class="basis-[200px] flex gap-2 items-center">
                                         <TestStatus :status="item.status" />
+                                        <Icon v-if="item.accepted_at"
+                                              v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
+                                              class="text-green-700"
+                                              name="user">
+                                        </Icon>
                                     </div>
                                     <div class="flex flex-col justify-start items-start basis-[200px]">
                                         <span v-tooltip.top="format(item.updated_at)">{{

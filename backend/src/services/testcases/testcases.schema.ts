@@ -10,6 +10,7 @@ const schema = Type.Object(
         pipeline_id: Type.Number(),
         result_img: Type.Optional(Type.String()),
         diff_img: Type.Optional(Type.String()),
+        accepted_at: Type.Optional(Type.String()),
         updated_at: Type.String(),
         created_at: Type.String(),
     },
@@ -24,10 +25,11 @@ export const dataSchema = Type.Pick(schema, [
     'slug',
     'result_img',
     'pipeline_id',
+    'accepted_at',
     'updated_at',
     'created_at',
 ]);
-export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'status', 'updated_at']));
+export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'status', 'accepted_at', 'updated_at']));
 export const querySchema = querySyntax(Type.Pick(schema, ['name', 'status', 'group', 'pipeline_id']), {
     group: {
         $like: Type.String(),

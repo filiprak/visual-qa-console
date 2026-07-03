@@ -22,6 +22,7 @@ export async function up(knex: Knex) {
         table.string('status');
         table.string('result_img').nullable();
         table.string('diff_img').nullable();
+        table.timestamp('accepted_at').nullable();
         table.timestamps(true, true);
 
         table.index(['pipeline_id']);

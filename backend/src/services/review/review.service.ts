@@ -47,6 +47,7 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                 testcase.id,
                 {
                     status: 'passed',
+                    accepted_at: utcNow(),
                     updated_at: utcNow(),
                 },
                 { transaction: params.transaction },
