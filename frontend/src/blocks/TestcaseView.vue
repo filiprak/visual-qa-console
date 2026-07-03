@@ -142,6 +142,7 @@ const loading = ref<boolean>(true);
 
 async function onAccept() {
     await acceptTestcase(id.value!);
+    visible.value = false;
 }
 
 watch(visible, async (v) => {
