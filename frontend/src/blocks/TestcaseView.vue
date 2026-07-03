@@ -73,9 +73,22 @@
                                           option-label="label"
                                           option-value="value"
                                           :options="view_options">
+                                <template #option="{ option }">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            {{ option.label }}
+                                        </div>
+                                        <div class="text-xs text-muted-color"
+                                             v-if="option.info">
+                                            {{ formatSize(option.info) }}
+                                        </div>
+                                    </div>
+                                </template>
                             </SelectButton>
                         </div>
-                        <div class="flex justify-center">
+                        <div>
+                        </div>
+                        <div class="flex flex-col items-center">
                             <template v-if="view == 'compare'">
                                 <div class="diff-container"
                                      v-if="baseline">
@@ -84,30 +97,30 @@
                                     </ImageDiff>
                                 </div>
                                 <div v-else>
-                                    <img class="block outline outline-surface-300 w-[500px] h-[500px]"
-                                         :src="fallback_url" />
+                                    <Sample class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                            :src="fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'result'">
                                 <div>
-                                    <img class="block outline outline-surface-300"
-                                         :src="testcase.result_img || fallback_url" />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="testcase.result_img || fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'diff'">
                                 <div>
-                                    <img class="block outline outline-surface-300"
-                                         :src="testcase.diff_img || fallback_url" />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="testcase.diff_img || fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'baseline'">
                                 <div v-if="baseline">
-                                    <img class="block outline outline-surface-300"
-                                         :src="baseline_src" />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="baseline_src" />
                                 </div>
                                 <div v-else>
-                                    <img class="block outline outline-surface-300 w-[500px] h-[500px]"
-                                         :src="fallback_url" />
+                                    <Sample class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                            :src="fallback_url" />
                                 </div>
                             </template>
                         </div>
@@ -129,15 +142,20 @@ import ImageDiff from '../components/ImageDiff.vue';
 import Icon from '../components/Icon.vue';
 import { useReview } from '../composables/useReview.ts';
 import TestStatus from '../components/TestStatus.vue';
+import { SampleData, useSample } from '../composables/useSample';
+
+function formatSize(info: SampleData) {
+    return info.empty ? '? x ?' : `${info.width} x ${info.height}`;
+}
 
 const fallback_url = '/placeholder.svg';
 const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
 const view_options = computed(() => {
     return [
         { label: 'Compare', value: 'compare', hide: hide_diff.value },
-        { label: 'Result', value: 'result' },
-        { label: 'Diff', value: 'diff', hide: hide_diff.value },
-        { label: 'Baseline' + (baseline.value ? '' : ' ⚠'), icon: 'home', value: 'baseline' },
+        { label: 'Result', value: 'result', info: result_info.value },
+        { label: 'Diff', value: 'diff', hide: hide_diff.value, info: diff_info.value },
+        { label: 'Baseline' + (baseline.value ? '' : ' ⚠'), icon: 'home', value: 'baseline', info: baseline_info.value },
     ].filter((i) => !i.hide);
 });
 
@@ -145,6 +163,10 @@ const testcase = ref<TestCase>();
 const pipeline = ref<Pipeline>();
 const baseline = ref<Baseline>();
 const baseline_src = computed(() => baseline.value?.baseline_img || fallback_url);
+
+const result_info = useSample(() => testcase.value?.result_img);
+const diff_info = useSample(() => testcase.value?.diff_img);
+const baseline_info = useSample(() => baseline.value?.baseline_img);
 
 const { visible, id } = useTestcaseView();
 const { acceptTestcase } = useReview();
@@ -176,6 +198,8 @@ watch(visible, async (v) => {
                         },
                     })
                 ).data.at(0);
+            } else {
+                baseline.value = undefined;
             }
             view.value = hide_diff.value ? 'result' : 'compare';
         } finally {
@@ -191,7 +215,7 @@ watch(visible, async (v) => {
 }
 
 .diff-container {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 300px);
     width: 100%;
 }
 </style>

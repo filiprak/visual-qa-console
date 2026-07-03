@@ -5,12 +5,14 @@
             height: `100%`,
         }"
          class="img-diff flex justify-center">
-        <div class="relative outline outline-surface-300 overflow-hidden bg-purple-300 select-none"
+        <div class="relative outline outline-surface-300 overflow-visible bg-purple-300 select-none"
              ref="viewport"
              :style="{
                 width: `${displayWidth}px`,
                 height: `${displayHeight}px`,
             }"
+             @mouseenter="hovering = true"
+             @mouseleave="hovering = false"
              @mousedown="startDrag"
              @touchstart.prevent="startDrag">
             <!-- BEFORE -->
@@ -40,6 +42,16 @@
                     <i class="pi pi-arrows-h text-gray-700" />
                 </div>
             </div>
+
+            <!-- Labels -->
+            <template v-if="!hovering">
+                <div class="absolute px-3 py-1 top-3 left-3 bg-black/70 shadow-lg text-white">
+                    Result
+                </div>
+                <div class="absolute px-3 py-1 top-3 right-3 bg-black/70 shadow-lg text-white">
+                    Baseline
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -64,6 +76,7 @@ const viewport = ref<HTMLDivElement>();
 const beforeImg = ref<HTMLImageElement>();
 const afterImg = ref<HTMLImageElement>();
 
+const hovering = ref(false);
 const position = ref(props.initial);
 
 const displayWidth = ref(0);
@@ -109,9 +122,6 @@ function refreshSizes() {
         { width: containerWidth, height: containerHeight },
         { width: virtualW, height: virtualH },
     );
-
-    console.log(container.value?.getBoundingClientRect())
-    console.log(containerWidth, containerHeight, virtualW, virtualH, scale)
 
     displayWidth.value = virtualW * scale;
     displayHeight.value = virtualH * scale;
