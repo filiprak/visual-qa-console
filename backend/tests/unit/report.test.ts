@@ -1,13 +1,14 @@
 import type { Application } from '../../src/declarations.js';
 import { expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
 
-let app: Application;
+let app: Application | undefined;
 
 beforeAll(async () => {
     app = await setupServer();
 });
 
 afterAll(async () => {
+    if (!app) return;
     await teardownServer(app);
 });
 
