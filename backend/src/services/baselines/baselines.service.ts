@@ -12,7 +12,6 @@ import {
 import { KnexService, transaction, type KnexAdapterOptions, type KnexAdapterParams } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import type { Static } from '@feathersjs/typebox';
-import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 import type { Params, Query } from '@feathersjs/feathers';
 import { KnexAbstract } from '../KnexAbstract.js';
 import { testcaseKey } from '../../utils/func.js';
@@ -93,7 +92,7 @@ export default (app: Application) => {
         patchSchema,
         querySchema,
     });
-    app.use(ROUTE, service);
+    app.use(ROUTE, service, { methods: ['find', 'get', 'remove'] });
     app.use(
         ROUTE_PIPELINES,
         new BaselinesPipelinesService({
@@ -109,13 +108,6 @@ export default (app: Application) => {
             app,
         ),
     );
-    app.service(ROUTE).hooks({
-        before: {
-            update: [notAllowedPublic],
-            create: [notAllowedPublic],
-            patch: [notAllowedPublic],
-        },
-    });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE_MATCH).hooks(
         getValidateHooks({

@@ -14,7 +14,7 @@ afterAll(async () => {
 describe('report service', () => {
 
     it('responds 400 when no payload', async () => {
-        const response = await request('/api/v1/pipelines', {
+        const response = await request('/api/v1/report', {
             method: 'post',
         });
 
@@ -22,7 +22,7 @@ describe('report service', () => {
     });
 
     it('responds 400 on empty payload', async () => {
-        const response = await request('/api/v1/pipelines', {
+        const response = await request('/api/v1/report', {
             method: 'post',
             payload: {},
         });
@@ -31,7 +31,7 @@ describe('report service', () => {
     });
 
     it('responds 400 on invalid payload', async () => {
-        const response = await request('/api/v1/pipelines', {
+        const response = await request('/api/v1/report', {
             method: 'post',
             payload: {
                 test: 1
@@ -42,7 +42,7 @@ describe('report service', () => {
     });
 
     it('responds 200 on valid payload', async () => {
-        const response = await request('/api/v1/pipelines', {
+        const response = await request('/api/v1/report', {
             method: 'post',
             payload: {
                 name: 'my-pipeline',
@@ -67,8 +67,12 @@ describe('report service', () => {
             },
         });
 
-        expect(response.json).toBe({});
-        expect(response.status).toBe(200);
+        expect(response.json).toMatchInlineSnapshot(`
+          {
+            "message": "OK! Report received",
+          }
+        `);
+        expect(response.status).toBe(201);
     });
 
 });

@@ -3,7 +3,6 @@ import { dataSchema, patchSchema, querySchema, type TestCase } from './testcases
 import { KnexService, type KnexAdapterParams } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import type { Static } from '@feathersjs/typebox';
-import { notAllowedPublic } from '../../hooks/notAllowed.hook.js';
 
 type TestCaseData = Static<typeof dataSchema>;
 
@@ -35,14 +34,6 @@ export default (app: Application) => {
         patchSchema,
         querySchema,
     });
-    app.use(ROUTE, service);
-    app.service(ROUTE).hooks({
-        before: {
-            update: [notAllowedPublic],
-            create: [notAllowedPublic],
-            patch: [notAllowedPublic],
-            remove: [notAllowedPublic],
-        },
-    });
+    app.use(ROUTE, service, { methods: ['find', 'get'] });
     app.service(ROUTE).hooks(validateHooks);
 };
