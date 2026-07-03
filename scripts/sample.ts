@@ -5,7 +5,8 @@ const getMockImg = (id: number, type: string, w: number, h: number) =>
 
 const sampleReport = () => ({
     name: 'ui-components',
-    commit_sha: generateShortSha(),
+    // @ts-ignore
+    commit_sha: process.argv[2] ?? generateShortSha(),
     branch_name: 'master',
     testcases: [
         {
