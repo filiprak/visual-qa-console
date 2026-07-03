@@ -1,22 +1,30 @@
 <template>
-    <DataView :value="rows"
-              lazy
-              paginator
-              :loading="loading"
-              :rows="rowsPerPage"
-              :totalRecords="total"
-              :first="first"
-              :sortField="sortField"
-              :sortOrder="sortOrder"
-              @page="onPage">
+    <DataView
+        :value="rows"
+        lazy
+        paginator
+        :loading="loading"
+        :rows="rowsPerPage"
+        :totalRecords="total"
+        :first="first"
+        :sortField="sortField"
+        :sortOrder="sortOrder"
+        @page="onPage"
+    >
         <template #list="{ items }">
-            <slot name="list"
-                  :reload="load"
-                  :items="typeItems(items)">
-                <div class="mb-3"
-                     v-if="items.length > 0">
-                    <div v-for="item in items"
-                         class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface">
+            <slot
+                name="list"
+                :reload="load"
+                :items="typeItems(items)"
+            >
+                <div
+                    class="mb-3"
+                    v-if="items.length > 0"
+                >
+                    <div
+                        v-for="item in items"
+                        class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
+                    >
                         {{ item }}
                     </div>
                 </div>
@@ -52,7 +60,7 @@ function typeItems(items: unknown[]): T[] {
 
 const props = withDefaults(defineProps<Props>(), {
     query: () => ({}),
-    watchApis: () => ([]),
+    watchApis: () => [],
     rows: 30,
 });
 

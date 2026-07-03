@@ -33,30 +33,40 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
             transaction: params.transaction,
         });
         if (find_result.data.length < 1) {
-            pipeline = await this.app.service('/api/v1/pipelines').create({
-                name: data.name,
-                commit_sha: data.commit_sha,
-                branch_name: data.branch_name,
-                created_at: utcNow(),
-                updated_at: utcNow(),
-            }, { transaction: params.transaction });
-        } else {
-            pipeline = find_result.data[0];
-            await this.app.service('/api/v1/pipelines').patch(pipeline.id, {
-                updated_at: utcNow(),
-            }, { transaction: params.transaction });
-        }
-        if (data.testcases.length > 0) {
-            await this.app.service('/api/v1/testcases').createOrPatch([
-                ...data.testcases.map((i) => ({
-                    ...i,
-                    group: i.group || 'default',
-                    slug: slugify(i.name),
-                    pipeline_id: pipeline.id,
+            pipeline = await this.app.service('/api/v1/pipelines').create(
+                {
+                    name: data.name,
+                    commit_sha: data.commit_sha,
+                    branch_name: data.branch_name,
                     created_at: utcNow(),
                     updated_at: utcNow(),
-                })),
-            ], { transaction: params.transaction });
+                },
+                { transaction: params.transaction },
+            );
+        } else {
+            pipeline = find_result.data[0];
+            await this.app.service('/api/v1/pipelines').patch(
+                pipeline.id,
+                {
+                    updated_at: utcNow(),
+                },
+                { transaction: params.transaction },
+            );
+        }
+        if (data.testcases.length > 0) {
+            await this.app.service('/api/v1/testcases').createOrPatch(
+                [
+                    ...data.testcases.map((i) => ({
+                        ...i,
+                        group: i.group || 'default',
+                        slug: slugify(i.name),
+                        pipeline_id: pipeline.id,
+                        created_at: utcNow(),
+                        updated_at: utcNow(),
+                    })),
+                ],
+                { transaction: params.transaction },
+            );
         }
         return { message: 'OK! Report received' };
     }

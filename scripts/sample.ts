@@ -308,7 +308,5 @@ async function report() {
 }
 
 (async () => {
-    await Promise.all([
-        report(),
-    ])
+    await Promise.all([report()]);
 })();
