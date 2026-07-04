@@ -429,4 +429,104 @@ describe('report service', () => {
           }
         `);
     });
+
+    it('creates default group', async () => {
+        const response = await request('/api/v1/report', {
+            method: 'post',
+            payload: {
+                name: 'ui-tests',
+                commit_sha: 'b6f87305',
+                branch_name: 'master',
+                testcases: [
+                    {
+                        name: 'button',
+                        status: 'passed',
+                        diff_img: 'https://example.com/button.diff.png',
+                        result_img: 'https://example.com/button.png',
+                    },
+                    {
+                        name: 'select',
+                        status: 'passed',
+                        diff_img: 'https://example.com/select.diff.png',
+                        result_img: 'https://example.com/select.png',
+                    },
+                ],
+            },
+        });
+        expect(response.status).toBe(201);
+
+        const pipelines = await request('/api/v1/pipelines/3');
+
+        expect(pipelines.json).toMatchInlineSnapshot(
+            {
+                created_at: expectSqlTimestamp,
+                updated_at: expectSqlTimestamp,
+            }, `
+          {
+            "branch_name": "master",
+            "commit_sha": "b6f87305",
+            "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+            "details": {
+              "failed": 0,
+              "groups": 1,
+              "passed": 2,
+              "status": "passed",
+              "total": 2,
+            },
+            "id": 3,
+            "name": "ui-tests",
+            "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+          }
+        `);
+
+        const testcases = await request('/api/v1/testcases?pipeline_id=3');
+
+        expect(testcases.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "accepted_at": null,
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "diff_img": "https://example.com/button.diff.png",
+                "group": "default",
+                "id": 7,
+                "name": "button",
+                "pipeline_id": 3,
+                "result_img": "https://example.com/button.png",
+                "status": "passed",
+                "unique_key": "8:ui-tests|7:default|6:button",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+              {
+                "accepted_at": null,
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "diff_img": "https://example.com/select.diff.png",
+                "group": "default",
+                "id": 8,
+                "name": "select",
+                "pipeline_id": 3,
+                "result_img": "https://example.com/select.png",
+                "status": "passed",
+                "unique_key": "8:ui-tests|7:default|6:select",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 2,
+          }
+        `);
+    });
 });
