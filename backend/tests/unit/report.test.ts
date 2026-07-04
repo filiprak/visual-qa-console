@@ -297,4 +297,136 @@ describe('report service', () => {
         `,
         );
     });
+
+    it('creates new pipeline and testcases on new commit hash', async () => {
+        const response = await request('/api/v1/report', {
+            method: 'post',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'b6f87305',
+                branch_name: 'master',
+                testcases: [
+                    {
+                        name: 'login flow',
+                        status: 'passed',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/image1.png',
+                        result_img: 'https://example.com/image1.png',
+                    },
+                    {
+                        name: 'signup',
+                        status: 'passed',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/signup.png',
+                        result_img: 'https://example.com/signup.png',
+                    },
+                ],
+            },
+        });
+        expect(response.status).toBe(201);
+
+        const pipelines = await request('/api/v1/pipelines');
+
+        expect(pipelines.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "branch_name": "master",
+                "commit_sha": "f7d93421",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 3,
+                  "groups": 1,
+                  "passed": 0,
+                  "status": "failed",
+                  "total": 3,
+                },
+                "id": 1,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+              {
+                "branch_name": "master",
+                "commit_sha": "b6f87305",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 0,
+                  "groups": 1,
+                  "passed": 2,
+                  "status": "passed",
+                  "total": 2,
+                },
+                "id": 2,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 2,
+          }
+        `);
+
+        const testcases = await request('/api/v1/testcases?pipeline_id=2');
+
+        expect(testcases.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "accepted_at": null,
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "diff_img": "https://example.com/image1.png",
+                "group": "portal.apps.auth.desktop",
+                "id": 5,
+                "name": "login flow",
+                "pipeline_id": 2,
+                "result_img": "https://example.com/image1.png",
+                "status": "passed",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|10:login flow",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+              {
+                "accepted_at": null,
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "diff_img": "https://example.com/signup.png",
+                "group": "portal.apps.auth.desktop",
+                "id": 6,
+                "name": "signup",
+                "pipeline_id": 2,
+                "result_img": "https://example.com/signup.png",
+                "status": "passed",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|6:signup",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 2,
+          }
+        `);
+    });
 });
