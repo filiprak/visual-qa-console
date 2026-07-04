@@ -339,7 +339,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -377,7 +378,8 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
 
         const testcases = await request('/api/v1/testcases?pipeline_id=2');
 
@@ -393,7 +395,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -427,7 +430,8 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
     });
 
     it('creates default group', async () => {
@@ -461,7 +465,8 @@ describe('report service', () => {
             {
                 created_at: expectSqlTimestamp,
                 updated_at: expectSqlTimestamp,
-            }, `
+            },
+            `
           {
             "branch_name": "master",
             "commit_sha": "b6f87305",
@@ -477,7 +482,8 @@ describe('report service', () => {
             "name": "ui-tests",
             "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
           }
-        `);
+        `,
+        );
 
         const testcases = await request('/api/v1/testcases?pipeline_id=3');
 
@@ -493,7 +499,8 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -527,6 +534,7 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
     });
 });

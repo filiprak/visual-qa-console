@@ -14,7 +14,6 @@ afterAll(async () => {
 });
 
 describe('baseline-match service', () => {
-
     it('responds 400 when invalid payload', async () => {
         const response = await request('/api/v1/baselines/match', {
             method: 'post',
@@ -32,7 +31,7 @@ describe('baseline-match service', () => {
                     {
                         name: 'login flow',
                         group: 'portal.apps.auth.desktop',
-                    }
+                    },
                 ],
             },
         });
@@ -111,7 +110,8 @@ describe('baseline-match service', () => {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            }, `
+            },
+            `
           {
             "baseline": {
               "baseline_img": "https://example.com/image.png",
@@ -126,14 +126,16 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "login flow",
           }
-        `);
+        `,
+        );
         expect(response.json[1]).toMatchInlineSnapshot(
             {
                 baseline: {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            }, `
+            },
+            `
           {
             "baseline": {
               "baseline_img": "https://example.com/image.png",
@@ -148,8 +150,9 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "forgot password email",
           }
-        `);
-        
+        `,
+        );
+
         const response2 = await request('/api/v1/baselines/match', {
             method: 'post',
             payload: {
@@ -178,7 +181,6 @@ describe('baseline-match service', () => {
             },
           ]
         `);
-
     });
 
     it('ignores case and whitespace characters when matching', async () => {
@@ -244,7 +246,8 @@ describe('baseline-match service', () => {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            }, `
+            },
+            `
           {
             "baseline": {
               "baseline_img": "https://example.com/image.png",
@@ -259,14 +262,16 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "login  flow",
           }
-        `);
+        `,
+        );
         expect(response.json[1]).toMatchInlineSnapshot(
             {
                 baseline: {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            }, `
+            },
+            `
           {
             "baseline": {
               "baseline_img": "https://example.com/image.png",
@@ -281,8 +286,7 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "  forgot password EMAil",
           }
-        `);
-
+        `,
+        );
     });
-
 });

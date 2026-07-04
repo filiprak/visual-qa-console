@@ -97,7 +97,8 @@ describe('review service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -131,7 +132,8 @@ describe('review service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
 
         const baselines = await request('/api/v1/baselines');
 
@@ -143,7 +145,8 @@ describe('review service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -161,7 +164,8 @@ describe('review service', () => {
             "skip": 0,
             "total": 1,
           }
-        `);
+        `,
+        );
 
         await request('/api/v1/review', {
             method: 'post',
@@ -187,7 +191,8 @@ describe('review service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -221,7 +226,8 @@ describe('review service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
 
         const baselines2 = await request('/api/v1/baselines');
 
@@ -237,7 +243,8 @@ describe('review service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            }, `
+            },
+            `
           {
             "data": [
               {
@@ -265,7 +272,7 @@ describe('review service', () => {
             "skip": 0,
             "total": 2,
           }
-        `);
+        `,
+        );
     });
-
 });
