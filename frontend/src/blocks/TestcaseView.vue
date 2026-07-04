@@ -226,7 +226,7 @@ const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
 
 async function onAccept() {
-    const comitted = await acceptTestcase(id.value!);
+    const comitted = await acceptTestcase([id.value!]);
 
     if (comitted) {
         visible.value = false;

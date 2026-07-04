@@ -7,7 +7,7 @@ export function useReview() {
 
     const loading = ref(false);
 
-    async function acceptTestcase(testcase_id: number) {
+    async function acceptTestcase(testcase_ids: number[]) {
         if (
             !(await confirmDialog({
                 message:
@@ -19,7 +19,7 @@ export function useReview() {
         try {
             loading.value = true;
             await api.review.create({
-                testcase_id,
+                testcase_ids,
                 accepted: true,
             });
         } finally {

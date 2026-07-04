@@ -212,7 +212,7 @@ function groupTestcases(items: TestCase[]) {
 }
 
 async function onAcceptTestcase(item: TestCase) {
-    await acceptTestcase(item.id);
+    await acceptTestcase([item.id]);
 }
 
 async function load() {

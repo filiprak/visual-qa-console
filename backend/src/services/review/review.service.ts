@@ -21,40 +21,42 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
     }
 
     async create(data: Review, params: Params & { transaction: KnexAdapterTransaction }) {
-        const testcase = await this.app
-            .service('/api/v1/testcases')
-            .get(data.testcase_id, { transaction: params.transaction });
-        const pipeline = await this.app
-            .service('/api/v1/pipelines')
-            .get(testcase.pipeline_id, { transaction: params.transaction });
+        for (const testcase_id of data.testcase_ids) {
+            const testcase = await this.app
+                .service('/api/v1/testcases')
+                .get(testcase_id, { transaction: params.transaction });
+            const pipeline = await this.app
+                .service('/api/v1/pipelines')
+                .get(testcase.pipeline_id, { transaction: params.transaction });
 
-        if (data.accepted) {
-            if (!testcase.unique_key) {
-                throw new Error('Malformed testcase unique key');
-            }
-            await this.app.service('/api/v1/baselines').createOrPatch(
-                [
+            if (data.accepted) {
+                if (!testcase.unique_key) {
+                    throw new Error('Malformed testcase unique key');
+                }
+                await this.app.service('/api/v1/baselines').createOrPatch(
+                    [
+                        {
+                            pipeline_name: pipeline.name,
+                            group: testcase.group,
+                            unique_key: testcase.unique_key,
+                            name: testcase.name,
+                            baseline_img: testcase.result_img,
+                            created_at: utcNow(),
+                            updated_at: utcNow(),
+                        },
+                    ],
+                    { transaction: params.transaction },
+                );
+                await this.app.service('/api/v1/testcases').patch(
+                    testcase.id,
                     {
-                        pipeline_name: pipeline.name,
-                        group: testcase.group,
-                        unique_key: testcase.unique_key,
-                        name: testcase.name,
-                        baseline_img: testcase.result_img,
-                        created_at: utcNow(),
+                        status: 'passed',
+                        accepted_at: utcNow(),
                         updated_at: utcNow(),
                     },
-                ],
-                { transaction: params.transaction },
-            );
-            await this.app.service('/api/v1/testcases').patch(
-                testcase.id,
-                {
-                    status: 'passed',
-                    accepted_at: utcNow(),
-                    updated_at: utcNow(),
-                },
-                { transaction: params.transaction },
-            );
+                    { transaction: params.transaction },
+                );
+            }
         }
 
         return { message: 'OK! Review processed' };
