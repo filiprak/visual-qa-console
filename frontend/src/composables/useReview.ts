@@ -1,8 +1,10 @@
 import { ref } from 'vue';
 import { api } from '../api';
 import { useConfirmDialog } from './useConfirmDialog';
+import { useToast } from 'primevue/usetoast';
 
 export function useReview() {
+    const toast = useToast();
     const { confirmDialog } = useConfirmDialog();
 
     const loading = ref(false);
@@ -21,6 +23,12 @@ export function useReview() {
             await api.review.create({
                 testcase_ids,
                 accepted: true,
+            });
+            toast.add({
+                summary: 'Result accepted',
+                detail: 'Baseline screenshot was updated',
+                severity: 'success',
+                life: 1300,
             });
         } finally {
             loading.value = false;
