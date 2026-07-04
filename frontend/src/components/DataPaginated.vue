@@ -1,34 +1,24 @@
 <template>
-    <DataView
-        :value="rows"
-        lazy
-        paginator
-        :loading="loading"
-        :rows="rowsPerPage"
-        :totalRecords="total"
-        :first="first"
-        :sortField="sortField"
-        :sortOrder="sortOrder"
-        @page="onPage"
-    >
+    <DataView :value="rows"
+              lazy
+              paginator
+              :loading="loading"
+              :rows="rowsPerPage"
+              :totalRecords="total"
+              :first="first"
+              :sortField="sortField"
+              :sortOrder="sortOrder"
+              @page="onPage">
         <template #list="{ items }">
-            <slot
-                name="list"
-                :reload="load"
-                :items="typeItems(items)"
-            >
-                <div
-                    class="mb-3"
-                    v-if="items.length > 0"
-                >
-                    <div
-                        v-for="item in items"
-                        class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface"
-                    >
+            <slot name="list"
+                  :reload="load"
+                  :items="typeItems(items)">
+                <div class="mb-3">
+                    <div v-for="item in items"
+                         class="flex p-4 hover:bg-emphasis hover:text-color-emphasis border-b border-surface">
                         {{ item }}
                     </div>
                 </div>
-                <div v-else>asds</div>
             </slot>
         </template>
         <template #empty>
@@ -47,12 +37,17 @@ import { onBackendModified } from '../api/api';
 
 interface Props {
     service: FeathersService<unknown, ClientService<T>>;
+    items?: T[],
     query?: Record<string, unknown>;
     rows?: number;
     watchApis?: ClientService[];
     sortField?: string;
     sortOrder?: number;
 }
+
+const emit = defineEmits<{
+    (e: 'update:items', items: T[]): void,
+}>();
 
 function typeItems(items: unknown[]): T[] {
     return items as T[];
@@ -93,6 +88,8 @@ async function load() {
 
         rows.value = result.data;
         total.value = result.total;
+
+        emit('update:items', [...result.data]);
     } finally {
         loading.value = false;
     }
