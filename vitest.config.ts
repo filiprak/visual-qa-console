@@ -6,5 +6,7 @@ export default defineConfig({
         environment: 'node',
         include: ['backend/tests/**/*.test.ts'],
         globalSetup: './backend/tests/globalSetup.ts',
+        fileParallelism: false,
+        maxWorkers: 1,
     },
 });
