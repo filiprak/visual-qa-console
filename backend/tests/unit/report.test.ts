@@ -1,10 +1,15 @@
 import type { Application } from '../../src/declarations.js';
-import { expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { loadSeed } from '../seed.js';
+import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application | undefined;
 
 beforeAll(async () => {
     app = await setupServer();
+});
+
+beforeEach(async () => {
+    await clearDb();
 });
 
 afterAll(async () => {
@@ -168,6 +173,13 @@ describe('report service', () => {
     });
 
     it('merges into existing pipeline if matching', async () => {
+        await loadSeed({
+            pipeline_name: 'my-pipeline',
+            commit_sha: 'f7d93421',
+            branch_name: 'master',
+            testcase_count: 2,
+        });
+
         const response = await request('/api/v1/report', {
             method: 'post',
             payload: {
@@ -183,7 +195,7 @@ describe('report service', () => {
                         result_img: 'https://example.com/image1.png',
                     },
                     {
-                        name: 'signup',
+                        name: 'signup flow',
                         status: 'failed',
                         failed_msg: 'Failed to load baseline image',
                         group: 'portal.apps.auth.desktop',
@@ -270,13 +282,13 @@ describe('report service', () => {
               {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
-                "diff_img": "https://example.com/image.png",
+                "diff_img": "https://example.com/forgot.diff.png",
                 "failed_msg": "Different screenshots",
                 "group": "portal.apps.auth.desktop",
                 "id": 2,
                 "name": "forgot password email",
                 "pipeline_id": 1,
-                "result_img": "https://example.com/image.png",
+                "result_img": "https://example.com/forgot.png",
                 "status": "failed",
                 "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|21:forgot password email",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
@@ -288,11 +300,11 @@ describe('report service', () => {
                 "failed_msg": "Failed to load baseline image",
                 "group": "portal.apps.auth.desktop",
                 "id": 4,
-                "name": "signup",
+                "name": "signup flow",
                 "pipeline_id": 1,
                 "result_img": "https://example.com/signup.png",
                 "status": "failed",
-                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|6:signup",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|11:signup flow",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               },
             ],
@@ -304,6 +316,12 @@ describe('report service', () => {
     });
 
     it('creates new pipeline and testcases on new commit hash', async () => {
+        await loadSeed({
+            pipeline_name: 'my-pipeline',
+            commit_sha: 'f7d93421',
+            branch_name: 'master',
+            testcase_count: 2,
+        });
         const response = await request('/api/v1/report', {
             method: 'post',
             payload: {
@@ -344,8 +362,7 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            },
-            `
+            }, `
           {
             "data": [
               {
@@ -353,11 +370,11 @@ describe('report service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
-                  "failed": 3,
+                  "failed": 1,
                   "groups": 1,
-                  "passed": 0,
+                  "passed": 1,
                   "status": "failed",
-                  "total": 3,
+                  "total": 2,
                 },
                 "id": 1,
                 "name": "my-pipeline",
@@ -383,8 +400,7 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `,
-        );
+        `);
 
         const testcases = await request('/api/v1/testcases?pipeline_id=2');
 
@@ -400,8 +416,7 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            },
-            `
+            }, `
           {
             "data": [
               {
@@ -410,7 +425,7 @@ describe('report service', () => {
                 "diff_img": "https://example.com/image1.png",
                 "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
-                "id": 5,
+                "id": 3,
                 "name": "login flow",
                 "pipeline_id": 2,
                 "result_img": "https://example.com/image1.png",
@@ -424,7 +439,7 @@ describe('report service', () => {
                 "diff_img": "https://example.com/signup.png",
                 "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
-                "id": 6,
+                "id": 4,
                 "name": "signup",
                 "pipeline_id": 2,
                 "result_img": "https://example.com/signup.png",
@@ -437,8 +452,7 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `,
-        );
+        `);
     });
 
     it('creates default group', async () => {
@@ -466,14 +480,13 @@ describe('report service', () => {
         });
         expect(response.status).toBe(201);
 
-        const pipelines = await request('/api/v1/pipelines/3');
+        const pipelines = await request('/api/v1/pipelines/1');
 
         expect(pipelines.json).toMatchInlineSnapshot(
             {
                 created_at: expectSqlTimestamp,
                 updated_at: expectSqlTimestamp,
-            },
-            `
+            }, `
           {
             "branch_name": "master",
             "commit_sha": "b6f87305",
@@ -485,14 +498,13 @@ describe('report service', () => {
               "status": "passed",
               "total": 2,
             },
-            "id": 3,
+            "id": 1,
             "name": "ui-tests",
             "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
           }
-        `,
-        );
+        `);
 
-        const testcases = await request('/api/v1/testcases?pipeline_id=3');
+        const testcases = await request('/api/v1/testcases?pipeline_id=1');
 
         expect(testcases.json).toMatchInlineSnapshot(
             {
@@ -506,8 +518,7 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            },
-            `
+            }, `
           {
             "data": [
               {
@@ -516,9 +527,9 @@ describe('report service', () => {
                 "diff_img": "https://example.com/button.diff.png",
                 "failed_msg": null,
                 "group": "default",
-                "id": 7,
+                "id": 1,
                 "name": "button",
-                "pipeline_id": 3,
+                "pipeline_id": 1,
                 "result_img": "https://example.com/button.png",
                 "status": "passed",
                 "unique_key": "8:ui-tests|7:default|6:button",
@@ -530,9 +541,9 @@ describe('report service', () => {
                 "diff_img": "https://example.com/select.diff.png",
                 "failed_msg": null,
                 "group": "default",
-                "id": 8,
+                "id": 2,
                 "name": "select",
-                "pipeline_id": 3,
+                "pipeline_id": 1,
                 "result_img": "https://example.com/select.png",
                 "status": "passed",
                 "unique_key": "8:ui-tests|7:default|6:select",
@@ -543,7 +554,6 @@ describe('report service', () => {
             "skip": 0,
             "total": 2,
           }
-        `,
-        );
+        `);
     });
 });
