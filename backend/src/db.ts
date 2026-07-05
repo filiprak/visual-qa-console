@@ -5,7 +5,7 @@ const isTest = process.env.NODE_ENV === 'test';
 export const db = knex({
     client: 'sqlite3',
     connection: {
-        filename: `./data/db${isTest ? '-test' : ''}.sqlite`,
+        filename: isTest ? ':memory:' : `./data/db.sqlite`,
     },
     useNullAsDefault: true,
     migrations: {

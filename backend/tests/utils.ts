@@ -25,8 +25,8 @@ export async function request(
             options.rawPayload !== undefined
                 ? options.rawPayload
                 : options.payload !== undefined
-                  ? JSON.stringify(options.payload)
-                  : undefined,
+                    ? JSON.stringify(options.payload)
+                    : undefined,
     });
     const json = await res.json();
 
@@ -50,6 +50,11 @@ export async function setupServer() {
     // await db.seed.run();
 
     return app;
+}
+
+export async function clearDb() {
+    await db.migrate.rollback(undefined, true);
+    await db.migrate.latest();
 }
 
 export async function teardownServer(app: Application) {

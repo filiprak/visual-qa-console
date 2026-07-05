@@ -33,20 +33,22 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                 if (!testcase.unique_key) {
                     throw new Error('Malformed testcase unique key');
                 }
-                await this.app.service('/api/v1/baselines').createOrPatch(
-                    [
-                        {
-                            pipeline_name: pipeline.name,
-                            group: testcase.group,
-                            unique_key: testcase.unique_key,
-                            name: testcase.name,
-                            baseline_img: testcase.result_img,
-                            created_at: utcNow(),
-                            updated_at: utcNow(),
-                        },
-                    ],
-                    { transaction: params.transaction },
-                );
+                if (!data.skip_baseline_update) {
+                    await this.app.service('/api/v1/baselines').createOrPatch(
+                        [
+                            {
+                                pipeline_name: pipeline.name,
+                                group: testcase.group,
+                                unique_key: testcase.unique_key,
+                                name: testcase.name,
+                                baseline_img: testcase.result_img,
+                                created_at: utcNow(),
+                                updated_at: utcNow(),
+                            },
+                        ],
+                        { transaction: params.transaction },
+                    );
+                }
                 await this.app.service('/api/v1/testcases').patch(
                     testcase.id,
                     {
