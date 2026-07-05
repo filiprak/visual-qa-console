@@ -1,11 +1,16 @@
 import { group } from 'node:console';
 import type { Application } from '../../src/declarations.js';
-import { expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { loadSeed } from '../seed.js';
 
 let app: Application | undefined;
 
 beforeAll(async () => {
     app = await setupServer();
+});
+
+beforeEach(async () => {
+    await clearDb();
 });
 
 afterAll(async () => {
@@ -48,42 +53,12 @@ describe('baseline-match service', () => {
     });
 
     it('matches baselines correctly', async () => {
-        await request('/api/v1/report', {
-            method: 'post',
-            payload: {
-                name: 'my-pipeline',
-                commit_sha: 'f7d93421',
-                branch_name: 'master',
-                testcases: [
-                    {
-                        name: 'login flow',
-                        status: 'passed',
-                        group: 'portal.apps.auth.desktop',
-                        diff_img: 'https://example.com/image.png',
-                        result_img: 'https://example.com/image.png',
-                    },
-                    {
-                        name: 'forgot password email',
-                        status: 'failed',
-                        group: 'portal.apps.auth.desktop',
-                        diff_img: 'https://example.com/image.png',
-                        result_img: 'https://example.com/image.png',
-                    },
-                ],
-            },
-        });
+        await loadSeed();
         await request('/api/v1/review', {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_ids: [1],
-            },
-        });
-        await request('/api/v1/review', {
-            method: 'post',
-            payload: {
-                accepted: true,
-                testcase_ids: [2],
+                testcase_ids: [1, 2],
             },
         });
         const response = await request('/api/v1/baselines/match', {
@@ -110,11 +85,10 @@ describe('baseline-match service', () => {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            },
-            `
+            }, `
           {
             "baseline": {
-              "baseline_img": "https://example.com/image.png",
+              "baseline_img": "https://example.com/login-flow.png",
               "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               "group": "portal.apps.auth.desktop",
               "id": 1,
@@ -126,19 +100,17 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "login flow",
           }
-        `,
-        );
+        `);
         expect(response.json[1]).toMatchInlineSnapshot(
             {
                 baseline: {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            },
-            `
+            }, `
           {
             "baseline": {
-              "baseline_img": "https://example.com/image.png",
+              "baseline_img": "https://example.com/forgot.png",
               "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               "group": "portal.apps.auth.desktop",
               "id": 2,
@@ -150,8 +122,7 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "forgot password email",
           }
-        `,
-        );
+        `);
 
         const response2 = await request('/api/v1/baselines/match', {
             method: 'post',
@@ -184,44 +155,15 @@ describe('baseline-match service', () => {
     });
 
     it('ignores case and whitespace characters when matching', async () => {
-        await request('/api/v1/report', {
-            method: 'post',
-            payload: {
-                name: 'my-pipeline',
-                commit_sha: 'f7d93421',
-                branch_name: 'master',
-                testcases: [
-                    {
-                        name: 'login flow',
-                        status: 'passed',
-                        group: 'portal.apps.auth.desktop',
-                        diff_img: 'https://example.com/image.png',
-                        result_img: 'https://example.com/image.png',
-                    },
-                    {
-                        name: 'forgot password email',
-                        status: 'failed',
-                        group: 'portal.apps.auth.desktop',
-                        diff_img: 'https://example.com/image.png',
-                        result_img: 'https://example.com/image.png',
-                    },
-                ],
-            },
-        });
+        await loadSeed();
         await request('/api/v1/review', {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_ids: [1],
+                testcase_ids: [1, 2],
             },
         });
-        await request('/api/v1/review', {
-            method: 'post',
-            payload: {
-                accepted: true,
-                testcase_ids: [2],
-            },
-        });
+        
         const response = await request('/api/v1/baselines/match', {
             method: 'post',
             payload: {
@@ -246,11 +188,10 @@ describe('baseline-match service', () => {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            },
-            `
+            }, `
           {
             "baseline": {
-              "baseline_img": "https://example.com/image.png",
+              "baseline_img": "https://example.com/login-flow.png",
               "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               "group": "portal.apps.auth.desktop",
               "id": 1,
@@ -262,19 +203,17 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "login  flow",
           }
-        `,
-        );
+        `);
         expect(response.json[1]).toMatchInlineSnapshot(
             {
                 baseline: {
                     created_at: expectSqlTimestamp,
                     updated_at: expectSqlTimestamp,
                 },
-            },
-            `
+            }, `
           {
             "baseline": {
-              "baseline_img": "https://example.com/image.png",
+              "baseline_img": "https://example.com/forgot.png",
               "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               "group": "portal.apps.auth.desktop",
               "id": 2,
@@ -286,7 +225,6 @@ describe('baseline-match service', () => {
             "group": "portal.apps.auth.desktop",
             "name": "  forgot password EMAil",
           }
-        `,
-        );
+        `);
     });
 });
