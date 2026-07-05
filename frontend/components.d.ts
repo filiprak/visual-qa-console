@@ -13,7 +13,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
-    ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']
