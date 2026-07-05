@@ -125,8 +125,8 @@
                                 <div v-else>
                                     <Sample class="block outline outline-surface-300 w-full h-full"
                                             :style="{
-                                                width: `${result_info.width}px`,
-                                                aspectRatio: result_info.width / result_info.height,
+                                                width: result_info.width ? `${result_info.width}px` : null,
+                                                aspectRatio: result_info.width ? (result_info.width / result_info.height) : null,
                                             }"
                                             :src="fallback_url" />
                                 </div>

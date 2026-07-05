@@ -34,6 +34,9 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                     throw new Error('Malformed testcase unique key');
                 }
                 if (!data.skip_baseline_update) {
+                    if (!testcase.result_img) {
+                        throw new Error('Testcase is missing result screenshot image');
+                    }
                     await this.app.service('/api/v1/baselines').createOrPatch(
                         [
                             {
