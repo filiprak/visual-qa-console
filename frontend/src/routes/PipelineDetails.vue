@@ -1,7 +1,14 @@
 <template>
     <div class="p-12 flex justify-center">
         <div class="max-w-[1600px] grow">
-            <h1 class="text-5xl font-semibold my-8">Pipeline #{{ pipeline?.id }} {{ pipeline?.name }}</h1>
+            <h1 class="text-5xl font-semibold mt-8 mb-2">
+                Pipeline
+                <span class="text-primary-600">#{{ pipeline?.id }} {{ pipeline?.name }}</span>
+            </h1>
+            <div class="mb-6 text-muted-color">
+                Commit <Tag severity="warn">{{ pipeline?.commit_sha }}</Tag>
+                on branch <span class="font-bold">{{ pipeline?.branch_name }}</span>
+            </div>
             <div class="grid grid-cols-4 gap-3 mb-6">
                 <Panel header="Status">
                     <Tag v-if="pipeline?.details.status == 'passed'"

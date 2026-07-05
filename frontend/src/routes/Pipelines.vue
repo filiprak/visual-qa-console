@@ -36,7 +36,7 @@
                                 {{ item.branch_name }}
                             </div>
                             <div class="basis-[200px]">
-                                <Tag severity="info">
+                                <Tag severity="warn">
                                     {{ item.commit_sha }}
                                 </Tag>
                             </div>
