@@ -13,7 +13,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
-    Checkbox: typeof import('primevue/checkbox')['default']
     ConfirmDialog: typeof import('primevue/confirmdialog')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']
     Icon: typeof import('./src/components/Icon.vue')['default']
@@ -32,9 +31,5 @@ declare module 'vue' {
     Tag: typeof import('primevue/tag')['default']
     TestStatus: typeof import('./src/components/TestStatus.vue')['default']
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
-    ToggleSwitch: typeof import('primevue/toggleswitch')['default']
-  }
-  export interface GlobalDirectives {
-    Tooltip: typeof import('primevue/tooltip')['default']
   }
 }
