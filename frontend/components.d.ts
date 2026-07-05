@@ -34,4 +34,7 @@ declare module 'vue' {
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
     ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }
+  export interface GlobalDirectives {
+    Tooltip: typeof import('primevue/tooltip')['default']
+  }
 }

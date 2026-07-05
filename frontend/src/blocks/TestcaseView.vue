@@ -1,115 +1,90 @@
 <template>
     <div class="flex justify-center">
-        <Drawer
-            v-model:visible="visible"
-            :show-close-icon="false"
-            block-scroll
-            class="no-transition"
-            position="full"
-        >
+        <Drawer v-model:visible="visible"
+                :show-close-icon="false"
+                block-scroll
+                class="no-transition"
+                position="full">
             <template #header>
                 <template v-if="!loading && testcase">
                     <div class="flex items-center gap-3">
-                        <Button
-                            icon="pi pi-chevron-left"
-                            severity="secondary"
-                            @click="visible = false"
-                        >
+                        <Button icon="pi pi-chevron-left"
+                                severity="secondary"
+                                @click="visible = false">
                         </Button>
                         <div class="text-xl font-semibold">
                             <span class="text-primary">{{ testcase?.group }}</span> /
                             <span>{{ testcase?.name }}</span>
                         </div>
-                        <div>
+                        <div class="flex items-center">
                             <TestStatus :status="testcase.status" />
+                            <span v-if="testcase.status == 'failed' && testcase.failed_msg"
+                                  v-tooltip.bottom="testcase.failed_msg"
+                                  class="text-red-700 font-semibold ml-3 inline-block whitespace-nowrap max-w-300 overflow-hidden text-ellipsis">
+                                {{ testcase.failed_msg }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex gap-3">
-                        <Button
-                            @click="visible = false"
-                            severity="secondary"
-                        >
+                        <Button @click="visible = false"
+                                severity="secondary">
                             <Icon name="times"></Icon>
                             Exit
                         </Button>
-                        <Button
-                            v-if="testcase?.status == 'failed'"
-                            severity="secondary"
-                        >
+                        <Button v-if="testcase?.status == 'failed'"
+                                severity="secondary">
                             <Icon name="flag"></Icon>
                             Report issue
                         </Button>
-                        <LoadingButton
-                            v-if="testcase?.status == 'failed' || !baseline"
-                            @click="onAccept"
-                            severity="success"
-                        >
+                        <LoadingButton v-if="testcase?.status == 'failed' || !baseline"
+                                       @click="onAccept"
+                                       severity="success">
                             <Icon name="check"></Icon>
                             Accept
                         </LoadingButton>
                     </div>
                 </template>
-                <div
-                    v-else
-                    class="flex gap-3 w-full items-center"
-                >
-                    <Button
-                        icon="pi pi-chevron-left"
-                        size="small"
-                        severity="secondary"
-                        @click="visible = false"
-                    >
+                <div v-else
+                     class="flex gap-3 w-full items-center">
+                    <Button icon="pi pi-chevron-left"
+                            size="small"
+                            severity="secondary"
+                            @click="visible = false">
                     </Button>
-                    <Skeleton
-                        width="10%"
-                        height="20px"
-                    />
+                    <Skeleton width="10%"
+                              height="20px" />
                 </div>
             </template>
             <template v-if="loading || !testcase">
                 <div class="flex gap-3 flex-col">
-                    <Skeleton
-                        width="50%"
-                        height="30px"
-                    />
-                    <Skeleton
-                        width="60%"
-                        height="30px"
-                    />
-                    <Skeleton
-                        width="30%"
-                        height="30px"
-                    />
-                    <Skeleton
-                        width="30%"
-                        height="30px"
-                    />
-                    <Skeleton
-                        width="40%"
-                        height="30px"
-                    />
+                    <Skeleton width="50%"
+                              height="30px" />
+                    <Skeleton width="60%"
+                              height="30px" />
+                    <Skeleton width="30%"
+                              height="30px" />
+                    <Skeleton width="30%"
+                              height="30px" />
+                    <Skeleton width="40%"
+                              height="30px" />
                 </div>
             </template>
             <template v-else>
                 <div class="flex justify-center">
                     <div class="samples-container">
                         <div class="flex justify-center mb-4">
-                            <SelectButton
-                                v-model="view"
-                                :allow-empty="false"
-                                option-label="label"
-                                option-value="value"
-                                :options="view_options"
-                            >
+                            <SelectButton v-model="view"
+                                          :allow-empty="false"
+                                          option-label="label"
+                                          option-value="value"
+                                          :options="view_options">
                                 <template #option="{ option }">
                                     <div class="flex flex-col">
                                         <div>
                                             {{ option.label }}
                                         </div>
-                                        <div
-                                            class="text-xs text-muted-color"
-                                            v-if="option.info"
-                                        >
+                                        <div class="text-xs text-muted-color"
+                                             v-if="option.info">
                                             {{ formatSize(option.info) }}
                                         </div>
                                     </div>
@@ -119,55 +94,41 @@
                         <div></div>
                         <div class="flex flex-col items-center">
                             <template v-if="view == 'compare'">
-                                <div
-                                    class="diff-container"
-                                    v-if="baseline"
-                                >
-                                    <ImageDiff
-                                        :before="testcase.result_img!"
-                                        :after="baseline_src"
-                                    >
+                                <div class="diff-container"
+                                     v-if="baseline">
+                                    <ImageDiff :before="testcase.result_img!"
+                                               :after="baseline_src">
                                     </ImageDiff>
                                 </div>
                                 <div v-else>
-                                    <Sample
-                                        class="block outline outline-surface-300 w-[500px] h-[500px]"
-                                        :src="fallback_url"
-                                    />
+                                    <Sample class="block outline outline-surface-300 w-[500px] h-[500px]"
+                                            :src="fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'result'">
                                 <div>
-                                    <Sample
-                                        class="block outline outline-surface-300"
-                                        :src="testcase.result_img || fallback_url"
-                                    />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="testcase.result_img || fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'diff'">
                                 <div>
-                                    <Sample
-                                        class="block outline outline-surface-300"
-                                        :src="testcase.diff_img || fallback_url"
-                                    />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="testcase.diff_img || fallback_url" />
                                 </div>
                             </template>
                             <template v-if="view == 'baseline'">
                                 <div v-if="baseline">
-                                    <Sample
-                                        class="block outline outline-surface-300"
-                                        :src="baseline_src"
-                                    />
+                                    <Sample class="block outline outline-surface-300"
+                                            :src="baseline_src" />
                                 </div>
                                 <div v-else>
-                                    <Sample
-                                        class="block outline outline-surface-300 w-full h-full"
-                                        :style="{
-                                            width: `${result_info.width}px`,
-                                            aspectRatio: result_info.width / result_info.height,
-                                        }"
-                                        :src="fallback_url"
-                                    />
+                                    <Sample class="block outline outline-surface-300 w-full h-full"
+                                            :style="{
+                                                width: `${result_info.width}px`,
+                                                aspectRatio: result_info.width / result_info.height,
+                                            }"
+                                            :src="fallback_url" />
                                 </div>
                             </template>
                         </div>
@@ -184,6 +145,7 @@ import type { Baseline, Pipeline, TestCase } from '@/types';
 import { computed, ref, watch } from 'vue';
 import { api } from '../api/api.ts';
 import Skeleton from 'primevue/skeleton';
+import vTooltip from 'primevue/tooltip';
 import SelectButton from 'primevue/selectbutton';
 import ImageDiff from '../components/ImageDiff.vue';
 import Icon from '../components/Icon.vue';

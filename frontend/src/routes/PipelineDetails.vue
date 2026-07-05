@@ -123,7 +123,7 @@
                             </div>
                             <div class="basis-[200px] flex gap-2 items-center">
                                 <TestStatus :status="item.status"
-                                            v-tooltip="item.failed_msg" />
+                                            v-tooltip.top="(item.status == 'failed' ? item.failed_msg : '') || 'No status details'" />
                                 <Icon v-if="item.accepted_at"
                                       v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
                                       class="text-green-700"
