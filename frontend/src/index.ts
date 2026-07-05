@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import BaseTheme from '@primeuix/themes/aura';
 import ToastService from 'primevue/toastservice';
-import ConfirmationService from 'primevue/confirmationservice';
+import DialogService from 'primevue/dialogservice';
 import { definePreset } from '@primeuix/themes';
 import App from './App.vue';
 import router from './router';
@@ -35,7 +35,7 @@ app.use(PrimeVue, {
 });
 
 app.use(ToastService);
-app.use(ConfirmationService);
+app.use(DialogService);
 
 app.config.errorHandler = (err, instance, info) => {
     console.error(err);

@@ -11,7 +11,7 @@
     </div>
     <div>
         <Toast position="top-center" />
-        <ConfirmDialog class="max-w-200"></ConfirmDialog>
+        <DynamicDialog />
     </div>
 </template>
 <script setup lang="ts">
@@ -23,6 +23,7 @@ import { registerToast } from './errors';
 import { onBeforeMount } from 'vue';
 import TestcaseView from './blocks/TestcaseView.vue';
 import ImageView from './blocks/ImageView.vue';
+import DynamicDialog from 'primevue/dynamicdialog';
 
 const toast = useToast();
 

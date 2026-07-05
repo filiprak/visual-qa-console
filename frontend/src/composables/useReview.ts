@@ -1,32 +1,38 @@
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { api } from '../api';
-import { useConfirmDialog } from './useConfirmDialog';
+import { useDialog } from './useDialog';
 import { useToast } from 'primevue/usetoast';
+import ReviewDialog from '../blocks/ReviewDialog.vue';
 
 export function useReview() {
     const toast = useToast();
-    const { confirmDialog } = useConfirmDialog();
+    const { confirmDialog } = useDialog();
 
     const loading = ref(false);
 
     async function acceptTestcase(testcase_ids: number[]) {
-        if (
-            !(await confirmDialog({
-                message:
-                    'Are you sure you want to accept this UI visual test(s)? This action will mark the screenshot as approved and update baseline screenshot.',
-                icon: 'pi pi-exclamation-triangle',
-            }))
-        )
+        const data = {
+            update_baseline: ref(true),
+        };
+
+        const { confirmed } = await confirmDialog({
+            message: ReviewDialog,
+            data,
+        });
+        const skip_baseline_update = data.update_baseline.value === false;
+
+        if (!confirmed)
             return false;
         try {
             loading.value = true;
             await api.review.create({
                 testcase_ids,
+                skip_baseline_update,
                 accepted: true,
             });
             toast.add({
-                summary: 'Result(s) accepted',
-                detail: 'Baseline screenshot(s) was updated',
+                summary: 'Testcase(s) accepted',
+                detail: skip_baseline_update ? 'Baseline screenshot(s) update skipped' : 'Baseline screenshot(s) was updated',
                 severity: 'success',
                 life: 1300,
             });

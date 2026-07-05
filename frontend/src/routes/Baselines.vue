@@ -114,11 +114,11 @@ import { format, fromNow } from '../utils/dates.ts';
 import type { Baseline, BaselinePipeline } from '@/types';
 import { useImageView } from '../composables/useImageView.ts';
 import { onBeforeMount, ref } from 'vue';
-import { useConfirmDialog } from '../composables/useConfirmDialog';
+import { useDialog } from '../composables/useDialog';
 import { useDebounce } from '../composables/useDebounce';
 
 const { openImages } = useImageView();
-const { confirmDialog } = useConfirmDialog();
+const { confirmDialog } = useDialog();
 
 const unique_pipelines = ref<BaselinePipeline[]>([]);
 const pipeline_filter = ref<string>('');

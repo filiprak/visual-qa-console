@@ -31,5 +31,6 @@ declare module 'vue' {
     Tag: typeof import('primevue/tag')['default']
     TestStatus: typeof import('./src/components/TestStatus.vue')['default']
     ThemeSwitch: typeof import('./src/components/ThemeSwitch.vue')['default']
+    ToggleSwitch: typeof import('primevue/toggleswitch')['default']
   }
 }
