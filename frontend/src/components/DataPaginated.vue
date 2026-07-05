@@ -88,8 +88,6 @@ async function load() {
 
         rows.value = result.data;
         total.value = result.total;
-
-        emit('update:items', [...result.data]);
     } finally {
         loading.value = false;
     }
@@ -102,6 +100,9 @@ function onPage(event: any) {
 }
 
 watch(() => props.query, load, { deep: true });
+watch(() => rows, () => {
+    emit('update:items', rows.value as T[]);
+});
 
 onBackendModified([...props.watchApis, props.service], () => {
     load();

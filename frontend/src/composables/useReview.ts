@@ -13,7 +13,7 @@ export function useReview() {
         if (
             !(await confirmDialog({
                 message:
-                    'Are you sure you want to accept this UI visual test? This action will mark the screenshot as approved and update baseline screenshot.',
+                    'Are you sure you want to accept this UI visual test(s)? This action will mark the screenshot as approved and update baseline screenshot.',
                 icon: 'pi pi-exclamation-triangle',
             }))
         )
@@ -25,8 +25,8 @@ export function useReview() {
                 accepted: true,
             });
             toast.add({
-                summary: 'Result accepted',
-                detail: 'Baseline screenshot was updated',
+                summary: 'Result(s) accepted',
+                detail: 'Baseline screenshot(s) was updated',
                 severity: 'success',
                 life: 1300,
             });

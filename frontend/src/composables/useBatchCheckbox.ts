@@ -40,8 +40,9 @@ export function useBatchCheckbox<T extends WithGroup>(items: Ref<T[]>) {
         }
     }
 
-    function toggleItem(id: number, checked: boolean) {
+    function toggleItem(id: number, checked?: boolean) {
         const set = new Set(selected.value);
+        checked = checked === undefined ? !set.has(id) : checked;
         if (checked) set.add(id);
         else set.delete(id);
         selected.value = [...set];
@@ -78,5 +79,6 @@ export function useBatchCheckbox<T extends WithGroup>(items: Ref<T[]>) {
         GroupCheckbox,
         ItemCheckbox,
         isAllChecked,
+        toggleItem,
     };
 }

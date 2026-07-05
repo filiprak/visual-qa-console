@@ -76,14 +76,14 @@ describe('baseline-match service', () => {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_id: 1,
+                testcase_ids: [1],
             },
         });
         await request('/api/v1/review', {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_id: 2,
+                testcase_ids: [2],
             },
         });
         const response = await request('/api/v1/baselines/match', {
@@ -212,14 +212,14 @@ describe('baseline-match service', () => {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_id: 1,
+                testcase_ids: [1],
             },
         });
         await request('/api/v1/review', {
             method: 'post',
             payload: {
                 accepted: true,
-                testcase_id: 2,
+                testcase_ids: [2],
             },
         });
         const response = await request('/api/v1/baselines/match', {

@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex gap-3 items-center p-3 text-muted-color group">
+                <div class="flex gap-3 items-center p-3 text-muted-color group h-[52px]">
                     <template v-if="!batch_mode">
                         <div class="basis-[28px]">#</div>
                         <div class="grow-1">Testcase name</div>
@@ -64,14 +64,23 @@
                         <div class="basis-[200px]">Actions</div>
                     </template>
                     <template v-else>
-                        <div class="grow-1 flex gap-3">
+                        <div class="grow-1 flex justify-between gap-3">
                             <div>{{ selected.length }} item(s) selected</div>
-                            <div><span class="text-primary-600 hover:text-primary-900 cursor-pointer"
-                                      @click="cancelBatch">Cancel</span></div>
+                            <div class="flex gap-5 items-center">
+                                <div><span class="text-primary-600 hover:text-primary-900 cursor-pointer"
+                                          @click="cancelBatch">Cancel</span></div>
+                                <div v-if="batch_mode">
+                                    <Button size="small"
+                                            :disabled="selected.length < 1"
+                                            @click="onBatchAccept">
+                                        Batch accept ({{ selected.length }})
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </template>
-                    <div class="basis-[30px] flex justify-end">
-                        <AllCheckbox class="group-hover:opacity-100"
+                    <div class="basis-[30px] flex items-center gap-4 justify-end">
+                        <AllCheckbox class="group-hover:opacity-100 outline outline-2 outline-primary-200"
                                      :class="{ 'opacity-0': !batch_mode }">
                         </AllCheckbox>
                     </div>
@@ -97,12 +106,13 @@
                                     </div>
                                     <div class="group-hover:opacity-100"
                                          :class="{ 'opacity-0': !batch_mode }">
-                                        <GroupCheckbox :group="entry[0]" />
+                                        <GroupCheckbox :group="entry[0]"
+                                                       class="outline outline-2 outline-primary-200" />
                                     </div>
                                 </div>
                                 <div v-for="item in entry[1]"
                                      class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface group"
-                                     @click="!batch_mode && openTestcase(item.id)"
+                                     @click="batch_mode ? toggleItem(item.id) : openTestcase(item.id)"
                                      :key="item.id">
                                     <div class="basis-10 flex items-center">
                                         <img :src="item.result_img"
@@ -147,8 +157,7 @@
                                     <div class="flex flex-col justify-end items-end basis-[30px] group-hover:opacity-100"
                                          :class="{ 'opacity-0': !batch_mode }">
                                         <ItemCheckbox :value="item.id"
-                                                      size="large"
-                                                      @click.stop="() => { }">
+                                                      size="large">
                                         </ItemCheckbox>
                                     </div>
                                 </div>
@@ -191,6 +200,7 @@ const { selected,
     AllCheckbox,
     GroupCheckbox,
     ItemCheckbox,
+    toggleItem,
 } = useBatchCheckbox(testcases);
 const { openTestcase } = useTestcaseView();
 const { acceptTestcase, loading: accepting } = useReview();
@@ -207,6 +217,12 @@ const tabs_opts = computed(() => {
 });
 
 function cancelBatch() {
+    selected.value = [];
+    nextTick(() => { batch_mode.value = false; });
+}
+
+async function onBatchAccept() {
+    await acceptTestcase(selected.value);
     selected.value = [];
     nextTick(() => { batch_mode.value = false; });
 }
