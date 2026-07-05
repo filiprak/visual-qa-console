@@ -26,6 +26,7 @@ const sampleReport = () => ({
         {
             name: 'mfa_token_validation',
             status: 'failed',
+            failed_msg: 'Different screenshots',
             group: 'portal.apps.auth.desktop',
             diff_img: getMockImg(3, 'diff', 1920, 700),
             result_img: getMockImg(3, 'result', 1800, 700),
@@ -48,6 +49,7 @@ const sampleReport = () => ({
         {
             name: 'empty_cart_state',
             status: 'failed',
+            failed_msg: 'Missing baseline screenshot',
             group: 'portal.apps.checkout.desktop',
             diff_img: getMockImg(6, 'diff', 1920, 700),
             result_img: getMockImg(6, 'result', 1920, 700),
@@ -69,6 +71,7 @@ const sampleReport = () => ({
         {
             name: 'credit_card_validation',
             status: 'failed',
+            failed_msg: 'Different screenshots',
             group: 'portal.apps.checkout.desktop',
             diff_img: getMockImg(9, 'diff', 1920, 700),
             result_img: getMockImg(9, 'result', 1920, 700),

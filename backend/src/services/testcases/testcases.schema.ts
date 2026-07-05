@@ -7,6 +7,7 @@ const schema = Type.Object(
         unique_key: Type.String(),
         group: Type.Optional(Type.String()),
         status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
+        failed_msg: Type.Optional(Type.String()),
         pipeline_id: Type.Number(),
         result_img: Type.Optional(Type.String()),
         diff_img: Type.Optional(Type.String()),
@@ -20,6 +21,7 @@ const schema = Type.Object(
 export const dataSchema = Type.Pick(schema, [
     'name',
     'status',
+    'failed_msg',
     'group',
     'diff_img',
     'unique_key',

@@ -122,7 +122,8 @@
                                 {{ item.name }}
                             </div>
                             <div class="basis-[200px] flex gap-2 items-center">
-                                <TestStatus :status="item.status" />
+                                <TestStatus :status="item.status"
+                                            v-tooltip="item.failed_msg" />
                                 <Icon v-if="item.accepted_at"
                                       v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
                                       class="text-green-700"
@@ -132,7 +133,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="flex gap-2 justify-start items-start basis-[200px]">
                                 <LoadingButton v-if="item.status == 'failed'"

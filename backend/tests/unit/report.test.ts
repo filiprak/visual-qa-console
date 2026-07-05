@@ -59,6 +59,7 @@ describe('report service', () => {
                     {
                         name: 'forgot password email',
                         status: 'failed',
+                        failed_msg: 'Different screenshots',
                         group: 'portal.apps.auth.desktop',
                         diff_img: 'https://example.com/image.png',
                         result_img: 'https://example.com/image.png',
@@ -133,6 +134,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/image.png",
+                "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
                 "id": 1,
                 "name": "login flow",
@@ -146,6 +148,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/image.png",
+                "failed_msg": "Different screenshots",
                 "group": "portal.apps.auth.desktop",
                 "id": 2,
                 "name": "forgot password email",
@@ -182,6 +185,7 @@ describe('report service', () => {
                     {
                         name: 'signup',
                         status: 'failed',
+                        failed_msg: 'Failed to load baseline image',
                         group: 'portal.apps.auth.desktop',
                         diff_img: 'https://example.com/signup.png',
                         result_img: 'https://example.com/signup.png',
@@ -246,14 +250,14 @@ describe('report service', () => {
                         updated_at: expectSqlTimestamp,
                     },
                 ],
-            },
-            `
+            }, `
           {
             "data": [
               {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/image1.png",
+                "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
                 "id": 1,
                 "name": "login flow",
@@ -267,6 +271,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/image.png",
+                "failed_msg": "Different screenshots",
                 "group": "portal.apps.auth.desktop",
                 "id": 2,
                 "name": "forgot password email",
@@ -280,6 +285,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/signup.png",
+                "failed_msg": "Failed to load baseline image",
                 "group": "portal.apps.auth.desktop",
                 "id": 4,
                 "name": "signup",
@@ -294,8 +300,7 @@ describe('report service', () => {
             "skip": 0,
             "total": 3,
           }
-        `,
-        );
+        `);
     });
 
     it('creates new pipeline and testcases on new commit hash', async () => {
@@ -403,6 +408,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/image1.png",
+                "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
                 "id": 5,
                 "name": "login flow",
@@ -416,6 +422,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/signup.png",
+                "failed_msg": null,
                 "group": "portal.apps.auth.desktop",
                 "id": 6,
                 "name": "signup",
@@ -507,6 +514,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/button.diff.png",
+                "failed_msg": null,
                 "group": "default",
                 "id": 7,
                 "name": "button",
@@ -520,6 +528,7 @@ describe('report service', () => {
                 "accepted_at": null,
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "diff_img": "https://example.com/select.diff.png",
+                "failed_msg": null,
                 "group": "default",
                 "id": 8,
                 "name": "select",

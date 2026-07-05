@@ -12,7 +12,7 @@ export class TestCasesService extends KnexService<TestCase> {
             .table('testcases')
             .insert(data)
             .onConflict(['pipeline_id', 'unique_key'])
-            .merge(['name', 'group', 'status', 'result_img', 'diff_img', 'accepted_at', 'updated_at'])
+            .merge(['name', 'group', 'status', 'failed_msg', 'result_img', 'diff_img', 'accepted_at', 'updated_at'])
             .returning('*');
     }
 }

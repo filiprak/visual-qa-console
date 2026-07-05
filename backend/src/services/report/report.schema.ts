@@ -6,7 +6,7 @@ const schema = Type.Object(
         name: Type.String({ minLength: 3 }),
         commit_sha: Type.String(),
         branch_name: Type.String(),
-        testcases: Type.Array(Type.Pick(testcaseSchema, ['name', 'status', 'group', 'diff_img', 'result_img']), {
+        testcases: Type.Array(Type.Pick(testcaseSchema, ['name', 'status', 'failed_msg', 'group', 'diff_img', 'result_img']), {
             maxItems: 10000,
         }),
     },

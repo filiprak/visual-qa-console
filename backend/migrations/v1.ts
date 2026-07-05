@@ -20,6 +20,7 @@ export async function up(knex: Knex) {
         table.integer('pipeline_id');
         table.string('group').defaultTo('default');
         table.string('status');
+        table.string('failed_msg').nullable();
         table.string('result_img').nullable();
         table.string('diff_img').nullable();
         table.timestamp('accepted_at').nullable();
