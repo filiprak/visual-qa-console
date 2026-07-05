@@ -436,4 +436,83 @@ describe('review service', () => {
           }
         `);
     });
+
+    it('do not add new baseline when already exists', async () => {
+        await loadSeed({ testcase_count: 2 });
+
+        await request('/api/v1/review', {
+            method: 'post',
+            payload: {
+                accepted: true,
+                testcase_ids: [2],
+            },
+        });
+
+        const baselines = await request('/api/v1/baselines');
+
+        expect(baselines.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "baseline_img": "https://example.com/forgot.png",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "group": "portal.apps.auth.desktop",
+                "id": 1,
+                "name": "forgot password email",
+                "pipeline_name": "my-pipeline",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|21:forgot password email",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+
+        await request('/api/v1/review', {
+            method: 'post',
+            payload: {
+                accepted: true,
+                testcase_ids: [2],
+            },
+        });
+
+        const baselines2 = await request('/api/v1/baselines');
+        expect(baselines2.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "baseline_img": "https://example.com/forgot.png",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "group": "portal.apps.auth.desktop",
+                "id": 1,
+                "name": "forgot password email",
+                "pipeline_name": "my-pipeline",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|21:forgot password email",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+    });
 });
