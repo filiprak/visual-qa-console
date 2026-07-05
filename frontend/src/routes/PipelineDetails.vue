@@ -113,7 +113,7 @@
                              @click="batch_mode ? toggleItem(item.id) : openTestcase(item.id)"
                              :key="item.id">
                             <div class="basis-10 flex items-center">
-                                <img :src="item.result_img"
+                                <img :src="item.result_img || fallback_url"
                                      :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
                                      class="block size-10 object-contain border" />
                             </div>
@@ -203,6 +203,8 @@ import { testcaseStatusOpts } from '../utils/statuses';
 import { useDebounce } from '../composables/useDebounce';
 import { useBatchCheckbox } from '../composables/useBatchCheckbox.ts';
 import { useDataView } from '../composables/useDataView.ts';
+
+const fallback_url = '/placeholder.svg';
 
 const route = useRoute();
 const pipeline = ref<Pipeline>();

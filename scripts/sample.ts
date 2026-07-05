@@ -102,8 +102,7 @@ const sampleReport = () => ({
             name: 'export csv button',
             status: 'failed',
             group: 'dashboard desktop',
-            diff_img: getMockImg(13, 'diff', 1920, 700),
-            result_img: getMockImg(13, 'result', 1920, 700),
+            failed_msg: 'Failed to generate screenshot',
         },
         {
             name: 'date range picker',

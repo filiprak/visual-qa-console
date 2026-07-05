@@ -96,7 +96,7 @@
                             <template v-if="view == 'compare'">
                                 <div class="diff-container"
                                      v-if="baseline">
-                                    <ImageDiff :before="testcase.result_img!"
+                                    <ImageDiff :before="testcase.result_img || fallback_url"
                                                :after="baseline_src">
                                     </ImageDiff>
                                 </div>
