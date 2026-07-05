@@ -48,30 +48,37 @@ export function useBatchCheckbox<T extends WithGroup>(items: Ref<T[]>) {
         selected.value = [...set];
     }
 
-    const AllCheckbox: FunctionalComponent = () =>
+    const AllCheckbox: FunctionalComponent = (props, { attrs }) =>
         h(Checkbox, {
+            ...attrs,
             modelValue: isAllChecked.value,
             binary: true,
             'onUpdate:model-value': (val: boolean) => setAll(val),
         });
 
-    const GroupCheckbox = ((props: { group: string }) =>
-        h(Checkbox, {
-            modelValue: groupMap.value.get(props.group)?.every(id =>
-                selected.value.includes(id)
-            ) ?? false,
-            binary: true,
-            'onUpdate:model-value': (val: boolean) =>
-                toggleGroup(props.group, val),
-        }));
+    const GroupCheckbox: FunctionalComponent<{ group: string }> = (
+        (props, { attrs }) =>
+            h(Checkbox, {
+                ...attrs,
+                modelValue: groupMap.value.get(props.group)?.every(id =>
+                    selected.value.includes(id)
+                ) ?? false,
+                binary: true,
+                'onUpdate:model-value': (val: boolean) =>
+                    toggleGroup(props.group, val),
+            })
+    );
 
-    const ItemCheckbox = ((props: { value: number }) =>
-        h(Checkbox, {
-            modelValue: selected.value.includes(props.value),
-            binary: true,
-            'onUpdate:model-value': (val: boolean) =>
-                toggleItem(props.value, val),
-        }));
+    const ItemCheckbox: FunctionalComponent<{ value: number }> = (
+        (props, { attrs }) =>
+            h(Checkbox, {
+                ...attrs,
+                modelValue: selected.value.includes(props.value),
+                binary: true,
+                'onUpdate:model-value': (val: boolean) =>
+                    toggleItem(props.value, val),
+            })
+    );
 
     return {
         selected,

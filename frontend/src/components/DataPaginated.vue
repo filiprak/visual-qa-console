@@ -3,15 +3,15 @@
               lazy
               paginator
               :loading="loading"
-              :rows="rowsPerPage"
+              :rows="limit"
               :totalRecords="total"
-              :first="first"
+              :first="offset"
               :sortField="sortField"
               :sortOrder="sortOrder"
               @page="onPage">
         <template #list="{ items }">
             <slot name="list"
-                  :reload="load"
+                  :reload="reload"
                   :items="typeItems(items)">
                 <div class="mb-3">
                     <div v-for="item in items"
@@ -23,7 +23,8 @@
         </template>
         <template #empty>
             <div class="flex justify-center p-6 mb-3">
-                <span>No items found</span>
+                <span v-if="loading">Loading...</span>
+                <span v-else>No items found</span>
             </div>
         </template>
     </DataView>
@@ -32,22 +33,17 @@
 <script setup lang="ts" generic="T">
 import type { ClientService, FeathersService } from '@feathersjs/feathers';
 import DataView from 'primevue/dataview';
-import { ref, watch, onMounted, resolveComponent } from 'vue';
-import { onBackendModified } from '../api/api';
+import { computed, onMounted } from 'vue';
+import { useDataView } from '../composables/useDataView';
 
 interface Props {
     service: FeathersService<unknown, ClientService<T>>;
-    items?: T[],
     query?: Record<string, unknown>;
-    rows?: number;
+    perPage?: number;
     watchApis?: ClientService[];
     sortField?: string;
-    sortOrder?: number;
+    sortOrder?: 1 | -1;
 }
-
-const emit = defineEmits<{
-    (e: 'update:items', items: T[]): void,
-}>();
 
 function typeItems(items: unknown[]): T[] {
     return items as T[];
@@ -59,56 +55,16 @@ const props = withDefaults(defineProps<Props>(), {
     rows: 30,
 });
 
-const rows = ref<T[]>([]);
-const total = ref(0);
-const loading = ref(false);
-
-const first = ref(0);
-const rowsPerPage = ref(props.rows);
-
-async function load() {
-    loading.value = true;
-
-    try {
-        const query: any = {
-            ...props.query,
-            $limit: rowsPerPage.value,
-            $skip: first.value,
-        };
-
-        if (props.sortField) {
-            query.$sort = {
-                [props.sortField]: props.sortOrder === 1 ? 1 : -1,
-            };
-        }
-
-        const result = await props.service.find({
-            query,
-        });
-
-        rows.value = result.data;
-        total.value = result.total;
-    } finally {
-        loading.value = false;
-    }
-}
-
-function onPage(event: any) {
-    first.value = event.first;
-    rowsPerPage.value = event.rows;
-    load();
-}
-
-watch(() => props.query, load, { deep: true });
-watch(() => rows, () => {
-    emit('update:items', rows.value as T[]);
-});
-
-onBackendModified([...props.watchApis, props.service], () => {
-    load();
+const { rows, loading, offset, limit, total, onPage, reload } = useDataView({
+    service: props.service,
+    perPage: props.perPage,
+    query: computed(() => props.query),
+    watchApis: props.watchApis,
+    sortField: computed(() => props.sortField),
+    sortOrder: computed(() => props.sortOrder),
 });
 
 onMounted(() => {
-    load();
+    reload();
 });
 </script>

@@ -22,6 +22,7 @@ declare module 'vue' {
     InputIcon: typeof import('primevue/inputicon')['default']
     InputText: typeof import('primevue/inputtext')['default']
     LoadingButton: typeof import('./src/components/LoadingButton.vue')['default']
+    Paginator: typeof import('primevue/paginator')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sample: typeof import('./src/components/Sample.vue')['default']
