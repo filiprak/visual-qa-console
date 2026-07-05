@@ -1,6 +1,6 @@
 import Button from 'primevue/button';
 import { useDialog as _useDialog } from 'primevue/usedialog';
-import { defineComponent, h, markRaw, ref, type DefineComponent } from 'vue';
+import { defineComponent, h, markRaw } from 'vue';
 
 export interface DialogOptions {
     header?: string;
