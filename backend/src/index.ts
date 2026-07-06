@@ -1,11 +1,36 @@
+import path from 'path';
+import fs from 'fs';
+import https from 'https';
 import { createServer } from './app.js';
 
 const isDev = process.argv[2] === 'development';
 const port = parseInt(process.env.PORT || '8080');
 const host = process.env.HOST || 'localhost';
+const ssl = parseInt(process.env.SSL || '0');
+const sslCertPath = process.env.SSLCERT || '';
+const sslKeyPath = process.env.SSL_KEY || '';
 
 const app = await createServer({ isDev });
 
-app.listen(port, host, () => {
-    console.log(`Server running at http://${host}:${port} [${!isDev ? 'PROD' : 'DEV'}]`);
-});
+const onListen = () => {
+    console.log(`Server running at http${ssl ? 's' : ''}://${host}:${port} [${!isDev ? 'PROD' : 'DEV'}]`);
+};
+
+function getSSLKeys() {
+    try {
+        const cert = fs.readFileSync(path.resolve(sslCertPath), 'utf8');
+        const key = fs.readFileSync(path.resolve(sslKeyPath), 'utf8');
+
+        return { cert, key };
+    } catch (e) {
+        throw new Error('Failed to get SSL Keys.');
+    }
+}
+
+if (ssl) {
+    https
+        .createServer({ ...getSSLKeys() }, app.callback())
+        .listen(host, port, onListen);
+} else {
+    app.listen(port, host, onListen);
+}
