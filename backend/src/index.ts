@@ -31,7 +31,7 @@ function getSSLKeys() {
 if (ssl) {
     https
         .createServer({ ...getSSLKeys() }, app.callback())
-        .listen(host, port, onListen);
+        .listen(port, host, onListen);
 } else {
     app.listen(port, host, onListen);
 }
