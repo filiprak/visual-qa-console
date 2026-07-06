@@ -11,7 +11,10 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
         const result = await context.service.db(context.params).client.raw(
             `
                 SELECT
-                    IF(SUM(t.status = 'failed') > 0, 'failed', 'passed') AS status,
+                    CASE
+                        WHEN SUM(t.status = 'failed') > 0 THEN 'failed'
+                        ELSE 'passed'
+                    END AS status,
                     COUNT(DISTINCT t.\`group\`) AS total_groups,
                     SUM(t.status = 'failed') AS failed_testcases,
                     COUNT(*) AS total_testcases
