@@ -8,7 +8,7 @@ const isDev = process.argv[2] === 'development';
 const port = parseInt(process.env.PORT || '8080');
 const host = process.env.HOST || 'localhost';
 const ssl = parseInt(process.env.SSL || '0');
-const sslCertPath = process.env.SSLCERT || '';
+const sslCertPath = process.env.SSL_CERT || '';
 const sslKeyPath = process.env.SSL_KEY || '';
 
 const app = await createServer({ isDev });
@@ -19,8 +19,8 @@ const onListen = () => {
 
 function getSSLKeys() {
     try {
-        const cert = fs.readFileSync(path.resolve(sslCertPath), 'utf8');
-        const key = fs.readFileSync(path.resolve(sslKeyPath), 'utf8');
+        const cert = fs.readFileSync(path.resolve(sslCertPath), 'utf-8');
+        const key = fs.readFileSync(path.resolve(sslKeyPath), 'utf-8');
 
         return { cert, key };
     } catch (e) {
