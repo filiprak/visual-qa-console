@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 const generateShortSha = () => Math.random().toString(16).substring(2, 9);
 
 const getMockImg = (id: number, type: string, w: number, h: number) =>
@@ -301,8 +303,15 @@ const sampleReport = () => ({
     ],
 });
 
+// @ts-ignore
+const port = parseInt(process.env.PORT || '8080');
+// @ts-ignore
+const host = process.env.HOST || 'localhost';
+// @ts-ignore
+const ssl = parseInt(process.env.SSL || '0');
+
 async function report() {
-    const res = await fetch('http://localhost:8080/api/v1/report', {
+    const res = await fetch(`http${ssl ? 's' : ''}://${host}:${port}/api/v1/report`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(sampleReport()),
