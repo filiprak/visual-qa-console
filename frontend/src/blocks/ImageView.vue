@@ -1,41 +1,34 @@
 <template>
     <div class="flex justify-center">
-        <Drawer
-            v-model:visible="visible"
-            style="background: 'red'"
-            position="full"
-        >
+        <Drawer v-model:visible="visible"
+                class="img-view-drawer"
+                block-scroll
+                position="full">
             <template #header>
-                <div class="flex grow gap-3 justify-center pl-10">
+                <div class="flex grow gap-3 justify-center pl-10 text-white">
                     <div class="text-center">
                         <div class="font-bold text-lg">{{ curr_image?.title }}</div>
-                        <div class="text-muted-color">{{ curr_image?.width }} x {{ curr_image?.height }} px</div>
+                        <div class="text-white/80">{{ curr_image?.width }} x {{ curr_image?.height }} px</div>
                     </div>
                 </div>
             </template>
             <div class="h-full">
-                <swiper
-                    @swiper="onReady"
-                    :style="{
-                        '--swiper-navigation-color': '#fff',
-                        '--swiper-pagination-color': '#fff',
-                    }"
-                    :zoom="{ enabled: true }"
-                    :navigation="true"
-                    class="w-full h-full"
-                    :modules="modules"
-                    @slide-change="onSlideChange"
-                    :space-between="50"
-                >
+                <swiper @swiper="onReady"
+                        :style="{
+                            '--swiper-navigation-color': '#fff',
+                            '--swiper-pagination-color': '#fff',
+                        }"
+                        :zoom="{ enabled: true }"
+                        :navigation="true"
+                        class="w-full h-full"
+                        :modules="modules"
+                        @slide-change="onSlideChange"
+                        :space-between="50">
                     <swiper-slide v-for="item in current_images">
-                        <div
-                            class="swiper-zoom-container"
-                            @wheel="onMouseWheel"
-                        >
-                            <img
-                                :src="item.src"
-                                @load="onImgLoad($event, item)"
-                            />
+                        <div class="swiper-zoom-container bg-black"
+                             @wheel="onMouseWheel">
+                            <img :src="item.src"
+                                 @load="onImgLoad($event, item)" />
                         </div>
                     </swiper-slide>
                 </swiper>
@@ -89,3 +82,8 @@ function onMouseWheel(e: WheelEvent) {
     }
 }
 </script>
+<style>
+.img-view-drawer {
+    background: black !important;
+}
+</style>

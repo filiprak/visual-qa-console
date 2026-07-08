@@ -111,6 +111,7 @@
                                 <div class="screen-container"
                                      v-if="testcase.result_img">
                                     <Sample class="screen"
+                                            title="Result"
                                             :src="testcase.result_img" />
                                 </div>
                                 <div v-else>
@@ -124,6 +125,7 @@
                                 <div class="screen-container"
                                      v-if="testcase.diff_img">
                                     <Sample class="screen"
+                                            title="Diff"
                                             :src="testcase.diff_img" />
                                 </div>
                                 <div v-else>
@@ -137,6 +139,7 @@
                                 <div class="screen-container"
                                      v-if="baseline_src">
                                     <Sample class="screen"
+                                            title="Baseline"
                                             :src="baseline_src" />
                                 </div>
                                 <div v-else>
