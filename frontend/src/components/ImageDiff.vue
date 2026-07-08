@@ -8,7 +8,7 @@
         class="img-diff flex justify-center"
     >
         <div
-            class="relative outline outline-surface-300 overflow-visible bg-purple-300 select-none"
+            class="relative outline-2 outline-surface-400 overflow-visible bg-purple-300 select-none"
             ref="viewport"
             :style="{
                 width: `${displayWidth}px`,
@@ -46,11 +46,11 @@
 
             <!-- Divider -->
             <div
-                class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+                class="absolute top-0 bottom-0 w-1 bg-white border-x border-surface-400"
                 :style="{ left: `${position}%`, transform: 'translateX(-50%)' }"
             >
                 <div
-                    class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white bg-white shadow-lg"
+                    class="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-surface-400 bg-white shadow-lg"
                 >
                     <i class="pi pi-arrows-h text-gray-700" />
                 </div>
