@@ -20,6 +20,7 @@
                         }"
                         :zoom="{ enabled: true }"
                         :navigation="true"
+                        :initial-slide="initial_idx"
                         class="w-full h-full"
                         :modules="modules"
                         @slide-change="onSlideChange"
@@ -49,7 +50,7 @@ import { ImageView, useImageView } from '../composables/useImageView';
 import type { Swiper as SwiperInstance } from 'swiper/types';
 import { ref } from 'vue';
 
-const { visible, current_images } = useImageView();
+const { visible, current_images, initial_idx } = useImageView();
 
 let sw: SwiperInstance | undefined;
 
@@ -85,5 +86,6 @@ function onMouseWheel(e: WheelEvent) {
 <style>
 .img-view-drawer {
     background: black !important;
+    border-color: black !important;
 }
 </style>

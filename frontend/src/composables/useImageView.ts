@@ -10,10 +10,12 @@ export interface ImageView {
 
 const visible = ref(false);
 const current_images = ref<ImageView[]>([]);
+const initial_idx = ref<number>(0);
 
 export function useImageView() {
-    function openImages(images: ImageView[]) {
+    function openImages(images: ImageView[], open_idx = 0) {
         current_images.value = images;
+        initial_idx.value = open_idx;
         visible.value = true;
     }
 
@@ -26,5 +28,5 @@ export function useImageView() {
         }
     });
 
-    return { openImages, visible, current_images };
+    return { openImages, visible, current_images, initial_idx };
 }
