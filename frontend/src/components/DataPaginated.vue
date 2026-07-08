@@ -6,8 +6,6 @@
               :rows="limit"
               :totalRecords="total"
               :first="offset"
-              :sortField="sortField"
-              :sortOrder="sortOrder"
               @page="onPage">
         <template #list="{ items }">
             <slot name="list"
@@ -41,8 +39,7 @@ interface Props {
     query?: Record<string, unknown>;
     perPage?: number;
     watchApis?: ClientService[];
-    sortField?: string;
-    sortOrder?: 1 | -1;
+    sort?: Record<string, 1 | -1>;
 }
 
 function typeItems(items: unknown[]): T[] {
@@ -60,8 +57,7 @@ const { rows, loading, offset, limit, total, onPage, reload } = useDataView({
     perPage: props.perPage,
     query: computed(() => props.query),
     watchApis: props.watchApis,
-    sortField: computed(() => props.sortField),
-    sortOrder: computed(() => props.sortOrder),
+    sort: computed(() => props.sort ?? {}),
 });
 
 onMounted(() => {

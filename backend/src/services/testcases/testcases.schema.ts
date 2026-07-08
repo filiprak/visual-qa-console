@@ -33,7 +33,7 @@ export const dataSchema = Type.Pick(schema, [
 ]);
 export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'status', 'accepted_at', 'updated_at']));
 export const querySchema = querySyntax(
-    Type.Pick(schema, ['name', 'status', 'group', 'pipeline_id']),
+    Type.Pick(schema, ['id', 'name', 'status', 'group', 'pipeline_id']),
     {
         group: {
             $like: Type.String(),

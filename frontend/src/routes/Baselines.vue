@@ -37,8 +37,7 @@
             <DataPaginated v-if="pipeline_filter || unique_pipelines.length < 1"
                            :service="api.baselines"
                            :query="{ pipeline_name: pipeline_filter, group: { $like: `%${text_filter_d}%` } }"
-                           sort-field="group"
-                           :sort-order="1">
+                           :sort="{ group: 1, id: 1 }">
                 <template #list="{ items }">
                     <div class="mb-3"
                          v-for="entry in groupBaselines(items)">

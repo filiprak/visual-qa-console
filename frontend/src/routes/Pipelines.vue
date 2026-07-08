@@ -11,8 +11,7 @@
                 <div class="basis-[200px]">Created</div>
             </div>
             <DataPaginated :service="api.pipelines"
-                           sort-field="created_at"
-                           :sort-order="-1">
+                           :sort="{ created_at: -1 }">
                 <template #list="{ items }">
                     <div class="mb-3">
                         <RouterLink v-for="item in items"
@@ -70,7 +69,6 @@
 import { RouterLink } from 'vue-router';
 import vTooltip from 'primevue/tooltip';
 import Tag from 'primevue/tag';
-import Button from 'primevue/button';
 import { api } from '../api';
 import DataPaginated from '../components/DataPaginated.vue';
 import { format, fromNow } from '../utils/dates.ts';

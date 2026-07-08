@@ -132,7 +132,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="flex gap-2 justify-start items-start basis-[200px]">
                                 <LoadingButton v-if="item.status == 'failed'"
@@ -217,15 +217,16 @@ const query = computed(() => ({
     status: status_filter.value !== 'all' ? status_filter.value : undefined,
     group: { $like: `%${text_filter_d.value}%` },
 }));
-const sortField = ref('group');
-const sortOrder = ref<1 | -1>(1);
+const sort = ref<Record<string, 1 | -1>>({
+    group: 1,
+    id: 1,
+});
 
 const { rows, loading, total, limit, offset, onPage, reload } = useDataView<TestCase>({
     service: api.testcases,
     query,
     perPage: 30,
-    sortField,
-    sortOrder,
+    sort,
 });
 
 const { selected,

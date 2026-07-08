@@ -7,8 +7,7 @@ interface Params<T> {
     query?: Ref<Record<string, unknown>>;
     perPage?: number;
     watchApis?: ClientService[];
-    sortField?: Ref<string | undefined>;
-    sortOrder?: Ref<1 | -1 | undefined>;
+    sort?: Ref<Record<string, 1 | -1>>;
 }
 
 export function useDataView<T>(params: Params<T>) {
@@ -29,9 +28,9 @@ export function useDataView<T>(params: Params<T>) {
                 $skip: offset.value,
             };
 
-            if (params.sortField?.value) {
+            if (params.sort?.value) {
                 query.$sort = {
-                    [params.sortField.value]: params.sortOrder?.value === 1 ? 1 : -1,
+                    ...params.sort.value,
                 };
             }
 
