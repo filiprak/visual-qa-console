@@ -114,11 +114,10 @@
                              :key="item.id">
                             <div class="basis-10 flex items-center">
                                 <img :src="item.result_img || fallback_url"
-                                     :class="[item.status == 'failed' ? 'border-red-600' : 'border-surface']"
-                                     class="block size-10 object-contain border" />
+                                     class="block size-10 object-contain bg-surface-200 dark:bg-surface-800" />
                             </div>
                             <div class="grow-1"
-                                 :class="{ 'text-red-600': item.status == 'failed' }">
+                                 :class="{ 'text-red-600 font-semibold': item.status == 'failed' }">
                                 {{ item.name }}
                             </div>
                             <div class="basis-[200px] flex gap-2 items-center">
@@ -133,7 +132,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="flex gap-2 justify-start items-start basis-[200px]">
                                 <LoadingButton v-if="item.status == 'failed'"

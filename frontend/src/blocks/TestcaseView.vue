@@ -3,7 +3,7 @@
         <Drawer v-model:visible="visible"
                 :show-close-icon="false"
                 block-scroll
-                class="no-transition"
+                class="test-drawer no-transition"
                 position="full">
             <template #header>
                 <template v-if="!loading && testcase">
@@ -94,7 +94,7 @@
                         <div></div>
                         <div class="flex flex-col items-center">
                             <template v-if="view == 'compare'">
-                                <div class="diff-container"
+                                <div class="screen-container"
                                      v-if="baseline_src && testcase.result_img">
                                     <ImageDiff :before="baseline_src"
                                                :after="testcase.result_img">
@@ -108,8 +108,9 @@
                                 </div>
                             </template>
                             <template v-if="view == 'result'">
-                                <div v-if="testcase.result_img">
-                                    <Sample class="block outline outline-surface-300"
+                                <div class="screen-container"
+                                     v-if="testcase.result_img">
+                                    <Sample class="screen"
                                             :src="testcase.result_img" />
                                 </div>
                                 <div v-else>
@@ -120,8 +121,9 @@
                                 </div>
                             </template>
                             <template v-if="view == 'diff'">
-                                <div v-if="testcase.diff_img">
-                                    <Sample class="block outline outline-surface-300"
+                                <div class="screen-container"
+                                     v-if="testcase.diff_img">
+                                    <Sample class="screen"
                                             :src="testcase.diff_img" />
                                 </div>
                                 <div v-else>
@@ -132,8 +134,9 @@
                                 </div>
                             </template>
                             <template v-if="view == 'baseline'">
-                                <div v-if="baseline_src">
-                                    <Sample class="block outline outline-surface-300"
+                                <div class="screen-container"
+                                     v-if="baseline_src">
+                                    <Sample class="screen"
                                             :src="baseline_src" />
                                 </div>
                                 <div v-else>
@@ -237,7 +240,13 @@ watch(visible, async (v) => {
     width: 100%;
 }
 
-.diff-container {
+.screen {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
+
+.screen-container {
     height: calc(100vh - 300px);
     width: 100%;
 }
