@@ -95,40 +95,52 @@
                         <div class="flex flex-col items-center">
                             <template v-if="view == 'compare'">
                                 <div class="diff-container"
-                                     v-if="baseline">
-                                    <ImageDiff :before="testcase.result_img || fallback_url"
-                                               :after="baseline_src">
+                                     v-if="baseline_src && testcase.result_img">
+                                    <ImageDiff :before="baseline_src"
+                                               :after="testcase.result_img">
                                     </ImageDiff>
                                 </div>
                                 <div v-else>
-                                    <Sample class="block outline outline-surface-300 w-[500px] h-[500px]"
-                                            :src="fallback_url" />
+                                    <Message severity="error"
+                                             icon="pi pi-exclamation-triangle">
+                                        Baseline or result screenshot was image not found
+                                    </Message>
                                 </div>
                             </template>
                             <template v-if="view == 'result'">
-                                <div>
+                                <div v-if="testcase.result_img">
                                     <Sample class="block outline outline-surface-300"
-                                            :src="testcase.result_img || fallback_url" />
+                                            :src="testcase.result_img" />
+                                </div>
+                                <div v-else>
+                                    <Message severity="error"
+                                             icon="pi pi-exclamation-triangle">
+                                        Result screenshot image was not found
+                                    </Message>
                                 </div>
                             </template>
                             <template v-if="view == 'diff'">
-                                <div>
+                                <div v-if="testcase.diff_img">
                                     <Sample class="block outline outline-surface-300"
-                                            :src="testcase.diff_img || fallback_url" />
+                                            :src="testcase.diff_img" />
+                                </div>
+                                <div v-else>
+                                    <Message severity="error"
+                                             icon="pi pi-exclamation-triangle">
+                                        Diff screenshot image was not found
+                                    </Message>
                                 </div>
                             </template>
                             <template v-if="view == 'baseline'">
-                                <div v-if="baseline">
+                                <div v-if="baseline_src">
                                     <Sample class="block outline outline-surface-300"
                                             :src="baseline_src" />
                                 </div>
                                 <div v-else>
-                                    <Sample class="block outline outline-surface-300 w-full h-full"
-                                            :style="{
-                                                width: result_info.width ? `${result_info.width}px` : null,
-                                                aspectRatio: result_info.width ? (result_info.width / result_info.height) : null,
-                                            }"
-                                            :src="fallback_url" />
+                                    <Message severity="error"
+                                             icon="pi pi-exclamation-triangle">
+                                        Baseline screenshot image was not found
+                                    </Message>
                                 </div>
                             </template>
                         </div>
@@ -157,7 +169,6 @@ function formatSize(info: SampleData) {
     return info.empty ? '? x ?' : `${info.width} x ${info.height}`;
 }
 
-const fallback_url = '/placeholder.svg';
 const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
 const view_options = computed(() => {
     return [
@@ -176,7 +187,7 @@ const view_options = computed(() => {
 const testcase = ref<TestCase>();
 const pipeline = ref<Pipeline>();
 const baseline = ref<Baseline>();
-const baseline_src = computed(() => baseline.value?.baseline_img || fallback_url);
+const baseline_src = computed(() => baseline.value?.baseline_img);
 
 const result_info = useSample(() => testcase.value?.result_img);
 const diff_info = useSample(() => testcase.value?.diff_img);
