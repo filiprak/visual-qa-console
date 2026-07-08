@@ -110,7 +110,7 @@
                         </div>
                         <div v-for="item in entry[1]"
                              class="flex cursor-pointer h-13 gap-3 items-center px-3 py-2 hover:bg-emphasis hover:text-color-emphasis border-t border-surface group"
-                             @click="batch_mode ? toggleItem(item.id) : openTestcase(item.id)"
+                             @click="batch_mode ? toggleItem(item.id) : onOpenTestcase(item)"
                              :key="item.id">
                             <div class="basis-10 flex items-center">
                                 <img :src="item.result_img || fallback_url"
@@ -140,7 +140,7 @@
                                                icon="eye"
                                                severity="secondary"
                                                :loading="accepting"
-                                               @click.stop.prevent="openTestcase(item.id)">
+                                               @click.stop.prevent="onOpenTestcase(item)">
                                     Review
                                 </LoadingButton>
                                 <LoadingButton v-if="item.status == 'failed'"
@@ -222,7 +222,7 @@ const sort = ref<Record<string, 1 | -1>>({
     id: 1,
 });
 
-const { rows, loading, total, limit, offset, onPage, reload } = useDataView<TestCase>({
+const { rows, loading, total, limit, offset, onPage, nextPage, prevPage, reload } = useDataView<TestCase>({
     service: api.testcases,
     query,
     perPage: 30,
@@ -258,6 +258,31 @@ async function onBatchAccept() {
     await acceptTestcase(selected.value);
     selected.value = [];
     nextTick(() => { batch_mode.value = false; });
+}
+
+async function onOpenTestcase(item: TestCase) {
+    openTestcase(item.id, {
+        async nextId(curr_id) {
+            const idx = rows.value.findIndex(i => i.id == curr_id);
+            if (rows.value[idx + 1]?.id === undefined) {
+                if (await nextPage()) {
+                    return rows.value[0]?.id;
+                }
+            } else {
+                return rows.value[idx + 1]?.id;
+            }
+        },
+        async prevId(curr_id) {
+            const idx = rows.value.findIndex(i => i.id == curr_id);
+            if (rows.value[idx - 1]?.id === undefined) {
+                if (await prevPage()) {
+                    return rows.value[rows.value.length - 1]?.id;
+                }
+            } else {
+                return rows.value[idx - 1]?.id;
+            }
+        }
+    });
 }
 
 function groupTestcases(items: TestCase[]) {

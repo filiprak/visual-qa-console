@@ -51,6 +51,26 @@ export function useDataView<T>(params: Params<T>) {
         load();
     }
 
+    async function prevPage() {
+        if (offset.value > 0) {
+            offset.value = Math.max(offset.value - rowsPerPage.value, 0);
+            await load();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    async function nextPage() {
+        if (offset.value + rowsPerPage.value < total.value) {
+            offset.value += rowsPerPage.value;
+            await load();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     watch(() => params.query?.value, load, { deep: true });
 
     onBackendModified([...(params.watchApis || []), params.service], () => {
@@ -65,6 +85,8 @@ export function useDataView<T>(params: Params<T>) {
         count: rows,
         loading,
         onPage,
+        nextPage,
+        prevPage,
         reload: load,
     };
 }

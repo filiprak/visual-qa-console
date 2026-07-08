@@ -26,6 +26,16 @@
                         </div>
                     </div>
                     <div class="flex gap-3">
+                        <Button v-if="options?.prevId"
+                                @click="onPrevClick"
+                                severity="secondary">
+                            <Icon name="chevron-left"></Icon>
+                        </Button>
+                        <Button v-if="options?.nextId"
+                                @click="onNextClick"
+                                severity="secondary">
+                            <Icon name="chevron-right"></Icon>
+                        </Button>
                         <Button @click="visible = false"
                                 severity="secondary">
                             <Icon name="times"></Icon>
@@ -170,11 +180,13 @@ import Icon from '../components/Icon.vue';
 import { useReview } from '../composables/useReview.ts';
 import TestStatus from '../components/TestStatus.vue';
 import { SampleData, useSample } from '../composables/useSample';
+import { useToast } from 'primevue/usetoast';
 
 function formatSize(info: SampleData) {
     return info.empty ? '? x ?' : `${info.width} x ${info.height}`;
 }
 
+const toast = useToast();
 const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
 const view_options = computed(() => {
     return [
@@ -199,10 +211,36 @@ const result_info = useSample(() => testcase.value?.result_img);
 const diff_info = useSample(() => testcase.value?.diff_img);
 const baseline_info = useSample(() => baseline.value?.baseline_img);
 
-const { visible, id } = useTestcaseView();
+const { visible, options, id } = useTestcaseView();
 const { acceptTestcase } = useReview();
 const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
+
+async function onPrevClick() {
+    const prev_id = await options.value?.prevId?.(id.value);
+    prev_id && await load(prev_id);
+
+    if (!prev_id) {
+        toast.add({
+            severity: 'warn',
+            summary: 'No more previous testcases',
+            life: 1000,
+        });
+    }
+}
+
+async function onNextClick() {
+    const next_id = await options.value?.nextId?.(id.value);
+    next_id && await load(next_id);
+
+    if (!next_id) {
+        toast.add({
+            severity: 'warn',
+            summary: 'No more next testcases',
+            life: 1000,
+        });
+    }
+}
 
 async function onAccept() {
     const comitted = await acceptTestcase([id.value!]);
@@ -212,28 +250,33 @@ async function onAccept() {
     }
 }
 
+async function load(testcase_id: number) {
+    try {
+        loading.value = true;
+        id.value = testcase_id;
+        testcase.value = await api.testcases.get(testcase_id);
+        pipeline.value = await api.pipelines.get(testcase.value!.pipeline_id);
+
+        if (pipeline.value?.name && testcase.value?.unique_key) {
+            baseline.value = (
+                await api.baselines.find({
+                    query: {
+                        unique_key: testcase.value?.unique_key,
+                    },
+                })
+            ).data.at(0);
+        } else {
+            baseline.value = undefined;
+        }
+        view.value = hide_diff.value ? 'result' : 'compare';
+    } finally {
+        loading.value = false;
+    }
+}
+
 watch(visible, async (v) => {
     if (v && id.value) {
-        try {
-            loading.value = true;
-            testcase.value = await api.testcases.get(id.value);
-            pipeline.value = await api.pipelines.get(testcase.value!.pipeline_id);
-
-            if (pipeline.value?.name && testcase.value?.unique_key) {
-                baseline.value = (
-                    await api.baselines.find({
-                        query: {
-                            unique_key: testcase.value?.unique_key,
-                        },
-                    })
-                ).data.at(0);
-            } else {
-                baseline.value = undefined;
-            }
-            view.value = hide_diff.value ? 'result' : 'compare';
-        } finally {
-            loading.value = false;
-        }
+        await load(id.value);
     }
 });
 </script>
