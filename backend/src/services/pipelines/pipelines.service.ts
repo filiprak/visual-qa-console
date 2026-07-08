@@ -4,7 +4,7 @@ import { getValidateHooks } from '../../utils/hooks.js';
 import { KnexService } from '@feathersjs/knex';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
 
-export class PipelinesService extends KnexService<Pipeline> {}
+export class PipelinesService extends KnexService<Pipeline> { }
 
 const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
     details: virtual(async (pipeline, context) => {
@@ -37,6 +37,16 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
     }),
 });
 
+const testcaseRemover = async (context: HookContext) => {
+    if (context.arguments[0]) {
+        await context.app
+            .get('db')
+            .table('testcases')
+            .where('pipeline_id', parseInt(context.arguments[0]))
+            .delete()
+    }
+}
+
 const ROUTE = '/api/v1/pipelines';
 
 export default (app: Application) => {
@@ -53,12 +63,15 @@ export default (app: Application) => {
         patchSchema,
         querySchema,
     });
-    app.use(ROUTE, service, { methods: ['find', 'get'] });
+    app.use(ROUTE, service, { methods: ['find', 'get', 'remove'] });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE).hooks({
         around: {
             find: [hooks.resolveResult(pipelineResolver)],
             get: [hooks.resolveResult(pipelineResolver)],
+        },
+        before: {
+            remove: [testcaseRemover],
         },
     });
 };
