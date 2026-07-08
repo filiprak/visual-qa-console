@@ -10,6 +10,7 @@ import type {
     BaselinesService,
 } from './services/baselines/baselines.service.js';
 import type { ReviewService } from './services/review/review.service.js';
+import type { FilesService } from './services/files/files.service.js';
 
 export interface Configuration {
     db: Knex;
@@ -23,6 +24,7 @@ export interface ServiceTypes {
     '/api/v1/baselines/pipelines': BaselinesPipelinesService;
     '/api/v1/baselines/match': BaselinesMatchService;
     '/api/v1/review': ReviewService;
+    '/api/v1/files': FilesService;
 }
 
 export type Application = _Application<ServiceTypes, Configuration>;
