@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import path from 'path';
 import fs from 'fs';
 import https from 'https';
 import { createServer } from './app.js';
