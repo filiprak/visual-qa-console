@@ -8,3 +8,4 @@ export {
     BaselineMatchResponse,
 } from '../backend/src/services/baselines/baselines.schema.ts';
 export { Review } from '../backend/src/services/review/review.schema.ts';
+export { User, Permissions } from '../backend/src/services/users/users.schema.ts';

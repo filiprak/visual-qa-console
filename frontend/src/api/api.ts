@@ -19,6 +19,7 @@ export const api = {
     baselines_pipelines: app.service('/api/v1/baselines/pipelines'),
     baselines_match: app.service('/api/v1/baselines/match'),
     review: app.service('/api/v1/review'),
+    users: app.service('/api/v1/users'),
 };
 
 function backendModifiedHook(context: HookContext) {

@@ -22,12 +22,11 @@ const schema = Type.Object(
     { additionalProperties: false },
 );
 
-export const dataSchema = Type.Pick(schema, [
-    'name',
-    'email',
-    'password',
+export const dataSchema = Type.Intersect([
+    Type.Pick(schema, ['name', 'email', 'password']),
+    Type.Partial(Type.Pick(schema, ['is_admin', 'permissions'])),
 ]);
-export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'email', 'password', 'permissions']));
+export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'email', 'password', 'permissions', 'is_admin']));
 export const querySchema = querySyntax(
     Type.Pick(schema, ['id', 'name', 'email', 'is_admin']),
     {

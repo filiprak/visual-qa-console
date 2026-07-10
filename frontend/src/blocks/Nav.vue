@@ -54,5 +54,10 @@ const menuItems: MenuItem[] = [
         icon: 'pi-image',
         path: '/baselines',
     },
+    {
+        label: 'Users',
+        icon: 'pi-users',
+        path: '/users',
+    },
 ];
 </script>

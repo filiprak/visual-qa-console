@@ -1,5 +1,5 @@
 import type { ClientService } from '@feathersjs/feathers';
-import type { BaselineMatch, BaselineMatchResponse, BaselinePipeline, Pipeline, Review } from '@/types';
+import type { BaselineMatch, BaselineMatchResponse, BaselinePipeline, Pipeline, Review, User } from '@/types';
 
 export interface ServiceTypes {
     '/api/v1/pipelines': ClientService<Pipeline>;
@@ -8,4 +8,5 @@ export interface ServiceTypes {
     '/api/v1/baselines/pipelines': ClientService<Baseline, never, never, BaselinePipeline[]>;
     '/api/v1/baselines/match': ClientService<BaselineMatchResponse, never, never, BaselineMatch>;
     '/api/v1/review': ClientService<Review>;
+    '/api/v1/users': ClientService<User>;
 }
