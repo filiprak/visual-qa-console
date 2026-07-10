@@ -15,11 +15,11 @@ import type { Configuration, ServiceTypes } from './declarations.js';
 const koaSslify = koaSslifyModule.default;
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
-export async function createServer(opts?: { port?: number, isDev?: boolean }) {
+export async function createServer(opts?: { ssl?: boolean, port?: number, isDev?: boolean }) {
     const isDev = !!opts?.isDev;
     const app = koa(feathers<ServiceTypes, Configuration>());
 
-    !isDev && app.use(koaSslify({ port: opts?.port }));
+    opts?.ssl && app.use(koaSslify({ port: opts?.port }));
     app.set('db', db);
     app.use(errorHandler());
     app.use(bodyParser());
