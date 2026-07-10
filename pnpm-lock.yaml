@@ -243,9 +243,6 @@ importers:
       koa-connect:
         specifier: ^2.1.1
         version: 2.1.1
-      koa-sslify:
-        specifier: ^6.0.0
-        version: 6.0.0
       koa-static:
         specifier: ^5.0.0
         version: 5.0.0
@@ -283,9 +280,6 @@ importers:
       '@types/express':
         specifier: ^5.0.6
         version: 5.0.6
-      '@types/koa-sslify':
-        specifier: ^4.0.6
-        version: 4.0.6
       '@types/koa-static':
         specifier: ^4.0.4
         version: 4.0.4
@@ -805,9 +799,6 @@ packages:
 
   '@types/koa-send@4.1.6':
     resolution: {integrity: sha512-vgnNGoOJkx7FrF0Jl6rbK1f8bBecqAchKpXtKuXzqIEdXTDO6dsSTjr+eZ5m7ltSjH4K/E7auNJEQCAd0McUPA==}
-
-  '@types/koa-sslify@4.0.6':
-    resolution: {integrity: sha512-yPp3bND99D81iZ3k9HV4vEv1sFqdsYa/k9dKmXgb7W9UXuNrf54x+mYOzPEnHvhDBQQLGUyBDiW7lZ6DQadVIA==}
 
   '@types/koa-static@4.0.4':
     resolution: {integrity: sha512-j1AUzzl7eJYEk9g01hNTlhmipFh8RFbOQmaMNLvLcNNAkPw0bdTs3XTa3V045XFlrWN0QYnblbDJv2RzawTn6A==}
@@ -1662,10 +1653,6 @@ packages:
   koa-send@5.0.1:
     resolution: {integrity: sha512-tmcyQ/wXXuxpDxyNXv5yNNkdAMdFRqwtegBXUaowiQzUKqJehttS0x2j0eOZDQAyloAth5w6wwBImnFzkUz3pQ==}
     engines: {node: '>= 8'}
-
-  koa-sslify@6.0.0:
-    resolution: {integrity: sha512-TR5zr0pVAfLsoneqeXKwns81cCL0bNo1/8JNcs9R3zW9qz5s3RfuzL8gZA78jhOhH68NfibGSvCgPcIffbbZpQ==}
-    engines: {node: '>16.0.0'}
 
   koa-static@5.0.0:
     resolution: {integrity: sha512-UqyYyH5YEXaJrf9S8E23GoJFQZXkBVJ9zYYMPGz919MSX1KuvAcycIuS0ci150HCoPf4XQVhQ84Qf8xRPWxFaQ==}
@@ -3084,10 +3071,6 @@ snapshots:
     dependencies:
       '@types/koa': 3.0.3
 
-  '@types/koa-sslify@4.0.6':
-    dependencies:
-      '@types/koa': 3.0.3
-
   '@types/koa-static@4.0.4':
     dependencies:
       '@types/koa': 3.0.3
@@ -3992,8 +3975,6 @@ snapshots:
       resolve-path: 1.4.0
     transitivePeerDependencies:
       - supports-color
-
-  koa-sslify@6.0.0: {}
 
   koa-static@5.0.0:
     dependencies:

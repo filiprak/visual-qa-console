@@ -5,21 +5,18 @@ import { feathers } from '@feathersjs/feathers';
 import { koa, rest, bodyParser, errorHandler } from '@feathersjs/koa';
 import koaConnect from 'koa-connect';
 import koaStatic from 'koa-static';
-import koaSslifyModule from 'koa-sslify';
 import type { ViteDevServer } from 'vite';
 import { db } from './db.js';
 import { appServices } from './services/index.js';
 import { hooks } from './app.hooks.js';
 import type { Configuration, ServiceTypes } from './declarations.js';
 
-const koaSslify = koaSslifyModule.default;
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
-export async function createServer(opts?: { ssl?: boolean, port?: number, isDev?: boolean }) {
+export async function createServer(opts?: { isDev?: boolean }) {
     const isDev = !!opts?.isDev;
     const app = koa(feathers<ServiceTypes, Configuration>());
 
-    opts?.ssl && app.use(koaSslify({ port: opts?.port }));
     app.set('db', db);
     app.use(errorHandler());
     app.use(bodyParser());
