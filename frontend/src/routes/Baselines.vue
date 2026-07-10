@@ -1,7 +1,12 @@
 <template>
     <div class="p-12 flex justify-center">
         <div class="max-w-[1600px] grow">
-            <h1 class="text-5xl font-semibold my-8">Baseline Screenshots</h1>
+            <div class="my-8">
+                <h1 class="text-5xl font-semibold">Baseline screenshots</h1>
+                <p class="text-muted-color mt-2">
+                    Reference images used for visual comparison and regression validation
+                </p>
+            </div>
             <div v-if="unique_pipelines.length"
                  class="flex justify-between items-stretch w-full bg-surface-0 dark:bg-surface-900">
                 <Tabs v-model:value="pipeline_filter"

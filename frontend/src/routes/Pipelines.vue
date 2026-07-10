@@ -1,7 +1,12 @@
 <template>
     <div class="p-12 flex justify-center">
         <div class="max-w-[1600px] grow">
-            <h1 class="text-5xl font-semibold my-8">Pipelines</h1>
+            <div class="my-8">
+                <h1 class="text-5xl font-semibold">Pipelines</h1>
+                <p class="text-muted-color mt-2">
+                    Track automated screenshot comparisons and regression test runs
+                </p>
+            </div>
             <div class="flex gap-3 items-center p-4 text-muted-color">
                 <div class="basis-[28px]">#</div>
                 <div class="grow-1">Name</div>
