@@ -11,7 +11,7 @@ const ssl = parseInt(process.env.SSL || '0');
 const sslCertPath = process.env.SSL_CERT || '';
 const sslKeyPath = process.env.SSL_KEY || '';
 
-const app = await createServer({ isDev, port, ssl: !isDev });
+const app = await createServer({ isDev, port, ssl: ssl === 1 });
 
 const onListen = () => {
     console.log(`Server running at http${ssl ? 's' : ''}://${host}:${port} [${!isDev ? 'PROD' : 'DEV'}]`);
