@@ -1,10 +1,17 @@
 import { createServer } from '../src/app.js';
 import { db } from '../src/db.js';
 import type { Application } from '../src/declarations.js';
+import { initialSeed } from './seed.js';
 
 export const port = parseInt(process.env.TEST_PORT || '3031');
 export const host = process.env.TEST_PORT || 'localhost';
 export const baseurl = `http://${host}:${port}`;
+
+let currentJwt: string | undefined;
+
+export async function setJwtToken(jwt?: string) {
+    currentJwt = jwt;
+}
 
 export async function request(
     route: string,
@@ -18,6 +25,7 @@ export async function request(
     const res = await fetch(`${baseurl}${route}`, {
         headers: {
             'Content-Type': 'application/json',
+            ...currentJwt && { 'Authorization': `Bearer ${currentJwt}` },
             ...(options.headers || {}),
         },
         method: options.method,
@@ -46,15 +54,15 @@ export async function setupServer() {
     await db.migrate.rollback(undefined, true);
     await db.migrate.latest();
 
-    // optional seed
-    // await db.seed.run();
-
     return app;
 }
 
 export async function clearDb() {
     await db.migrate.rollback(undefined, true);
     await db.migrate.latest();
+
+    // optional seed
+    await initialSeed(db);
 }
 
 export async function teardownServer(app: Application) {

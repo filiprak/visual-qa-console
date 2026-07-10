@@ -1,4 +1,29 @@
-import { request } from "./utils.js";
+import type { Knex } from "knex";
+import { request, setJwtToken } from "./utils.js";
+
+export async function initialSeed(db: Knex) {
+    await db
+        .table('users')
+        .insert({
+            id: 1,
+            name: 'admin',
+            email: 'admin@example.com',
+            password: '$2b$10$PyXGD6GBRzRbBgguwpZaoOqnfFsg/otHMKZamN1IjHYXuRe9mWaBa',
+            is_admin: 1,
+            updated_at: '2026-01-01 12:00:00',
+            created_at: '2026-01-01 12:00:00',
+        });
+
+    const authResponse = await request('/api/v1/auth', {
+        method: 'post',
+        payload: {
+            strategy: 'local',
+            email: 'admin@example.com',
+            password: 'admin'
+        },
+    });
+    setJwtToken(authResponse.json.accessToken);
+}
 
 export async function loadSeed(
     params?: {
