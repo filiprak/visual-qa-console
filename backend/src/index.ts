@@ -19,8 +19,8 @@ const onListen = () => {
 
 function getSSLKeys() {
     try {
-        const cert = fs.readFileSync(path.resolve(sslCertPath), 'utf-8');
-        const key = fs.readFileSync(path.resolve(sslKeyPath), 'utf-8');
+        const cert = fs.readFileSync(sslCertPath, 'utf-8');
+        const key = fs.readFileSync(sslKeyPath, 'utf-8');
 
         return { cert, key };
     } catch (e) {
