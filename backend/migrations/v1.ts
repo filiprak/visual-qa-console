@@ -7,6 +7,8 @@ export async function up(knex: Knex) {
         table.string('name');
         table.string('email').unique();
         table.string('password');
+        table.boolean('is_admin').defaultTo(false);
+        table.json('permissions').defaultTo([]);
         table.timestamps(true, true);
     });
 
@@ -64,4 +66,5 @@ export async function down(knex: Knex) {
     await knex.schema.dropTable('pipelines');
     await knex.schema.dropTable('testcases');
     await knex.schema.dropTable('baselines');
+    await knex.schema.dropTable('users');
 }

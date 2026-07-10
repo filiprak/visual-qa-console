@@ -1,9 +1,10 @@
 import type { Application, HookContext } from '../../declarations.js';
 import { dataSchema, patchSchema, querySchema, type User } from './users.schema.js';
-import { KnexService } from '@feathersjs/knex';
+import { KnexService, ERROR } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import { passwordHash } from '@feathersjs/authentication-local';
 import { hooks, resolve } from '@feathersjs/schema';
+import { jsonFieldConvert } from '../../hooks/jsonFieldConvert.js';
 
 const ROUTE = '/api/v1/users';
 
@@ -38,8 +39,12 @@ export default (app: Application) => {
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE).hooks({
         before: {
-            create: [hooks.resolveData(userDataResolver)],
-            patch: [hooks.resolveData(userDataResolver)],
+            create: [hooks.resolveData(userDataResolver), jsonFieldConvert(['permissions'])],
+            update: [hooks.resolveData(userDataResolver), jsonFieldConvert(['permissions'])],
+            patch: [hooks.resolveData(userDataResolver), jsonFieldConvert(['permissions'])],
+        },
+        after: {
+            all: [jsonFieldConvert(['permissions'])],
         },
         around: {
             all: [hooks.resolveExternal(userExternalResolver)],
