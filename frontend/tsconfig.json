@@ -2,7 +2,11 @@
     "compilerOptions": {
         "target": "ES2022",
         "useDefineForClassFields": true,
-        "lib": ["DOM", "DOM.Iterable", "ES2022"],
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ES2022"
+        ],
         "module": "ESNext",
         "skipLibCheck": true,
         "moduleResolution": "bundler",
@@ -12,11 +16,16 @@
         "noEmit": true,
         "strict": true,
         "paths": {
-            "@/types": ["../shared/types.d.ts"]
+            "@/types": [
+                "../shared/types.d.ts"
+            ]
         }
     },
     "exclude": [
-        "node_modules"
+        "../node_modules",
+        "../dist"
     ],
-    "include": ["./src/**/*"]
+    "include": [
+        "./src/**/*"
+    ]
 }

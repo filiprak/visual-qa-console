@@ -1,7 +1,9 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "types": ["node"],
+        "types": [
+            "node"
+        ],
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "rootDir": ".",
@@ -10,6 +12,13 @@
         "esModuleInterop": true,
         "skipLibCheck": true
     },
-    "exclude": ["../node_modules", "../dist"],
-    "include": ["tests/**/*", "src/**/*", "../shared/*.d.ts"]
+    "exclude": [
+        "../node_modules",
+        "../dist"
+    ],
+    "include": [
+        "tests/**/*",
+        "src/**/*",
+        "../shared/*.d.ts"
+    ]
 }
