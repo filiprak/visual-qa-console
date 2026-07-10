@@ -1,4 +1,5 @@
-import type { Pipeline, Report } from '@/types';
+import type { Report } from './report.schema.js';
+import type { Pipeline } from '../pipelines/pipelines.schema.js';
 import type { Application } from '../../declarations.js';
 import { dataSchema } from './report.schema.js';
 import type { Params, ServiceInterface } from '@feathersjs/feathers';

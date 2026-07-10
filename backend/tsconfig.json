@@ -8,10 +8,7 @@
         "outDir": "../dist/backend",
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
-        "paths": {
-            "@/types": ["../shared/types.d.ts"]
-        }
+        "skipLibCheck": true
     },
     "include": ["tests/**/*", "src/**/*", "../shared/*.d.ts"]
 }

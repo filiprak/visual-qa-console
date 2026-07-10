@@ -15,5 +15,8 @@
             "@/types": ["../shared/types.d.ts"]
         }
     },
+    "exclude": [
+        "node_modules"
+    ],
     "include": ["./src/**/*", "../shared/*.d.ts"]
 }

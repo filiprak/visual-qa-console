@@ -1,4 +1,4 @@
-import type { Review } from '@/types';
+import type { Review } from './review.schema.js';
 import type { Application } from '../../declarations.js';
 import { dataSchema } from './review.schema.js';
 import type { Params, ServiceInterface } from '@feathersjs/feathers';
