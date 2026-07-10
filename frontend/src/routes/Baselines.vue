@@ -128,7 +128,7 @@ async function onRemove(item: Baseline) {
             message: 'Do you want to remove baseline screenshot?',
             acceptLabel: 'Remove',
             severity: 'danger',
-        }))
+        })).confirmed
     )
         return;
     await api.baselines.remove(item.id);
