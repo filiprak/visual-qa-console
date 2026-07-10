@@ -33,6 +33,8 @@
         }
     },
     "dependencies": {
+        "@feathersjs/authentication": "^5.0.46",
+        "@feathersjs/authentication-local": "^5.0.46",
         "@feathersjs/errors": "^5.0.46",
         "@feathersjs/feathers": "^5.0.45",
         "@feathersjs/knex": "^5.0.45",

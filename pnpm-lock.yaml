@@ -207,6 +207,12 @@ importers:
 
   .:
     dependencies:
+      '@feathersjs/authentication':
+        specifier: ^5.0.46
+        version: 5.0.46(typescript@5.9.3)
+      '@feathersjs/authentication-local':
+        specifier: ^5.0.46
+        version: 5.0.46(typescript@5.9.3)
       '@feathersjs/errors':
         specifier: ^5.0.46
         version: 5.0.46
@@ -384,12 +390,28 @@ packages:
     resolution: {integrity: sha512-5GZluJHbBDrbScbEPUvZbayND4ONlRyy9OQGVTACzpdETrp4iTf0zxntpkHlrHXpqd0MUvEAd81BgkZx5OaHVg==}
     engines: {node: '>= 12'}
 
+  '@feathersjs/adapter-commons@5.0.46':
+    resolution: {integrity: sha512-c85Hi8xOyV2jaHZz/V5GRvK6fmyUiV9DoJyYvbDWwYiQ7wBW0bjy3WESN4nIXFH9neogbyirgk1aA1Fap/W6hw==}
+    engines: {node: '>= 12'}
+
+  '@feathersjs/authentication-local@5.0.46':
+    resolution: {integrity: sha512-gBQmhU170niJNmUaJYJy3PbOYGlu04oMU3sSqWNnf9IjANOqdVoQ0GZS4xPAaL2a0ZYiUSYygLroHknoPfJJFw==}
+    engines: {node: '>= 12'}
+
   '@feathersjs/authentication@5.0.45':
     resolution: {integrity: sha512-9kn5SPilK1cbOQuExJOb2lvucGaa9DO91kbK9QBeaCzbYzkX33KJ/yuhiMGD+wOK4H0u9M3FnEsIL/t6P6H6Rg==}
     engines: {node: '>= 12'}
 
+  '@feathersjs/authentication@5.0.46':
+    resolution: {integrity: sha512-CupnZenY9DpgtGvZkODASwYCRla/MJMivW+W1QyAmayAq2o50A2Xt7a76y4BYjbQntYrKu3L4JsW2LVDZ1MdoQ==}
+    engines: {node: '>= 12'}
+
   '@feathersjs/commons@5.0.45':
     resolution: {integrity: sha512-dCe9Kfi+T6wRvhXLii1PJWaRAvqiJRMmBFsNzrrOi/wacph14NijUK63H8u/iy8Ni3gYIRaEYyBnKTfTbxbiRQ==}
+    engines: {node: '>= 12'}
+
+  '@feathersjs/commons@5.0.46':
+    resolution: {integrity: sha512-jcoPt00VATX25L8eSLLHw75oN0p8ibx0v5KniC/uHlpq5i8CMYgcgjmZJ/bKdkZAHcGQ/ELGvYLkj5QocWpvxg==}
     engines: {node: '>= 12'}
 
   '@feathersjs/errors@5.0.46':
@@ -398,6 +420,10 @@ packages:
 
   '@feathersjs/feathers@5.0.45':
     resolution: {integrity: sha512-0NLBzf67grpx1uX8+t09ctklhgmh4T9D1q/kkdPdR21qYhPcvI+6wrJHJo/CfnQNEJ6mlVVV2NqdDDC/omC+Bg==}
+    engines: {node: '>= 12'}
+
+  '@feathersjs/feathers@5.0.46':
+    resolution: {integrity: sha512-RDgyeTiOgEmymHn7P0gA+rclXaLPdgPa8KcBrUTbQuJylWgRi6Vd7RFHgQvjCaSlrXVThRfPdvgH9Twbc/yfAA==}
     engines: {node: '>= 12'}
 
   '@feathersjs/hooks@0.9.0':
@@ -424,8 +450,18 @@ packages:
     peerDependencies:
       typescript: '>=5.0'
 
+  '@feathersjs/schema@5.0.46':
+    resolution: {integrity: sha512-oZK1I+P0sGzdbc45XqVvLGJVSvAE30t7S0eglmLisNEbBPv8ut+cX8QB6WcpBbdD24fYgQ9Z4j3p57bl9ivnWg==}
+    engines: {node: '>= 12'}
+    peerDependencies:
+      typescript: '>=5.0'
+
   '@feathersjs/transport-commons@5.0.45':
     resolution: {integrity: sha512-AsrcsHwp89nfjHKOUMPb0n8F1REt3NbjT03hBnzMznbRMoGNpV8SnlwSlulW60aF69R6lr61doGC2ye4hpYFzA==}
+    engines: {node: '>= 12'}
+
+  '@feathersjs/transport-commons@5.0.46':
+    resolution: {integrity: sha512-Ezdz4yuK+A+kTQ7OWFVyoAFShrdlJ1iuelbXfYkK8zIdiw+huxwAHcOXUmtBdP1MYxsWnadJoyyvA4ZehzuJjQ==}
     engines: {node: '>= 12'}
 
   '@feathersjs/typebox@5.0.45':
@@ -1024,6 +1060,10 @@ packages:
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+
+  bcryptjs@3.0.3:
+    resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
+    hasBin: true
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -2663,6 +2703,23 @@ snapshots:
       '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
 
+  '@feathersjs/adapter-commons@5.0.46':
+    dependencies:
+      '@feathersjs/commons': 5.0.46
+      '@feathersjs/errors': 5.0.46
+      '@feathersjs/feathers': 5.0.46
+
+  '@feathersjs/authentication-local@5.0.46(typescript@5.9.3)':
+    dependencies:
+      '@feathersjs/authentication': 5.0.46(typescript@5.9.3)
+      '@feathersjs/commons': 5.0.46
+      '@feathersjs/errors': 5.0.46
+      '@feathersjs/feathers': 5.0.46
+      bcryptjs: 3.0.3
+      lodash: 4.18.1
+    transitivePeerDependencies:
+      - typescript
+
   '@feathersjs/authentication@5.0.45(typescript@5.9.3)':
     dependencies:
       '@feathersjs/commons': 5.0.45
@@ -2679,13 +2736,37 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  '@feathersjs/authentication@5.0.46(typescript@5.9.3)':
+    dependencies:
+      '@feathersjs/commons': 5.0.46
+      '@feathersjs/errors': 5.0.46
+      '@feathersjs/feathers': 5.0.46
+      '@feathersjs/hooks': 0.9.0
+      '@feathersjs/schema': 5.0.46(typescript@5.9.3)
+      '@feathersjs/transport-commons': 5.0.46
+      '@types/jsonwebtoken': 9.0.10
+      jsonwebtoken: 9.0.3
+      lodash: 4.18.1
+      long-timeout: 0.1.1
+      uuid: 11.1.1
+    transitivePeerDependencies:
+      - typescript
+
   '@feathersjs/commons@5.0.45': {}
+
+  '@feathersjs/commons@5.0.46': {}
 
   '@feathersjs/errors@5.0.46': {}
 
   '@feathersjs/feathers@5.0.45':
     dependencies:
       '@feathersjs/commons': 5.0.45
+      '@feathersjs/hooks': 0.9.0
+      events: 3.3.0
+
+  '@feathersjs/feathers@5.0.46':
+    dependencies:
+      '@feathersjs/commons': 5.0.46
       '@feathersjs/hooks': 0.9.0
       events: 3.3.0
 
@@ -2741,11 +2822,32 @@ snapshots:
       json-schema-to-ts: 3.1.1
       typescript: 5.9.3
 
+  '@feathersjs/schema@5.0.46(typescript@5.9.3)':
+    dependencies:
+      '@feathersjs/adapter-commons': 5.0.46
+      '@feathersjs/commons': 5.0.46
+      '@feathersjs/errors': 5.0.46
+      '@feathersjs/feathers': 5.0.46
+      '@feathersjs/hooks': 0.9.0
+      '@types/json-schema': 7.0.15
+      ajv: 8.20.0
+      ajv-formats: 3.0.1(ajv@8.20.0)
+      json-schema-to-ts: 3.1.1
+      typescript: 5.9.3
+
   '@feathersjs/transport-commons@5.0.45':
     dependencies:
       '@feathersjs/commons': 5.0.45
       '@feathersjs/errors': 5.0.46
       '@feathersjs/feathers': 5.0.45
+      encodeurl: 2.0.0
+      lodash: 4.18.1
+
+  '@feathersjs/transport-commons@5.0.46':
+    dependencies:
+      '@feathersjs/commons': 5.0.46
+      '@feathersjs/errors': 5.0.46
+      '@feathersjs/feathers': 5.0.46
       encodeurl: 2.0.0
       lodash: 4.18.1
 
@@ -3356,6 +3458,8 @@ snapshots:
   balanced-match@4.0.4: {}
 
   base64-js@1.5.1: {}
+
+  bcryptjs@3.0.3: {}
 
   binary-extensions@2.3.0: {}
 
