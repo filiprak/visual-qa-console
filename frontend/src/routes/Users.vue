@@ -15,7 +15,7 @@
 
             <!-- Toolbar & Filter -->
             <div
-                 class="flex justify-between items-center w-full mb-6 p-4 bg-surface-0 dark:bg-surface-900 border border-surface rounded-xl">
+                 class="flex justify-between items-center w-full mb-6 p-4 bg-surface-0 dark:bg-surface-900 border border-surface">
                 <IconField class="w-full max-w-md">
                     <InputIcon>
                         <Icon name="search" />

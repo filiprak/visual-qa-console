@@ -77,6 +77,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <LoadingButton icon-only
                                                icon="trash"
+                                               variant="outlined"
                                                severity="danger"
                                                @click.stop.prevent="onRemove(item)">
                                 </LoadingButton>
