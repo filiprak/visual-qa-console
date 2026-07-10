@@ -1,10 +1,11 @@
 import type { Application, HookContext } from '../../declarations.js';
 import { dataSchema, patchSchema, querySchema, type User } from './users.schema.js';
-import { KnexService, ERROR } from '@feathersjs/knex';
+import { KnexService } from '@feathersjs/knex';
 import { getValidateHooks } from '../../utils/hooks.js';
 import { passwordHash } from '@feathersjs/authentication-local';
 import { hooks, resolve } from '@feathersjs/schema';
 import { jsonFieldConvert } from '../../hooks/jsonFieldConvert.js';
+import { auth } from '../../hooks/auth.js';
 
 const ROUTE = '/api/v1/users';
 
@@ -35,7 +36,14 @@ export default (app: Application) => {
         patchSchema,
         querySchema,
     });
-    app.use(ROUTE, service);
+    app.use(ROUTE, service, { methods: ['get', 'find', 'create', 'patch', 'remove'] });
+    app.service(ROUTE).hooks({
+        before: {
+            create: [auth(['users.create'])],
+            patch: [auth(['users.patch'])],
+            remove: [auth(['users.delete'])],
+        },
+    });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE).hooks({
         before: {

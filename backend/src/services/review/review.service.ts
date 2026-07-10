@@ -6,6 +6,7 @@ import { getValidateHooks } from '../../utils/hooks.js';
 import { utcNow } from '../../utils/dates.js';
 import { type KnexAdapterTransaction } from '@feathersjs/knex';
 import { transactionHandler } from '../../hooks/transaction.hook.js';
+import { auth } from '../../hooks/auth.js';
 
 const ROUTE = '/api/v1/review';
 
@@ -73,6 +74,11 @@ export default (app: Application) => {
     const validateHooks = getValidateHooks({ dataSchema });
 
     app.use(ROUTE, service);
+    app.service(ROUTE).hooks({
+        before: {
+            create: [auth(['review.create'])],
+        },
+    });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE).hooks({
         around: {

@@ -3,6 +3,7 @@ import { dataSchema, patchSchema, querySchema, type Pipeline } from './pipelines
 import { getValidateHooks } from '../../utils/hooks.js';
 import { KnexService } from '@feathersjs/knex';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
+import { auth } from '../../hooks/auth.js';
 
 export class PipelinesService extends KnexService<Pipeline> { }
 
@@ -64,6 +65,11 @@ export default (app: Application) => {
         querySchema,
     });
     app.use(ROUTE, service, { methods: ['find', 'get', 'remove'] });
+    app.service(ROUTE).hooks({
+        before: {
+            remove: [auth(['pipelines.delete'])],
+        },
+    });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE).hooks({
         around: {

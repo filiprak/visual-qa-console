@@ -367,13 +367,6 @@ async function saveUser() {
         }
 
         dialogVisible.value = false;
-    } catch (err: any) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error Saving User',
-            detail: err.message || 'An error occurred while saving the user.',
-            life: 5000,
-        });
     } finally {
         saving.value = false;
     }
@@ -389,16 +382,8 @@ async function onDelete(user: User) {
 
     if (!confirmation.confirmed) return;
 
-    try {
-        await api.users.remove(user.id);
-        toast.add({ severity: 'success', summary: 'Deleted', detail: 'User account removed successfully', life: 3000 });
-    } catch (err: any) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error Deleting User',
-            detail: err.message || 'Could not delete the user account.',
-            life: 5000,
-        });
-    }
+    await api.users.remove(user.id);
+    toast.add({ severity: 'success', summary: 'Deleted', detail: 'User account removed successfully', life: 3000 });
+
 }
 </script>

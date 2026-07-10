@@ -15,6 +15,7 @@ import type { Static } from '@feathersjs/typebox';
 import type { Params, Query } from '@feathersjs/feathers';
 import { KnexAbstract } from '../KnexAbstract.js';
 import { testcaseKey } from '../../utils/func.js';
+import { auth } from '../../hooks/auth.js';
 
 type BaselineData = Static<typeof dataSchema>;
 
@@ -108,6 +109,11 @@ export default (app: Application) => {
             app,
         ),
     );
+    app.service(ROUTE).hooks({
+        before: {
+            remove: [auth(['baselines.delete'])],
+        },
+    });
     app.service(ROUTE).hooks(validateHooks);
     app.service(ROUTE_MATCH).hooks(
         getValidateHooks({
