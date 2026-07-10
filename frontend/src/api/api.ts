@@ -10,7 +10,16 @@ const restClient = rest();
 
 let watchers: { apis: ClientService[]; callback: ServiceWatcher }[] = [];
 
-app.configure(restClient.fetch(window.fetch.bind(window)));
+function authFetch(url: RequestInfo | URL, options?: RequestInit): Promise<Response> {
+    const token = localStorage.getItem('accessToken');
+    const headers = new Headers(options?.headers);
+    if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+    }
+    return window.fetch(url, { ...options, headers });
+}
+
+app.configure(restClient.fetch(authFetch));
 
 export const api = {
     pipelines: app.service('/api/v1/pipelines'),
@@ -20,6 +29,7 @@ export const api = {
     baselines_match: app.service('/api/v1/baselines/match'),
     review: app.service('/api/v1/review'),
     users: app.service('/api/v1/users'),
+    auth: app.service('/api/v1/auth'),
 };
 
 function backendModifiedHook(context: HookContext) {

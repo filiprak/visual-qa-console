@@ -48,10 +48,7 @@
                              :key="user.id">
                             <!-- Avatar placeholder -->
                             <div class="basis-[50px]">
-                                <div
-                                     class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-950/40 text-primary flex items-center justify-center font-bold text-lg border border-primary-200 dark:border-primary-900/60">
-                                    {{ user.name.charAt(0).toUpperCase() }}
-                                </div>
+                                <UserAvatar class="w-10 h-10 text-lg" :user="user" />
                             </div>
                             <!-- Name / Email -->
                             <div class="basis-[300px]">
@@ -211,6 +208,7 @@ import ToggleSwitch from 'primevue/toggleswitch';
 import { api } from '../api';
 import DataPaginated from '../components/DataPaginated.vue';
 import LoadingButton from '../components/LoadingButton.vue';
+import UserAvatar from '../components/UserAvatar.vue';
 import Icon from '../components/Icon.vue';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
@@ -219,10 +217,21 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import { useDebounce } from '../composables/useDebounce';
 import { useDialog } from '../composables/useDialog';
+import { useAuth } from '../composables/useAuth';
+import { useRouter } from 'vue-router';
 import type { User } from '@/types';
 
 const toast = useToast();
 const { confirmDialog } = useDialog();
+const { user, checkPermission } = useAuth();
+const router = useRouter();
+
+watch(user, (u) => {
+    if (u === null) return;
+    if (!checkPermission('users.')) {
+        router.push('/');
+    }
+}, { immediate: true });
 
 // Search & Filter
 const text_filter = ref('');

@@ -5,7 +5,7 @@ import PipelineDetails from './routes/PipelineDetails.vue';
 import Baselines from './routes/Baselines.vue';
 import Users from './routes/Users.vue';
 
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/', component: Pipelines },
@@ -15,3 +15,23 @@ export default createRouter({
         { path: '/:pathMatch(.*)*', component: NotFound },
     ],
 });
+
+import { useAuth } from './composables/useAuth';
+
+router.beforeEach((to) => {
+    if (to.path === '/users') {
+        const { user, checkPermission, hasToken } = useAuth();
+        
+        if (!hasToken()) {
+            return { path: '/' };
+        }
+        
+        if (user.value) {
+            if (!checkPermission('users.')) {
+                return { path: '/' };
+            }
+        }
+    }
+});
+
+export default router;

@@ -9,4 +9,5 @@ export interface ServiceTypes {
     '/api/v1/baselines/match': ClientService<BaselineMatchResponse, never, never, BaselineMatch>;
     '/api/v1/review': ClientService<Review>;
     '/api/v1/users': ClientService<User>;
+    '/api/v1/auth': ClientService<any>;
 }

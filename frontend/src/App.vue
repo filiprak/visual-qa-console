@@ -12,6 +12,7 @@
     <div>
         <Toast position="top-center" />
         <DynamicDialog />
+        <LoginModal />
     </div>
 </template>
 <script setup lang="ts">
@@ -24,11 +25,15 @@ import { onBeforeMount } from 'vue';
 import TestcaseView from './blocks/TestcaseView.vue';
 import ImageView from './blocks/ImageView.vue';
 import DynamicDialog from 'primevue/dynamicdialog';
+import LoginModal from './blocks/LoginModal.vue';
+import { useAuth } from './composables/useAuth';
 
 const toast = useToast();
+const { restoreSession } = useAuth();
 
 onBeforeMount(() => {
     registerToast(toast);
+    restoreSession();
 });
 </script>
 <style scoped>
