@@ -39,7 +39,7 @@
             <!-- Paginated List -->
             <DataPaginated :service="api.users"
                            :query="queryFilter"
-                           :sort="{ name: 1 }">
+                           :sort="{ is_admin: -1, id: 1 }">
                 <template #list="{ items }">
                     <div class="mb-3">
                         <div v-for="user in items"
@@ -48,7 +48,8 @@
                              :key="user.id">
                             <!-- Avatar placeholder -->
                             <div class="basis-[50px]">
-                                <UserAvatar class="w-10 h-10 text-lg" :user="user" />
+                                <UserAvatar class="w-10 h-10 text-lg"
+                                            :user="user" />
                             </div>
                             <!-- Name / Email -->
                             <div class="basis-[300px]">
@@ -149,27 +150,17 @@
                                v-if="errors.password">{{ errors.password }}</small>
                     </div>
 
-                    <!-- Administrator Status -->
-                    <div
-                         class="flex items-center justify-between p-4 bg-surface-50 dark:bg-surface-950/40 border border-surface rounded-xl">
-                        <div class="flex flex-col gap-1">
-                            <span class="font-semibold">Administrator Status</span>
-                            <span class="text-sm text-muted-color">Grant full admin privileges and bypass granular
-                                permissions.</span>
-                        </div>
-                        <ToggleSwitch v-model="form.is_admin" />
-                    </div>
-
                     <!-- Granular Permissions Selection -->
                     <div v-if="!form.is_admin"
                          class="flex flex-col gap-3">
-                        <span class="font-semibold">Granular Permissions</span>
+                        <span class="font-semibold">Permissions</span>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-surface rounded-xl p-4">
                             <div v-for="opt in permissionOptions"
                                  :key="opt.value"
                                  class="flex items-start gap-3 p-2 hover:bg-emphasis rounded-lg cursor-pointer"
-                                 @click="togglePermission(opt.value)">
+                                 @click="!selfEditing && togglePermission(opt.value)">
                                 <Checkbox :modelValue="form.permissions"
+                                          :disabled="selfEditing"
                                           :value="opt.value"
                                           @click.stop />
                                 <div class="flex flex-col">
@@ -204,7 +195,6 @@ import { useToast } from 'primevue/usetoast';
 import vTooltip from 'primevue/tooltip';
 import Dialog from 'primevue/dialog';
 import Checkbox from 'primevue/checkbox';
-import ToggleSwitch from 'primevue/toggleswitch';
 import { api } from '../api';
 import DataPaginated from '../components/DataPaginated.vue';
 import LoadingButton from '../components/LoadingButton.vue';
@@ -251,6 +241,7 @@ const dialogVisible = ref(false);
 const isEditMode = ref(false);
 const saving = ref(false);
 const selectedUserId = ref<number | null>(null);
+const selfEditing = computed(() => selectedUserId.value === user.value?.id);
 
 // Form
 const form = reactive({
@@ -359,8 +350,7 @@ async function saveUser() {
         const payload: any = {
             name: form.name.trim(),
             email: form.email.trim().toLowerCase(),
-            is_admin: form.is_admin,
-            permissions: form.is_admin ? [] : form.permissions,
+            permissions: selfEditing.value ? undefined : form.permissions,
         };
 
         if (form.password) {
