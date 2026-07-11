@@ -76,6 +76,7 @@
                             </div>
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <LoadingButton icon-only
+                                               class="size-9"
                                                icon="trash"
                                                variant="outlined"
                                                severity="danger"
