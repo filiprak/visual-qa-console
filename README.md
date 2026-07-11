@@ -30,7 +30,7 @@ I built this dashboard because I couldn't find a simple tool to view UI screensh
 
 This tool keeps it simple:
 
-* **Baseline Management**`**: Easily store and track your accepted screenshots.
+* **Baseline Management**: Easily store and track your accepted screenshots.
 * **Quick Approvals**: Use the built-in accept/reject workflow to sign off on UI changes in seconds.
 * **CI/CD Ready**: Gather and review test results directly from your pipeline through REST API.
 
