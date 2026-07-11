@@ -52,7 +52,7 @@ Feel free to fork the repo, open an issue, or submit a pull request if you have 
 
 ## Running application
 
-1. Clone and install:
+##### 1. Clone and install:
 ```bash
 git clone https://github.com/filiprak/visual-qa-console.git
 cd visual-qa-console/
@@ -60,7 +60,7 @@ cd visual-qa-console/
 pnpm install
 ```
 
-2. Create `.env` file with content:
+##### 2. Create `.env` file with content:
 ```
 PORT=8989
 HOST=0.0.0.0
@@ -69,21 +69,21 @@ SSL_CERT=/path/to/cert
 SSL_KEY=/path/to/key
 JWT_SECRET=mysecret
 ```
-3. Prepare database:
+##### 3. Prepare database:
 ```bash
 mkdir data/
 pnpm migrate
 ```
-4. Build and run the app:
+##### 4. Build and run the app:
 ```bash
 pnpm build
 pnpm start
 ```
-5. Go to `http://locahost:8989`, by default admin account is auto created with credentials:
+##### 5. Go to `http://locahost:8989`, by default admin account is auto created with credentials:
 - email `admin@example.com`
 - password: `admin`
 
-6. Upload first pipeline report to the app:
+##### 6. Upload first pipeline report to the app:
 ```bash
 pnpm sample
 ```
