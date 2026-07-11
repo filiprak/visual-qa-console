@@ -196,6 +196,32 @@ describe('users service', () => {
         expect(response.status).toBe(403);
     });
 
+    it('unable to patch admin user', async () => {
+        await login('full');
+
+        const response = await request('/api/v1/users/1', {
+            method: 'PATCH',
+            payload: {
+                name: 'test',
+                password: 'test',
+            },
+        });
+        expect(response.status).toBe(403);
+    });
+
+    it('admin can patch admin user', async () => {
+        await login('admin');
+
+        const response = await request('/api/v1/users/1', {
+            method: 'PATCH',
+            payload: {
+                name: 'test',
+                password: 'test',
+            },
+        });
+        expect(response.status).toBe(200);
+    });
+
     it('unable to delete not existing user', async () => {
         await login('admin');
 

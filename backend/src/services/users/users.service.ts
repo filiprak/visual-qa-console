@@ -41,6 +41,15 @@ const forbidDeleteAdmin = async (context: HookContext<UsersService>) => {
     }
 };
 
+const forbidPatchAdmin = async (context: HookContext<UsersService>) => {
+    const self = context.arguments[0] === String((context.params as any).user.id);
+    const patchedUserId = parseInt(context.arguments[0]);
+    const user = await context.service.get(patchedUserId);
+    if (!self && user.is_admin) {
+        throw new errors.Forbidden('Unable to change admin user');
+    }
+};
+
 export default (app: Application) => {
     const service = new UsersService({
         Model: app.get('db'),
@@ -59,7 +68,7 @@ export default (app: Application) => {
     app.service(ROUTE).hooks({
         before: {
             create: [auth(['users.create'])],
-            patch: [auth(['users.patch']), forbidOwnPermissionsPatch],
+            patch: [auth(['users.patch']), forbidPatchAdmin, forbidOwnPermissionsPatch],
             remove: [auth(['users.delete']), forbidDeleteAdmin],
         },
     });

@@ -32,6 +32,16 @@ export const TEST_USERS = [
         updated_at: '2026-01-01 12:00:00',
         created_at: '2026-01-01 12:00:00',
     },
+    {
+        id: 4,
+        name: 'full',
+        email: 'full@example.com',
+        password: '$2b$10$PyXGD6GBRzRbBgguwpZaoOqnfFsg/otHMKZamN1IjHYXuRe9mWaBa',
+        is_admin: 0,
+        permissions: '["review.create","baselines.delete","pipelines.delete","users.create","users.patch","users.delete"]',
+        updated_at: '2026-01-01 12:00:00',
+        created_at: '2026-01-01 12:00:00',
+    },
 ];
 
 export async function initialSeed(db: Knex) {

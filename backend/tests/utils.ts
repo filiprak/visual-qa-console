@@ -17,7 +17,7 @@ export function getAccessToken() {
     return accessToken;
 }
 
-export async function login(username: 'admin' | 'empty' | 'reviewer') {
+export async function login(username: 'admin' | 'empty' | 'reviewer' | 'full') {
     const user = TEST_USERS.find(i => i.name === username);
     const authResponse = await request('/api/v1/auth', {
         method: 'POST',
