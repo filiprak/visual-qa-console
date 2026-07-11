@@ -89,6 +89,7 @@ export async function clearDb() {
     await db.migrate.latest();
 
     // optional seed
+    await logout();
     await initialSeed(db);
 }
 

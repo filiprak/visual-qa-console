@@ -60,6 +60,27 @@ describe('pipelines service', () => {
         `);
     });
 
+    it('does not allow to remove pipeline without auth', async () => {
+        await createSampleReport({ commit_sha: '985477' });
+
+        const response1 = await request('/api/v1/pipelines/1', {
+            method: 'DELETE',
+        });
+
+        expect(response1.status).toBe(401);
+    });
+
+    it('does not allow to remove pipeline without permissions', async () => {
+        await login('empty');
+        await createSampleReport({ commit_sha: '985477' });
+
+        const response1 = await request('/api/v1/pipelines/1', {
+            method: 'DELETE',
+        });
+
+        expect(response1.status).toBe(403);
+    });
+
     it('removes testcases when pipeline removed', async () => {
         await login('reviewer');
         await createSampleReport({ commit_sha: '398469' });
