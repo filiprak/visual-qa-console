@@ -21,7 +21,7 @@ describe('auth service', () => {
 
     it('responds error when no credentials passed', async () => {
         const response = await request('/api/v1/auth', {
-            method: 'post',
+            method: 'POST',
         });
 
         expect(response.status).toBe(401);
@@ -29,7 +29,7 @@ describe('auth service', () => {
 
     it('responds error when empty credentials passed', async () => {
         const response = await request('/api/v1/auth', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 strategy: 'local',
                 email: '',
@@ -42,7 +42,7 @@ describe('auth service', () => {
 
     it('responds error when invalid credentials passed', async () => {
         const response = await request('/api/v1/auth', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 strategy: 'local',
                 email: 'admin@example.com',
@@ -55,7 +55,7 @@ describe('auth service', () => {
 
     it('responds with access token when valid credentials', async () => {
         const response = await request('/api/v1/auth', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 strategy: 'local',
                 email: 'admin@example.com',
@@ -103,7 +103,7 @@ describe('auth service', () => {
         await login('empty');
 
         const response = await request('/api/v1/auth', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 strategy: 'jwt',
                 accessToken: getAccessToken(),

@@ -23,7 +23,7 @@ describe('pipelines service', () => {
         await loadSeed();
 
         const response = await request('/api/v1/pipelines', {
-            method: 'get',
+            method: 'GET',
         });
 
         expect(response.json).toMatchInlineSnapshot({
@@ -67,7 +67,7 @@ describe('pipelines service', () => {
         expect(response.json.data).toHaveLength(8);
 
         const response1 = await request('/api/v1/pipelines/1', {
-            method: 'delete',
+            method: 'DELETE',
         });
 
         expect(response1.status).toBe(200);

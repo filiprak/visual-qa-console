@@ -21,7 +21,7 @@ describe('files service', () => {
 
     it('responds error when no urls passed', async () => {
         const response = await request('/api/v1/files', {
-            method: 'post',
+            method: 'POST',
         });
 
         expect(response.status).toBe(400);
@@ -29,7 +29,7 @@ describe('files service', () => {
 
     it('responds no match when db empty', async () => {
         const response = await request('/api/v1/files', {
-            method: 'post',
+            method: 'POST',
             payload: [
                 { url: 'https://example.com/image1.png' },
                 { url: 'https://example.com/image2.png' },
@@ -48,7 +48,7 @@ describe('files service', () => {
         await loadSeed();
 
         const response = await request('/api/v1/files', {
-            method: 'post',
+            method: 'POST',
             payload: [
                 { url: 'https://example.com/image1.png' },
                 { url: 'https://example.com/image2.png' },
@@ -67,7 +67,7 @@ describe('files service', () => {
         await loadSeed();
 
         const response = await request('/api/v1/files', {
-            method: 'post',
+            method: 'POST',
             payload: [
                 { url: 'https://example.com/login-flow.diff.png' },
                 { url: 'https://example.com/login-flow.png' },
@@ -88,7 +88,7 @@ describe('files service', () => {
 
     it('responds true when file used only in baseline', async () => {
         await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'my-pipeline',
                 commit_sha: 'f7d93421',
@@ -113,14 +113,14 @@ describe('files service', () => {
             },
         });
         await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [1, 2],
             },
         });
         await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'my-pipeline',
                 commit_sha: 'f7d93421',
@@ -146,7 +146,7 @@ describe('files service', () => {
         });
 
         const response = await request('/api/v1/files', {
-            method: 'post',
+            method: 'POST',
             payload: [
                 { url: 'https://example.com/forgot.png' },
                 { url: 'https://example.com/login-flow.png' },

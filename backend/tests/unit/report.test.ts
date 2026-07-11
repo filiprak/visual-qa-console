@@ -20,7 +20,7 @@ afterAll(async () => {
 describe('report service', () => {
     it('responds 400 when no payload', async () => {
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
         });
 
         expect(response.status).toBe(400);
@@ -28,7 +28,7 @@ describe('report service', () => {
 
     it('responds 400 on empty payload', async () => {
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {},
         });
 
@@ -37,7 +37,7 @@ describe('report service', () => {
 
     it('responds 400 on invalid payload', async () => {
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 test: 1,
             },
@@ -48,7 +48,7 @@ describe('report service', () => {
 
     it('responds 200 on valid payload and process report correctly', async () => {
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'my-pipeline',
                 commit_sha: 'f7d93421',
@@ -181,7 +181,7 @@ describe('report service', () => {
         });
 
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'my-pipeline',
                 commit_sha: 'f7d93421',
@@ -323,7 +323,7 @@ describe('report service', () => {
             testcase_count: 2,
         });
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'my-pipeline',
                 commit_sha: 'b6f87305',
@@ -457,7 +457,7 @@ describe('report service', () => {
 
     it('creates default group', async () => {
         const response = await request('/api/v1/report', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 name: 'ui-tests',
                 commit_sha: 'b6f87305',

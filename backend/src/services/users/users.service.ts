@@ -6,6 +6,7 @@ import { passwordHash } from '@feathersjs/authentication-local';
 import { hooks, resolve } from '@feathersjs/schema';
 import { jsonFieldConvert } from '../../hooks/jsonFieldConvert.js';
 import { auth } from '../../hooks/auth.js';
+import { errors } from '@feathersjs/errors';
 
 const ROUTE = '/api/v1/users';
 
@@ -21,6 +22,24 @@ export const userDataResolver = resolve<User, HookContext<UsersService>>({
 export const userExternalResolver = resolve<User, HookContext<UsersService>>({
     password: async () => undefined,
 });
+
+const forbidOwnPermissionsPatch = async (context: HookContext) => {
+    if (context.params.authenticated) {
+        const self = context.arguments[0] === String(context.params.user.id);
+
+        if (self && context.data.permissions) {
+            throw new errors.Forbidden('Unable to change own permissions');
+        }
+    }
+};
+
+const forbidDeleteAdmin = async (context: HookContext<UsersService>) => {
+    const deletedUserId = parseInt(context.arguments[0]);
+    const user = await context.service.get(deletedUserId);
+    if (user.is_admin) {
+        throw new errors.Forbidden('Unable to remove admin user');
+    }
+};
 
 export default (app: Application) => {
     const service = new UsersService({
@@ -40,8 +59,8 @@ export default (app: Application) => {
     app.service(ROUTE).hooks({
         before: {
             create: [auth(['users.create'])],
-            patch: [auth(['users.patch'])],
-            remove: [auth(['users.delete'])],
+            patch: [auth(['users.patch']), forbidOwnPermissionsPatch],
+            remove: [auth(['users.delete']), forbidDeleteAdmin],
         },
     });
     app.service(ROUTE).hooks(validateHooks);

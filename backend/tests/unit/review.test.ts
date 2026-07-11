@@ -20,7 +20,7 @@ afterAll(async () => {
 describe('review service', () => {
     it('responds 400 when no payload', async () => {
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
         });
 
         expect(response.status).toBe(400);
@@ -28,7 +28,7 @@ describe('review service', () => {
 
     it('responds 400 on empty payload', async () => {
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {},
         });
 
@@ -37,7 +37,7 @@ describe('review service', () => {
 
     it('responds 400 on invalid payload', async () => {
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 test: 1,
             },
@@ -50,7 +50,7 @@ describe('review service', () => {
         await loadSeed({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [2, 9999],
@@ -137,7 +137,7 @@ describe('review service', () => {
         await loadSeed({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [2],
@@ -239,7 +239,7 @@ describe('review service', () => {
         await loadSeed({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 skip_baseline_update: true,
@@ -323,7 +323,7 @@ describe('review service', () => {
         await loadSeed({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [1, 2],
@@ -441,7 +441,7 @@ describe('review service', () => {
         await loadSeed({ testcase_count: 2 });
 
         await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [2],
@@ -479,7 +479,7 @@ describe('review service', () => {
         `);
 
         await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [2],

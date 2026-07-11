@@ -20,7 +20,7 @@ export function getAccessToken() {
 export async function login(username: 'admin' | 'empty' | 'reviewer') {
     const user = TEST_USERS.find(i => i.name === username);
     const authResponse = await request('/api/v1/auth', {
-        method: 'post',
+        method: 'POST',
         payload: {
             strategy: 'local',
             email: user?.email,
@@ -28,6 +28,10 @@ export async function login(username: 'admin' | 'empty' | 'reviewer') {
         },
     });
     setAccessToken(authResponse.json.accessToken);
+
+    if (!accessToken) {
+        throw new Error('Failed to login');
+    }
 }
 
 export async function logout() {
@@ -37,7 +41,7 @@ export async function logout() {
 export async function request(
     route: string,
     options: {
-        method?: 'get' | 'post' | 'update' | 'patch' | 'delete';
+        method?: 'GET' | 'POST' | 'UPDATE' | 'PATCH' | 'DELETE';
         headers?: HeadersInit;
         payload?: any;
         rawPayload?: string;
@@ -74,6 +78,8 @@ export async function setupServer() {
     // reset schema
     await db.migrate.rollback(undefined, true);
     await db.migrate.latest();
+
+    setAccessToken(undefined);
 
     return app;
 }

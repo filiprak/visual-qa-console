@@ -24,9 +24,9 @@ const schema = Type.Object(
 
 export const dataSchema = Type.Intersect([
     Type.Pick(schema, ['name', 'email', 'password']),
-    Type.Partial(Type.Pick(schema, ['is_admin', 'permissions'])),
-]);
-export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'email', 'password', 'permissions', 'is_admin']));
+    Type.Partial(Type.Pick(schema, ['permissions'])),
+], { additionalProperties: false });
+export const patchSchema = Type.Partial(Type.Pick(schema, ['name', 'email', 'password', 'permissions']));
 export const querySchema = querySyntax(
     Type.Pick(schema, ['id', 'name', 'email', 'is_admin']),
     {

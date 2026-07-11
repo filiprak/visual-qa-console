@@ -21,7 +21,7 @@ afterAll(async () => {
 describe('baseline-match service', () => {
     it('responds 400 when invalid payload', async () => {
         const response = await request('/api/v1/baselines/match', {
-            method: 'post',
+            method: 'POST',
         });
 
         expect(response.status).toBe(400);
@@ -29,7 +29,7 @@ describe('baseline-match service', () => {
 
     it('responds without baselines when no baselines in db', async () => {
         const response = await request('/api/v1/baselines/match', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 pipeline_name: 'my-pipeline',
                 testcases: [
@@ -55,14 +55,14 @@ describe('baseline-match service', () => {
     it('matches baselines correctly', async () => {
         await loadSeed();
         await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [1, 2],
             },
         });
         const response = await request('/api/v1/baselines/match', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 pipeline_name: 'my-pipeline',
                 testcases: [
@@ -125,7 +125,7 @@ describe('baseline-match service', () => {
         `);
 
         const response2 = await request('/api/v1/baselines/match', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 pipeline_name: 'non-existing',
                 testcases: [
@@ -157,7 +157,7 @@ describe('baseline-match service', () => {
     it('ignores case and whitespace characters when matching', async () => {
         await loadSeed();
         await request('/api/v1/review', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 accepted: true,
                 testcase_ids: [1, 2],
@@ -165,7 +165,7 @@ describe('baseline-match service', () => {
         });
         
         const response = await request('/api/v1/baselines/match', {
-            method: 'post',
+            method: 'POST',
             payload: {
                 pipeline_name: 'My-pipeline ',
                 testcases: [

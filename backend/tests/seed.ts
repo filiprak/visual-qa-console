@@ -49,7 +49,7 @@ export async function loadSeed(
     }
 ) {
     await request('/api/v1/report', {
-        method: 'post',
+        method: 'POST',
         payload: {
             name: params?.pipeline_name ?? 'my-pipeline',
             commit_sha: params?.commit_sha ?? 'f7d93421',
