@@ -59,17 +59,27 @@ cd visual-qa-console/
 
 pnpm install
 ```
-2. Prepare database:
+
+2. Create `.env` file with content:
+```
+PORT=8989
+HOST=0.0.0.0
+SSL=0
+SSL_CERT=/path/to/cert
+SSL_KEY=/path/to/key
+JWT_SECRET=mysecret
+```
+3. Prepare database:
 ```bash
 mkdir data/
 pnpm migrate
 ```
-3. Build and run (on port `http://locahost:8080` by default):
+4. Build and run the app:
 ```bash
 pnpm build
 pnpm start
 ```
-4. Got to `http://locahost:8080`, by default admin account is auto created:
+5. Got to `http://locahost:8989`, by default admin account is auto created with credentials:
 - email `admin@example.com`
 - password: `admin`
 
@@ -82,6 +92,8 @@ pnpm dev
 ```bash
 pnpm test
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [product-screenshot]: images/screenshot.png
