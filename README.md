@@ -21,3 +21,23 @@
     <a href="https://github.com/filiprak/visual-qa-console/issues/new?labels=enhancement">Request Feature</a>
   </p>
 </div>
+
+
+### Built With
+
+* [![Vue][Vue.js]][Vue-url]
+* [![Node][Node.js]][Node-url]
+* [![Feathers][Feathers.js]][Feathers-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[product-screenshot]: images/screenshot.png
+[diff-screenshot]: images/screenshot-diff.png
+[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue-url]: https://vuejs.org/
+[Node.js]: https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white
+[Node-url]: https://nodejs.org/
+[Feathers.js]: https://img.shields.io/badge/FeathersJS-D61255?style=for-the-badge&logo=feathersjs&logoColor=white
+[Feathers-url]: https://feathersjs.com/
