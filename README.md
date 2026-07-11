@@ -83,6 +83,12 @@ pnpm start
 - email `admin@example.com`
 - password: `admin`
 
+6. Upload first pipeline report to the app:
+```bash
+pnpm sample
+```
+Uploaded pipeline should be visible on pipelines list in the app.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Development with live reload support
