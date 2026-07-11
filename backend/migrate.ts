@@ -4,6 +4,7 @@ import path from 'path';
 import { DATA_DIRNAME, db, DB_FILENAME, initDb } from './src/db.ts';
 import { type Knex } from 'knex';
 import knex from 'knex';
+import { utcNow } from './src/utils/dates.ts';
 
 const BACKUP_FILENAME = path.resolve(DATA_DIRNAME, `db-backup-${Date.now()}.sqlite`);
 
@@ -99,6 +100,24 @@ async function migrate() {
         } catch (error) {
             console.error('❌ Critical failure running data synchronization:', error);
         }
+    }
+
+    const users = (await liveDb.table('users').select('id'));
+
+    if (users.length < 1) {
+        console.log(`✅ Creating admin user.`);
+        await liveDb
+            .table('users')
+            .insert({
+                id: 1,
+                name: 'admin',
+                email: 'admin@example.com',
+                password: '$2b$10$PyXGD6GBRzRbBgguwpZaoOqnfFsg/otHMKZamN1IjHYXuRe9mWaBa',
+                is_admin: 1,
+                permissions: '[]',
+                updated_at: utcNow(),
+                created_at: utcNow(),
+            },);
     }
 
     await liveDb.destroy();
