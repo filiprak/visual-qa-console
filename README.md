@@ -79,19 +79,37 @@ pnpm migrate
 pnpm build
 pnpm start
 ```
-5. Got to `http://locahost:8989`, by default admin account is auto created with credentials:
+5. Go to `http://locahost:8989`, by default admin account is auto created with credentials:
 - email `admin@example.com`
 - password: `admin`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Development with live reload support
 ```bash
 pnpm dev
 ```
 
-## Running tests
+
+### Running tests
 ```bash
 pnpm test
 ```
+
+
+## License
+
+Distributed under the MIT License. See `LICENSE` file for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Credits
+
+* [Vue.js](https://vuejs.org/)
+* [Prime Vue](https://primevue.dev/)
+* [FeathersJS](https://feathersjs.com/)
+* [SwiperJS](https://swiperjs.com/)
+* [TailwindCSS](https://tailwindcss.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
