@@ -1,16 +1,37 @@
 import { createServer } from '../src/app.js';
 import { db } from '../src/db.js';
 import type { Application } from '../src/declarations.js';
-import { initialSeed } from './seed.js';
+import { initialSeed, TEST_USERS } from './seed.js';
 
 export const port = parseInt(process.env.TEST_PORT || '3031');
 export const host = process.env.TEST_PORT || 'localhost';
 export const baseurl = `http://${host}:${port}`;
 
-let currentJwt: string | undefined;
+let accessToken: string | undefined;
 
-export async function setJwtToken(jwt?: string) {
-    currentJwt = jwt;
+export function setAccessToken(jwt?: string) {
+    accessToken = jwt;
+}
+
+export function getAccessToken() {
+    return accessToken;
+}
+
+export async function login(username: 'admin' | 'empty' | 'reviewer') {
+    const user = TEST_USERS.find(i => i.name === username);
+    const authResponse = await request('/api/v1/auth', {
+        method: 'post',
+        payload: {
+            strategy: 'local',
+            email: user?.email,
+            password: 'admin'
+        },
+    });
+    setAccessToken(authResponse.json.accessToken);
+}
+
+export async function logout() {
+    setAccessToken(undefined);
 }
 
 export async function request(
@@ -25,7 +46,7 @@ export async function request(
     const res = await fetch(`${baseurl}${route}`, {
         headers: {
             'Content-Type': 'application/json',
-            ...currentJwt && { 'Authorization': `Bearer ${currentJwt}` },
+            ...accessToken && { 'Authorization': `Bearer ${accessToken}` },
             ...(options.headers || {}),
         },
         method: options.method,
