@@ -3,7 +3,6 @@
 [![CI](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml)
 ![GitHub License](https://img.shields.io/github/license/filiprak/visual-qa-console)
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/filiprak/visual-qa-console">
@@ -23,6 +22,23 @@
 </div>
 
 
+## About The Project
+
+![Visual QA Console][product-screenshot]
+
+I built this dashboard because I couldn't find a simple tool to view UI screenshots, manage baseline images, and collect results from CI/CD pipelines.
+
+This tool keeps it simple:
+
+* **Baseline Management**`**: Easily store and track your accepted screenshots.
+* **Quick Approvals**: Use the built-in accept/reject workflow to sign off on UI changes in seconds.
+* **CI/CD Ready**: Gather and review test results directly from your pipeline through REST API.
+
+Feel free to fork the repo, open an issue, or submit a pull request if you have ideas for improvement.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 ### Built With
 
 * [![Vue][Vue.js]][Vue-url]
@@ -39,5 +55,5 @@
 [Vue-url]: https://vuejs.org/
 [Node.js]: https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white
 [Node-url]: https://nodejs.org/
-[Feathers.js]: https://img.shields.io/badge/FeathersJS-D61255?style=for-the-badge&logo=feathersjs&logoColor=white
+[Feathers.js]: https://img.shields.io/badge/FeathersJS-2b2b2b?style=for-the-badge&logo=feathersjs&logoColor=white
 [Feathers-url]: https://feathersjs.com/
