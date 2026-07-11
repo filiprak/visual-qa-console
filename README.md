@@ -24,8 +24,6 @@
 
 ## About The Project
 
-![Visual QA Console][product-screenshot]
-
 I built this dashboard because I couldn't find a simple tool to view UI screenshots, manage baseline images, and collect results from CI/CD pipelines.
 
 This tool keeps it simple:
@@ -35,6 +33,10 @@ This tool keeps it simple:
 * **CI/CD Ready**: Gather and review test results directly from your pipeline through REST API.
 
 Feel free to fork the repo, open an issue, or submit a pull request if you have ideas for improvement.
+
+![Visual QA Console][product-screenshot]
+
+![Visual QA Console][diff-screenshot]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -47,6 +49,39 @@ Feel free to fork the repo, open an issue, or submit a pull request if you have 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+## Running application
+
+1. Clone and install:
+```bash
+git clone https://github.com/filiprak/visual-qa-console.git
+cd visual-qa-console/
+
+pnpm install
+```
+2. Prepare database:
+```bash
+mkdir data/
+pnpm migrate
+```
+3. Build and run (on port `http://locahost:8080` by default):
+```bash
+pnpm build
+pnpm start
+```
+4. Got to `http://locahost:8080`, by default admin account is auto created:
+- email `admin@example.com`
+- password: `admin`
+
+## Development with live reload support
+```bash
+pnpm dev
+```
+
+## Running tests
+```bash
+pnpm test
+```
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [product-screenshot]: images/screenshot.png
