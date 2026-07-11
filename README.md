@@ -87,6 +87,33 @@ pnpm start
 ```bash
 pnpm sample
 ```
+- or using `curl`:
+```bash
+curl -X POST http://localhost:8989/api/v1/report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "ui-components",
+    "commit_sha": "abc1234",
+    "branch_name": "master",
+    "testcases": [
+      {
+        "name": "login flow",
+        "status": "passed",
+        "group": "auth desktop",
+        "diff_img": "https://picsum.photos/seed/1-diff/1920/800",
+        "result_img": "https://picsum.photos/seed/1-result/1920/800"
+      },
+      {
+        "name": "checkout",
+        "status": "failed",
+        "failed_msg": "Different screenshots",
+        "group": "checkout desktop",
+        "diff_img": "https://picsum.photos/seed/2-diff/1920/800",
+        "result_img": "https://picsum.photos/seed/2-result/1920/800"
+      }
+    ]
+  }'
+```
 Uploaded pipeline should be visible on pipelines list in the app.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
