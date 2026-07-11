@@ -1,6 +1,7 @@
 <a id="readme-top"></a>
 
 [![CI](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml)
+![GitHub License](https://img.shields.io/github/license/filiprak/visual-qa-console)
 
 <!-- PROJECT LOGO -->
 <br />
