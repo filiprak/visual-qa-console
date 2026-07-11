@@ -1,6 +1,6 @@
 import type { Application } from '../../src/declarations.js';
-import { loadSeed } from '../seed.js';
-import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { createSampleReport } from '../seed.js';
+import { clearDb, expectSqlTimestamp, logout, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application | undefined;
 
@@ -15,6 +15,7 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
+    await logout();
 });
 
 describe('report service', () => {
@@ -173,7 +174,7 @@ describe('report service', () => {
     });
 
     it('merges into existing pipeline if matching', async () => {
-        await loadSeed({
+        await createSampleReport({
             pipeline_name: 'my-pipeline',
             commit_sha: 'f7d93421',
             branch_name: 'master',
@@ -316,7 +317,7 @@ describe('report service', () => {
     });
 
     it('creates new pipeline and testcases on new commit hash', async () => {
-        await loadSeed({
+        await createSampleReport({
             pipeline_name: 'my-pipeline',
             commit_sha: 'f7d93421',
             branch_name: 'master',

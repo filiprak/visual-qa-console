@@ -40,7 +40,7 @@ export async function initialSeed(db: Knex) {
         .insert(TEST_USERS);
 }
 
-export async function loadSeed(
+export async function createSampleReport(
     params?: {
         pipeline_name?: string,
         commit_sha?: string,

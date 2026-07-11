@@ -1,6 +1,6 @@
 import type { Application } from '../../src/declarations.js';
-import { loadSeed } from '../seed.js';
-import { clearDb, request, setupServer, teardownServer } from '../utils.js';
+import { createSampleReport } from '../seed.js';
+import { clearDb, login, logout, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application | undefined;
 
@@ -15,6 +15,7 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
+    await logout();
 });
 
 describe('files service', () => {
@@ -45,7 +46,7 @@ describe('files service', () => {
     });
 
     it('responds no match when urls unused', async () => {
-        await loadSeed();
+        await createSampleReport();
 
         const response = await request('/api/v1/files', {
             method: 'POST',
@@ -64,7 +65,7 @@ describe('files service', () => {
     });
 
     it('responds true when file used in testcase', async () => {
-        await loadSeed();
+        await createSampleReport();
 
         const response = await request('/api/v1/files', {
             method: 'POST',
@@ -87,6 +88,7 @@ describe('files service', () => {
     });
 
     it('responds true when file used only in baseline', async () => {
+        await login('reviewer');
         await request('/api/v1/report', {
             method: 'POST',
             payload: {

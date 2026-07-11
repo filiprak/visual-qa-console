@@ -14,7 +14,7 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
-    logout();
+    await logout();
 });
 
 describe('auth service', () => {

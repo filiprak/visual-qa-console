@@ -1,6 +1,6 @@
 import type { Application } from '../../src/declarations.js';
-import { loadSeed } from '../seed.js';
-import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { createSampleReport } from '../seed.js';
+import { clearDb, expectSqlTimestamp, login, logout, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application | undefined;
 
@@ -15,10 +15,30 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
+    await logout();
 });
 
 describe('review service', () => {
+
+    it('responds 401 when not authenticated', async () => {
+        const response = await request('/api/v1/review', {
+            method: 'POST',
+        });
+
+        expect(response.status).toBe(401);
+    });
+
+    it('responds 403 when no permissions', async () => {
+        await login('empty');
+        const response = await request('/api/v1/review', {
+            method: 'POST',
+        });
+
+        expect(response.status).toBe(403);
+    });
+
     it('responds 400 when no payload', async () => {
+        await login('reviewer');
         const response = await request('/api/v1/review', {
             method: 'POST',
         });
@@ -27,6 +47,7 @@ describe('review service', () => {
     });
 
     it('responds 400 on empty payload', async () => {
+        await login('reviewer');
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {},
@@ -36,6 +57,7 @@ describe('review service', () => {
     });
 
     it('responds 400 on invalid payload', async () => {
+        await login('reviewer');
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {
@@ -47,7 +69,8 @@ describe('review service', () => {
     });
 
     it('rollbacks on invalid testcase passed', async () => {
-        await loadSeed({ testcase_count: 2 });
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
             method: 'POST',
@@ -134,7 +157,8 @@ describe('review service', () => {
     });
 
     it('processes simple accept correctly', async () => {
-        await loadSeed({ testcase_count: 2 });
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
             method: 'POST',
@@ -236,7 +260,8 @@ describe('review service', () => {
     });
 
     it('allows to skip baseline update', async () => {
-        await loadSeed({ testcase_count: 2 });
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
             method: 'POST',
@@ -320,7 +345,8 @@ describe('review service', () => {
     });
 
     it('processes batch accept correctly', async () => {
-        await loadSeed({ testcase_count: 2 });
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
 
         const response = await request('/api/v1/review', {
             method: 'POST',
@@ -438,7 +464,8 @@ describe('review service', () => {
     });
 
     it('do not add new baseline when already exists', async () => {
-        await loadSeed({ testcase_count: 2 });
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
 
         await request('/api/v1/review', {
             method: 'POST',

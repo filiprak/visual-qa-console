@@ -1,6 +1,6 @@
 import type { Application } from '../../src/declarations.js';
-import { loadSeed } from '../seed.js';
-import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
+import { createSampleReport } from '../seed.js';
+import { clearDb, expectSqlTimestamp, login, logout, request, setupServer, teardownServer } from '../utils.js';
 
 let app: Application | undefined;
 
@@ -15,12 +15,13 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
+    await logout();
 });
 
 describe('pipelines service', () => {
 
     it('returns list', async () => {
-        await loadSeed();
+        await createSampleReport();
 
         const response = await request('/api/v1/pipelines', {
             method: 'GET',
@@ -60,8 +61,9 @@ describe('pipelines service', () => {
     });
 
     it('removes testcases when pipeline removed', async () => {
-        await loadSeed({ commit_sha: '398469' });
-        await loadSeed({ commit_sha: '985477' });
+        await login('reviewer');
+        await createSampleReport({ commit_sha: '398469' });
+        await createSampleReport({ commit_sha: '985477' });
 
         const response = await request('/api/v1/testcases');
         expect(response.json.data).toHaveLength(8);

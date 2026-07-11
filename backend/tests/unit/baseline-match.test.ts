@@ -1,7 +1,6 @@
-import { group } from 'node:console';
 import type { Application } from '../../src/declarations.js';
-import { clearDb, expectSqlTimestamp, request, setupServer, teardownServer } from '../utils.js';
-import { loadSeed } from '../seed.js';
+import { clearDb, expectSqlTimestamp, login, logout, request, setupServer, teardownServer } from '../utils.js';
+import { createSampleReport } from '../seed.js';
 
 let app: Application | undefined;
 
@@ -16,6 +15,7 @@ beforeEach(async () => {
 afterAll(async () => {
     if (!app) return;
     await teardownServer(app);
+    await logout();
 });
 
 describe('baseline-match service', () => {
@@ -53,7 +53,8 @@ describe('baseline-match service', () => {
     });
 
     it('matches baselines correctly', async () => {
-        await loadSeed();
+        await login('reviewer');
+        await createSampleReport();
         await request('/api/v1/review', {
             method: 'POST',
             payload: {
@@ -155,7 +156,8 @@ describe('baseline-match service', () => {
     });
 
     it('ignores case and whitespace characters when matching', async () => {
-        await loadSeed();
+        await login('reviewer');
+        await createSampleReport();
         await request('/api/v1/review', {
             method: 'POST',
             payload: {
@@ -163,7 +165,7 @@ describe('baseline-match service', () => {
                 testcase_ids: [1, 2],
             },
         });
-        
+
         const response = await request('/api/v1/baselines/match', {
             method: 'POST',
             payload: {
