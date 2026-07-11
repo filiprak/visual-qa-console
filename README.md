@@ -11,6 +11,7 @@
 
   <p align="center">
     A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows. Ideal for visual regression testing and design sign-offs.
+    <br/>
     <a href="https://github.com/filiprak/visual-qa-console/issues/new?labels=bug">Report Bug</a>
     &middot;
     <a href="https://github.com/filiprak/visual-qa-console/issues/new?labels=enhancement">Request Feature</a>
