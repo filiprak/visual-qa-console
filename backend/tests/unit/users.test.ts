@@ -231,4 +231,32 @@ describe('users service', () => {
         expect(response.status).toBe(404);
     });
 
+    it('unable to add user with same email', async () => {
+        await login('admin');
+
+        const response = await request('/api/v1/users', {
+            method: 'POST',
+            payload: {
+                name: 'test',
+                email: 'admin@example.com',
+                password: 'test',
+            },
+        });
+        expect(response.status).toBe(400);
+    });
+
+    it('unable to add user with invalid email', async () => {
+        await login('admin');
+
+        const response = await request('/api/v1/users', {
+            method: 'POST',
+            payload: {
+                name: 'test',
+                email: 'invalid@',
+                password: 'test',
+            },
+        });
+        expect(response.status).toBe(400);
+    });
+
 });
