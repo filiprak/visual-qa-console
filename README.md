@@ -1,5 +1,7 @@
 <a id="readme-top"></a>
 
+[![CI](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/filiprak/visual-qa-console/actions/workflows/test.yml)
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -11,6 +13,7 @@
 
   <p align="center">
     A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows. Ideal for visual regression testing and design sign-offs.
+    <br/>
     <br/>
     <a href="https://github.com/filiprak/visual-qa-console/issues/new?labels=bug">Report Bug</a>
     &middot;
