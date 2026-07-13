@@ -16,11 +16,11 @@
                             <span class="text-primary">{{ testcase?.group }}</span> /
                             <span>{{ testcase?.name }}</span>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex items-center cursor-pointer"
+                             @click="onErrorDetails">
                             <TestStatus :status="testcase.status" />
                             <span v-if="testcase.status == 'failed' && testcase.failed_msg"
-                                  v-tooltip.bottom="testcase.failed_msg"
-                                  class="text-red-700 font-semibold ml-3 inline-block whitespace-nowrap max-w-300 overflow-hidden text-ellipsis">
+                                  class="text-red-700 hover:text-red-600 font-semibold ml-3 inline-block whitespace-nowrap max-w-150 overflow-hidden text-ellipsis">
                                 {{ testcase.failed_msg }}
                             </span>
                         </div>
@@ -170,10 +170,9 @@
 import Drawer from 'primevue/drawer';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
 import type { Baseline, Pipeline, TestCase } from '@/types';
-import { computed, ref, watch } from 'vue';
+import { computed, h, ref, watch } from 'vue';
 import { api } from '../api/api.ts';
 import Skeleton from 'primevue/skeleton';
-import vTooltip from 'primevue/tooltip';
 import SelectButton from 'primevue/selectbutton';
 import ImageDiff from '../components/ImageDiff.vue';
 import Icon from '../components/Icon.vue';
@@ -181,11 +180,13 @@ import { useReview } from '../composables/useReview.ts';
 import TestStatus from '../components/TestStatus.vue';
 import { SampleData, useSample } from '../composables/useSample';
 import { useToast } from 'primevue/usetoast';
+import { useDialog } from '../composables/useDialog';
 
 function formatSize(info: SampleData) {
     return info.empty ? '? x ?' : `${info.width} x ${info.height}`;
 }
 
+const { openDialog } = useDialog();
 const toast = useToast();
 const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
 const view_options = computed(() => {
@@ -215,6 +216,20 @@ const { visible, options, id } = useTestcaseView();
 const { acceptTestcase } = useReview();
 const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
+
+function onErrorDetails() {
+    if (!testcase.value?.failed_msg) return;
+    openDialog({
+        header: 'Error details',
+        content: {
+            setup() {
+                return () => h('pre', { class: 'text-red-600 max-w-[1000px] overflow-auto' }, testcase.value?.failed_msg)
+            },
+        },
+        severity: 'danger',
+        blockScroll: false,
+    });
+}
 
 async function onPrevClick() {
     const prev_id = await options.value?.prevId?.(id.value);

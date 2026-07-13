@@ -122,7 +122,7 @@
                             </div>
                             <div class="basis-[200px] flex gap-2 items-center">
                                 <TestStatus :status="item.status"
-                                            v-tooltip.top="(item.status == 'failed' ? item.failed_msg : '') || 'No status details'" />
+                                            v-tooltip.top="(item.status == 'failed' ? truncateStr(item.failed_msg, 120) : '') || 'No status details'" />
                                 <Icon v-if="item.accepted_at"
                                       v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
                                       class="text-green-700"
@@ -202,6 +202,7 @@ import { testcaseStatusOpts } from '../utils/statuses';
 import { useDebounce } from '../composables/useDebounce';
 import { useBatchCheckbox } from '../composables/useBatchCheckbox.ts';
 import { useDataView } from '../composables/useDataView.ts';
+import { truncateStr } from '../utils/func';
 
 const fallback_url = '/placeholder.svg';
 

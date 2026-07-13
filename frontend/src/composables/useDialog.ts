@@ -6,6 +6,7 @@ export interface DialogOptions {
     header?: string;
     content?: any;
     severity?: 'danger' | 'primary';
+    blockScroll?: boolean
 }
 
 export interface ConfirmDialogOptions<T = unknown> {
@@ -25,7 +26,7 @@ export function useDialog() {
                 props: {
                     header: options.header || 'Info',
                     modal: true,
-                    blockScroll: true,
+                    blockScroll: options.blockScroll ?? true,
                 },
                 onClose: (closeOpts) => {
                     resolve(closeOpts?.data);
