@@ -23,6 +23,7 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
                     SUM(t.status = 'passed') AS passed_testcases,
                     SUM(t.status = 'new') AS new_testcases,
                     SUM(t.status = 'reported') AS reported_testcases,
+                    SUM(t.status = 'approved') AS approved_testcases,
                     COUNT(*) AS total_testcases
                 FROM pipelines p
                 INNER JOIN testcases t
@@ -41,6 +42,7 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
             failed: result.at(0)?.failed_testcases || 0,
             new: result.at(0)?.new_testcases || 0,
             reported: result.at(0)?.reported_testcases || 0,
+            approved: result.at(0)?.approved_testcases || 0,
         };
     }),
 });

@@ -100,6 +100,7 @@ describe('report service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 1,
                   "groups": 1,
                   "new": 0,
@@ -229,6 +230,7 @@ describe('report service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 3,
                   "groups": 1,
                   "new": 0,
@@ -375,6 +377,7 @@ describe('report service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 1,
                   "groups": 1,
                   "new": 0,
@@ -392,6 +395,7 @@ describe('report service', () => {
                 "commit_sha": "b6f87305",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 0,
                   "groups": 1,
                   "new": 0,
@@ -501,6 +505,7 @@ describe('report service', () => {
             "commit_sha": "b6f87305",
             "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
             "details": {
+              "approved": 0,
               "failed": 0,
               "groups": 1,
               "new": 0,

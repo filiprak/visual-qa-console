@@ -15,6 +15,7 @@ const schema = Type.Object(
                 passed: Type.Number(),
                 new: Type.Number(),
                 reported: Type.Number(),
+                approved: Type.Number(),
             },
             { additionalProperties: false },
         ),

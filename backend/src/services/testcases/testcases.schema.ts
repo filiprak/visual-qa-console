@@ -11,6 +11,7 @@ const schema = Type.Object(
             Type.Literal('failed'),
             Type.Literal('new'),
             Type.Literal('reported'),
+            Type.Literal('approved'),
         ]),
         failed_msg: Type.Optional(Type.String()),
         pipeline_id: Type.Number(),

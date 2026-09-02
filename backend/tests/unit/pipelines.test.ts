@@ -42,6 +42,7 @@ describe('pipelines service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 2,
                   "groups": 2,
                   "new": 0,
@@ -94,7 +95,7 @@ describe('pipelines service', () => {
                     },
                     {
                         name: 'invalid email',
-                        status: 'passed',
+                        status: 'approved',
                         group: 'portal.apps.auth.signup',
                         diff_img: 'https://example.com/invalid-email.diff.png',
                         result_img: 'https://example.com/invalid-email.png',
@@ -122,10 +123,11 @@ describe('pipelines service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 1,
                   "failed": 0,
                   "groups": 2,
                   "new": 0,
-                  "passed": 4,
+                  "passed": 3,
                   "reported": 0,
                   "status": "passed",
                   "total": 4,
@@ -202,6 +204,7 @@ describe('pipelines service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 0,
                   "groups": 2,
                   "new": 2,
@@ -282,6 +285,7 @@ describe('pipelines service', () => {
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
                 "details": {
+                  "approved": 0,
                   "failed": 0,
                   "groups": 2,
                   "new": 0,
