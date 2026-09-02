@@ -82,7 +82,7 @@
             <template v-else>
                 <div class="flex justify-center">
                     <div class="samples-container">
-                        <div class="flex justify-center mb-4">
+                        <div class="samples-top flex justify-center mb-4">
                             <SelectButton v-model="view"
                                           :allow-empty="false"
                                           option-label="label"
@@ -308,7 +308,6 @@ watch(visible, async (v) => {
 }
 
 .screen-container {
-    height: calc(100vh - 300px);
     width: 100%;
 }
 </style>

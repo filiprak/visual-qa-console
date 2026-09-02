@@ -115,15 +115,14 @@ function getContainScale(boxA: Box, boxB: Box): number {
 function refreshSizes() {
     if (!beforeImg.value || !afterImg.value) return;
 
-    const containerWidth = container.value?.getBoundingClientRect().width || 500;
-    const containerHeight = container.value?.getBoundingClientRect().height || 500;
-
     const b = beforeImg.value;
     const a = afterImg.value;
 
     if (!a.naturalHeight || !b.naturalHeight) return;
     if (!a.naturalWidth || !b.naturalWidth) return;
 
+    const containerWidth = container.value?.getBoundingClientRect().width || Math.max(b.naturalWidth, a.naturalWidth);
+    const containerHeight = container.value?.getBoundingClientRect().height || Math.max(b.naturalHeight, a.naturalHeight);
     const virtualW = Math.max(b.naturalWidth, a.naturalWidth);
     const virtualH = Math.max(b.naturalHeight, a.naturalHeight);
 
