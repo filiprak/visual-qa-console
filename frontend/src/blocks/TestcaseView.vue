@@ -103,62 +103,62 @@
                         </div>
                         <div></div>
                         <div class="flex flex-col items-center">
-                            <template v-if="view == 'compare'">
-                                <div class="screen-container"
-                                     v-if="baseline_src && testcase.result_img">
-                                    <ImageDiff :before="baseline_src"
-                                               :after="testcase.result_img">
-                                    </ImageDiff>
-                                </div>
-                                <div v-else>
-                                    <Message severity="error"
-                                             icon="pi pi-exclamation-triangle">
-                                        Baseline or result screenshot was image not found
-                                    </Message>
-                                </div>
-                            </template>
-                            <template v-if="view == 'result'">
-                                <div class="screen-container"
-                                     v-if="testcase.result_img">
-                                    <Sample class="screen"
-                                            title="Result"
-                                            :src="testcase.result_img" />
-                                </div>
-                                <div v-else>
-                                    <Message severity="error"
-                                             icon="pi pi-exclamation-triangle">
-                                        Result screenshot image was not found
-                                    </Message>
-                                </div>
-                            </template>
-                            <template v-if="view == 'diff'">
-                                <div class="screen-container"
-                                     v-if="testcase.diff_img">
-                                    <Sample class="screen"
-                                            title="Diff"
-                                            :src="testcase.diff_img" />
-                                </div>
-                                <div v-else>
-                                    <Message severity="error"
-                                             icon="pi pi-exclamation-triangle">
-                                        Diff screenshot image was not found
-                                    </Message>
-                                </div>
-                            </template>
-                            <template v-if="view == 'baseline'">
-                                <div class="screen-container"
-                                     v-if="baseline_src">
-                                    <Sample class="screen"
-                                            title="Baseline"
-                                            :src="baseline_src" />
-                                </div>
-                                <div v-else>
-                                    <Message severity="error"
-                                             icon="pi pi-exclamation-triangle">
-                                        Baseline screenshot image was not found
-                                    </Message>
-                                </div>
-                            </template>
+                            <div class="screen-container"
+                                 v-show="view == 'compare'"
+                                 v-if="baseline_src && testcase.result_img">
+                                <ImageDiff :before="baseline_src"
+                                           :after="testcase.result_img">
+                                </ImageDiff>
+                            </div>
+                            <div v-else
+                                 v-show="view == 'compare'">
+                                <Message severity="error"
+                                         icon="pi pi-exclamation-triangle">
+                                    Baseline or result screenshot was image not found
+                                </Message>
+                            </div>
+                            <div class="screen-container"
+                                 v-show="view == 'result'"
+                                 v-if="testcase.result_img">
+                                <Sample class="screen"
+                                        title="Result"
+                                        :src="testcase.result_img" />
+                            </div>
+                            <div v-else
+                                 v-show="view == 'result'">
+                                <Message severity="error"
+                                         icon="pi pi-exclamation-triangle">
+                                    Result screenshot image was not found
+                                </Message>
+                            </div>
+                            <div class="screen-container"
+                                 v-show="view == 'diff'"
+                                 v-if="testcase.diff_img">
+                                <Sample class="screen"
+                                        title="Diff"
+                                        :src="testcase.diff_img" />
+                            </div>
+                            <div v-else
+                                 v-show="view == 'diff'">
+                                <Message severity="error"
+                                         icon="pi pi-exclamation-triangle">
+                                    Diff screenshot image was not found
+                                </Message>
+                            </div>
+                            <div class="screen-container"
+                                 v-show="view == 'baseline'"
+                                 v-if="baseline_src">
+                                <Sample class="screen"
+                                        title="Baseline"
+                                        :src="baseline_src" />
+                            </div>
+                            <div v-else
+                                 v-show="view == 'baseline'">
+                                <Message severity="error"
+                                         icon="pi pi-exclamation-triangle">
+                                    Baseline screenshot image was not found
+                                </Message>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -192,7 +192,6 @@ const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline
 const view_options = computed(() => {
     return [
         { label: 'Compare', value: 'compare', hide: hide_diff.value },
-        { label: 'Result', value: 'result', info: result_info.value },
         { label: 'Diff', value: 'diff', hide: hide_diff.value, info: diff_info.value },
         {
             label: 'Baseline' + (baseline.value ? '' : ' ⚠'),
@@ -200,6 +199,7 @@ const view_options = computed(() => {
             value: 'baseline',
             info: baseline_info.value,
         },
+        { label: 'Result', value: 'result', info: result_info.value },
     ].filter((i) => !i.hide);
 });
 
@@ -309,5 +309,11 @@ watch(visible, async (v) => {
 
 .screen-container {
     width: 100%;
+}
+
+.samples-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 </style>
