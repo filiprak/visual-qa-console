@@ -6,7 +6,12 @@ const schema = Type.Object(
         name: Type.String(),
         unique_key: Type.String(),
         group: Type.Optional(Type.String()),
-        status: Type.Union([Type.Literal('passed'), Type.Literal('failed')]),
+        status: Type.Union([
+            Type.Literal('passed'),
+            Type.Literal('failed'),
+            Type.Literal('new'),
+            Type.Literal('reported'),
+        ]),
         failed_msg: Type.Optional(Type.String()),
         pipeline_id: Type.Number(),
         result_img: Type.Optional(Type.String()),

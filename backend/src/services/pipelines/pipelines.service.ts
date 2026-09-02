@@ -14,10 +14,15 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
                 SELECT
                     CASE
                         WHEN SUM(t.status = 'failed') > 0 THEN 'failed'
+                        WHEN SUM(t.status = 'new') > 0 THEN 'failed'
+                        WHEN SUM(t.status = 'reported') > 0 THEN 'failed'
                         ELSE 'passed'
                     END AS status,
                     COUNT(DISTINCT t.\`group\`) AS total_groups,
                     SUM(t.status = 'failed') AS failed_testcases,
+                    SUM(t.status = 'passed') AS passed_testcases,
+                    SUM(t.status = 'new') AS new_testcases,
+                    SUM(t.status = 'reported') AS reported_testcases,
                     COUNT(*) AS total_testcases
                 FROM pipelines p
                 INNER JOIN testcases t
@@ -32,8 +37,10 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
             status: result.at(0)?.status || 'passed',
             groups: result.at(0)?.total_groups || 0,
             total: result.at(0)?.total_testcases || 0,
-            passed: (result.at(0)?.total_testcases || 0) - (result.at(0)?.failed_testcases || 0),
+            passed: result.at(0)?.passed_testcases || 0,
             failed: result.at(0)?.failed_testcases || 0,
+            new: result.at(0)?.new_testcases || 0,
+            reported: result.at(0)?.reported_testcases || 0,
         };
     }),
 });

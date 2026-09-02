@@ -13,6 +13,8 @@ const schema = Type.Object(
                 total: Type.Number(),
                 failed: Type.Number(),
                 passed: Type.Number(),
+                new: Type.Number(),
+                reported: Type.Number(),
             },
             { additionalProperties: false },
         ),

@@ -44,7 +44,249 @@ describe('pipelines service', () => {
                 "details": {
                   "failed": 2,
                   "groups": 2,
+                  "new": 0,
                   "passed": 2,
+                  "reported": 0,
+                  "status": "failed",
+                  "total": 4,
+                },
+                "id": 1,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+    });
+
+    it('computes valid pipeline status - all passed', async () => {
+        await request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                testcases: [
+                    {
+                        name: 'login flow',
+                        status: 'passed',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/login-flow.diff.png',
+                        result_img: 'https://example.com/login-flow.png',
+                    },
+                    {
+                        name: 'forgot password email',
+                        status: 'passed',
+                        failed_msg: 'Different screenshots',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/forgot.diff.png',
+                        result_img: 'https://example.com/forgot.png',
+                    },
+                    {
+                        name: 'invalid password',
+                        status: 'passed',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-password.diff.png',
+                        result_img: 'https://example.com/invalid-password.png',
+                    },
+                    {
+                        name: 'invalid email',
+                        status: 'passed',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-email.diff.png',
+                        result_img: 'https://example.com/invalid-email.png',
+                    },
+                ],
+            },
+        });
+
+        const response = await request('/api/v1/pipelines', {
+            method: 'GET',
+        });
+
+        expect(response.json).toMatchInlineSnapshot({
+            data: [
+                {
+                    created_at: expectSqlTimestamp,
+                    updated_at: expectSqlTimestamp,
+                }
+            ]
+        }, `
+          {
+            "data": [
+              {
+                "branch_name": "master",
+                "commit_sha": "f7d93421",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 0,
+                  "groups": 2,
+                  "new": 0,
+                  "passed": 4,
+                  "reported": 0,
+                  "status": "passed",
+                  "total": 4,
+                },
+                "id": 1,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+    });
+
+    it('computes valid pipeline status - some new cases', async () => {
+        await request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                testcases: [
+                    {
+                        name: 'login flow',
+                        status: 'passed',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/login-flow.diff.png',
+                        result_img: 'https://example.com/login-flow.png',
+                    },
+                    {
+                        name: 'forgot password email',
+                        status: 'new',
+                        failed_msg: 'Different screenshots',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/forgot.diff.png',
+                        result_img: 'https://example.com/forgot.png',
+                    },
+                    {
+                        name: 'invalid password',
+                        status: 'new',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-password.diff.png',
+                        result_img: 'https://example.com/invalid-password.png',
+                    },
+                    {
+                        name: 'invalid email',
+                        status: 'passed',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-email.diff.png',
+                        result_img: 'https://example.com/invalid-email.png',
+                    },
+                ],
+            },
+        });
+
+        const response = await request('/api/v1/pipelines', {
+            method: 'GET',
+        });
+
+        expect(response.json).toMatchInlineSnapshot({
+            data: [
+                {
+                    created_at: expectSqlTimestamp,
+                    updated_at: expectSqlTimestamp,
+                }
+            ]
+        }, `
+          {
+            "data": [
+              {
+                "branch_name": "master",
+                "commit_sha": "f7d93421",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 0,
+                  "groups": 2,
+                  "new": 2,
+                  "passed": 2,
+                  "reported": 0,
+                  "status": "failed",
+                  "total": 4,
+                },
+                "id": 1,
+                "name": "my-pipeline",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+    });
+
+    it('computes valid pipeline status - some reported cases', async () => {
+        await request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                testcases: [
+                    {
+                        name: 'login flow',
+                        status: 'passed',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/login-flow.diff.png',
+                        result_img: 'https://example.com/login-flow.png',
+                    },
+                    {
+                        name: 'forgot password email',
+                        status: 'reported',
+                        failed_msg: 'Different screenshots',
+                        group: 'portal.apps.auth.desktop',
+                        diff_img: 'https://example.com/forgot.diff.png',
+                        result_img: 'https://example.com/forgot.png',
+                    },
+                    {
+                        name: 'invalid password',
+                        status: 'passed',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-password.diff.png',
+                        result_img: 'https://example.com/invalid-password.png',
+                    },
+                    {
+                        name: 'invalid email',
+                        status: 'passed',
+                        group: 'portal.apps.auth.signup',
+                        diff_img: 'https://example.com/invalid-email.diff.png',
+                        result_img: 'https://example.com/invalid-email.png',
+                    },
+                ],
+            },
+        });
+
+        const response = await request('/api/v1/pipelines', {
+            method: 'GET',
+        });
+
+        expect(response.json).toMatchInlineSnapshot({
+            data: [
+                {
+                    created_at: expectSqlTimestamp,
+                    updated_at: expectSqlTimestamp,
+                }
+            ]
+        }, `
+          {
+            "data": [
+              {
+                "branch_name": "master",
+                "commit_sha": "f7d93421",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "details": {
+                  "failed": 0,
+                  "groups": 2,
+                  "new": 0,
+                  "passed": 3,
+                  "reported": 1,
                   "status": "failed",
                   "total": 4,
                 },

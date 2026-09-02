@@ -102,7 +102,9 @@ describe('report service', () => {
                 "details": {
                   "failed": 1,
                   "groups": 1,
+                  "new": 0,
                   "passed": 1,
+                  "reported": 0,
                   "status": "failed",
                   "total": 2,
                 },
@@ -229,7 +231,9 @@ describe('report service', () => {
                 "details": {
                   "failed": 3,
                   "groups": 1,
+                  "new": 0,
                   "passed": 0,
+                  "reported": 0,
                   "status": "failed",
                   "total": 3,
                 },
@@ -373,7 +377,9 @@ describe('report service', () => {
                 "details": {
                   "failed": 1,
                   "groups": 1,
+                  "new": 0,
                   "passed": 1,
+                  "reported": 0,
                   "status": "failed",
                   "total": 2,
                 },
@@ -388,7 +394,9 @@ describe('report service', () => {
                 "details": {
                   "failed": 0,
                   "groups": 1,
+                  "new": 0,
                   "passed": 2,
+                  "reported": 0,
                   "status": "passed",
                   "total": 2,
                 },
@@ -495,7 +503,9 @@ describe('report service', () => {
             "details": {
               "failed": 0,
               "groups": 1,
+              "new": 0,
               "passed": 2,
+              "reported": 0,
               "status": "passed",
               "total": 2,
             },
