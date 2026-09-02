@@ -114,7 +114,9 @@
                              :key="item.id">
                             <div class="basis-10 flex items-center">
                                 <img :src="item.result_img || fallback_url"
-                                     class="block size-10 object-contain bg-surface-200 dark:bg-surface-800" />
+                                     class="block size-10 object-contain bg-surface-200 dark:bg-surface-800"
+                                     @mouseenter="showPreview($event, item.result_img, item.diff_img)"
+                                     @mouseleave="hidePreview" />
                             </div>
                             <div class="grow-1"
                                  :class="{ 'text-red-600 font-semibold': item.status == 'failed' }">
@@ -132,7 +134,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="flex gap-2 justify-start items-start basis-[200px]">
                                 <LoadingButton v-if="item.status == 'failed'"
@@ -182,6 +184,15 @@
                 </div>
             </div>
         </div>
+        <Popover ref="testcase_popover">
+            <div class="flex gap-3">
+                <img :src="popover_result_img"
+                     class="image-preview max-w-100 max-h-150" />
+                <img v-if="popover_diff_img"
+                     :src="popover_diff_img"
+                     class="image-preview max-w-100 max-h-150" />
+            </div>
+        </Popover>
     </div>
 </template>
 <script setup lang="ts">
@@ -203,6 +214,7 @@ import { useDebounce } from '../composables/useDebounce';
 import { useBatchCheckbox } from '../composables/useBatchCheckbox.ts';
 import { useDataView } from '../composables/useDataView.ts';
 import { truncateStr } from '../utils/func';
+import type { PopoverMethods } from 'primevue/popover';
 
 const fallback_url = '/placeholder.svg';
 
@@ -226,7 +238,7 @@ const sort = ref<Record<string, 1 | -1>>({
 const { rows, loading, total, limit, offset, onPage, nextPage, prevPage, reload } = useDataView<TestCase>({
     service: api.testcases,
     query,
-    perPage: 30,
+    perPage: 50,
     sort,
 });
 
@@ -249,6 +261,24 @@ const tabs_opts = computed(() => {
         })),
     ];
 });
+
+const testcase_popover = ref<PopoverMethods>()
+const popover_result_img = ref<string>()
+const popover_diff_img = ref<string>()
+
+const showPreview = (event: MouseEvent, result?: string, diff?: string) => {
+    if (result || diff) {
+        popover_result_img.value = result;
+        popover_diff_img.value = diff;
+        testcase_popover.value?.show(event);
+    }
+}
+
+const hidePreview = () => {
+    testcase_popover.value?.hide();
+    popover_result_img.value = undefined;
+    popover_diff_img.value = undefined;
+}
 
 function cancelBatch() {
     selected.value = [];
