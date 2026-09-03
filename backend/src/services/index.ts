@@ -7,9 +7,11 @@ import baselines from './baselines/baselines.service.js';
 import review from './review/review.service.js';
 import files from './files/files.service.js';
 import users from './users/users.service.js';
+import settings from './settings/settings.service.js';
 
 export const appServices = (app: Application) => {
     app.configure(users);
+    app.configure(settings);
     app.configure(auth);
     app.configure(report);
     app.configure(pipelines);

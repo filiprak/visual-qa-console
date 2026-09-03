@@ -13,6 +13,7 @@ import type {
 import type { ReviewService } from './services/review/review.service.js';
 import type { FilesService } from './services/files/files.service.js';
 import type { UsersService } from './services/users/users.service.js';
+import type { SettingsService } from './services/settings/settings.service.js';
 
 export interface Configuration {
     db: Knex;
@@ -22,6 +23,7 @@ export interface Configuration {
 export interface ServiceTypes {
     '/api/v1/auth': AuthenticationService;
     '/api/v1/users': UsersService;
+    '/api/v1/settings': SettingsService;
     '/api/v1/report': ReportService;
     '/api/v1/pipelines': PipelinesService;
     '/api/v1/testcases': TestCasesService;

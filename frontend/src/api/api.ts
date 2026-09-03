@@ -29,6 +29,7 @@ export const api = {
     baselines_match: app.service('/api/v1/baselines/match'),
     review: app.service('/api/v1/review'),
     users: app.service('/api/v1/users'),
+    settings: app.service('/api/v1/settings'),
     auth: app.service('/api/v1/auth'),
 };
 

@@ -169,8 +169,8 @@
 <script setup lang="ts">
 import Drawer from 'primevue/drawer';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
-import type { Baseline, Pipeline, TestCase } from '@/types';
-import { computed, h, ref, watch } from 'vue';
+import type { Baseline, Pipeline, ReportIssueValue, TestCase } from '@/types';
+import { computed, h, onBeforeMount, ref, watch } from 'vue';
 import { api } from '../api/api.ts';
 import Skeleton from 'primevue/skeleton';
 import SelectButton from 'primevue/selectbutton';
@@ -181,6 +181,8 @@ import TestStatus from '../components/TestStatus.vue';
 import { SampleData, useSample } from '../composables/useSample';
 import { useToast } from 'primevue/usetoast';
 import { useDialog } from '../composables/useDialog';
+import { fetchReportIssueConfig } from '../composables/useReportIssue';
+import { buildDefaultReportLink, buildReportIssueUrl } from '../utils/reportIssue';
 
 function formatSize(info: SampleData) {
     return info.empty ? '? x ?' : `${info.width} x ${info.height}`;
@@ -216,22 +218,39 @@ const { visible, options, id } = useTestcaseView();
 const { acceptTestcase } = useReview();
 const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
+const report_config = ref<ReportIssueValue | null>(null);
+
+async function loadReportConfig() {
+    try {
+        report_config.value = await fetchReportIssueConfig();
+    } catch {
+        report_config.value = null;
+    }
+}
+
+onBeforeMount(() => {
+    loadReportConfig();
+});
 
 const report_link = computed(() => {
-    const title = `Fix visual test ${testcase.value?.group}`;
-    const description = [
-        `### Screenshot before (expected):`,
-        `![Expected](${baseline.value?.baseline_img})`,
-        `### Screenshot after (actual result):`,
-        `![Actual](${testcase.value?.result_img})`,
-        `### Screenshots diff:`,
-        `![Diff](${testcase.value?.diff_img})`,
-    ];
+    const ctx = {
+        group: testcase.value?.group ?? '',
+        test: testcase.value?.name ?? '',
+        resultUrl: testcase.value?.result_img ?? '',
+        diffUrl: testcase.value?.diff_img ?? '',
+        actualUrl: testcase.value?.result_img ?? '',
+        baselineUrl: baseline.value?.baseline_img ?? '',
+    };
 
-    return `https://gitlab.ikol.com/issues/new?issue[title]=${encodeURIComponent(title)}&issue[description]=${encodeURIComponent(description.join('\n\n'))}`;
+    const custom = report_config.value?.base_url?.trim()
+        ? buildReportIssueUrl(report_config.value, ctx)
+        : null;
+
+    return custom ?? buildDefaultReportLink(ctx);
 });
 
 function onReport() {
+    if (!report_link.value) return;
     window.open(report_link.value, '_blank');
 }
 
@@ -309,7 +328,7 @@ async function load(testcase_id: number) {
 
 watch(visible, async (v) => {
     if (v && id.value) {
-        await load(id.value);
+        await Promise.all([load(id.value), loadReportConfig()]);
     }
 });
 </script>

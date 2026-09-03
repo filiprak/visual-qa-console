@@ -1,6 +1,7 @@
 import type { ClientService } from '@feathersjs/feathers';
 import type { AuthenticationRequest, AuthenticationResult } from '@feathersjs/authentication';
 import type { BaselineMatch, BaselineMatchResponse, BaselinePipeline, Pipeline, Review, User } from '@/types';
+import type { Setting } from '@/types';
 
 export interface ServiceTypes {
     '/api/v1/pipelines': ClientService<Pipeline>;
@@ -10,5 +11,6 @@ export interface ServiceTypes {
     '/api/v1/baselines/match': ClientService<BaselineMatchResponse, never, never, BaselineMatch>;
     '/api/v1/review': ClientService<Review>;
     '/api/v1/users': ClientService<User>;
+    '/api/v1/settings': ClientService<Setting>;
     '/api/v1/auth': any;
 }

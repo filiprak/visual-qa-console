@@ -9,3 +9,8 @@ export type {
 } from '../backend/src/services/baselines/baselines.schema.ts';
 export type { Review } from '../backend/src/services/review/review.schema.ts';
 export type { User, Permissions } from '../backend/src/services/users/users.schema.ts';
+export type {
+    Setting,
+    ReportIssueParam,
+    ReportIssueValue,
+} from '../backend/src/services/settings/settings.schema.ts';

@@ -4,6 +4,7 @@ import NotFound from './routes/NotFound.vue';
 import PipelineDetails from './routes/PipelineDetails.vue';
 import Baselines from './routes/Baselines.vue';
 import Users from './routes/Users.vue';
+import Settings from './routes/Settings.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,6 +13,7 @@ const router = createRouter({
         { path: '/baselines', component: Baselines },
         { path: '/pipelines/:id', component: PipelineDetails },
         { path: '/users', component: Users },
+        { path: '/settings', component: Settings },
         { path: '/:pathMatch(.*)*', component: NotFound },
     ],
 });
@@ -28,6 +30,20 @@ router.beforeEach((to) => {
         
         if (user.value) {
             if (!checkPermission('users.')) {
+                return { path: '/' };
+            }
+        }
+    }
+
+    if (to.path === '/settings') {
+        const { user, hasToken } = useAuth();
+
+        if (!hasToken()) {
+            return { path: '/' };
+        }
+
+        if (user.value) {
+            if (!user.value.is_admin) {
                 return { path: '/' };
             }
         }

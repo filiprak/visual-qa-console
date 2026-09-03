@@ -60,6 +60,12 @@ export async function up(knex: Knex) {
 
         table.unique(['unique_key']);
     });
+
+    await knex.schema.createTable('settings', (table) => {
+        table.string('key').primary();
+        table.text('value').nullable();
+        table.timestamps(true, true);
+    });
 }
 
 export async function down(knex: Knex) {
@@ -67,4 +73,5 @@ export async function down(knex: Knex) {
     await knex.schema.dropTable('testcases');
     await knex.schema.dropTable('baselines');
     await knex.schema.dropTable('users');
+    await knex.schema.dropTable('settings');
 }

@@ -124,6 +124,14 @@ const menuItems = computed<MenuItem[]>(() => {
         });
     }
 
+    if (user.value?.is_admin) {
+        items.push({
+            label: 'Settings',
+            icon: 'pi-cog',
+            path: '/settings',
+        });
+    }
+
     return items;
 });
 </script>
