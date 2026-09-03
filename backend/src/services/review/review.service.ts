@@ -56,16 +56,13 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                 await this.app.service('/api/v1/testcases').patch(
                     testcase.id,
                     {
-                        status: 'passed',
+                        status: 'approved',
                         accepted_at: utcNow(),
                         updated_at: utcNow(),
                     },
                     { transaction: params.transaction },
                 );
-            } else if (
-                data.status == 'new' ||
-                data.status == 'reported'
-            ) {
+            } else if (data.status) {
                 await this.app.service('/api/v1/testcases').patch(
                     testcase.id,
                     {

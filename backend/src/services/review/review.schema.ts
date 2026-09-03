@@ -4,6 +4,8 @@ const schema = Type.Object(
     {
         status: Type.Union([
             Type.Literal('new'),
+            Type.Literal('failed'),
+            Type.Literal('passed'),
             Type.Literal('reported'),
             Type.Literal('approved'),
         ]),
