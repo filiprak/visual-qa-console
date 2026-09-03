@@ -7,6 +7,27 @@
         Passed
     </Tag>
     <Tag
+        v-else-if="status == 'approved'"
+        severity="success"
+    >
+        <Icon name="check"> </Icon>
+        Approved
+    </Tag>
+    <Tag
+        v-else-if="status == 'new'"
+        severity="info"
+    >
+        <Icon name="plus"> </Icon>
+        New
+    </Tag>
+    <Tag
+        v-else-if="status == 'reported'"
+        severity="warn"
+    >
+        <Icon name="times"> </Icon>
+        New
+    </Tag>
+    <Tag
         v-else
         severity="danger"
     >
@@ -16,6 +37,6 @@
 </template>
 <script setup lang="ts">
 defineProps<{
-    status: 'passed' | 'failed';
+    status: 'passed' | 'failed' | 'new' | 'reported' | 'approved';
 }>();
 </script>
