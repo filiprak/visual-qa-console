@@ -76,7 +76,14 @@
                             <div class="flex gap-5 items-center">
                                 <div><span class="text-primary-600 hover:text-primary-900 cursor-pointer"
                                           @click="cancelBatch">Cancel</span></div>
-                                <div v-if="batch_mode">
+                                <div v-if="batch_mode"
+                                     class="flex gap-2">
+                                    <Button size="small"
+                                            severity="secondary"
+                                            :disabled="selected.length < 1"
+                                            @click="onBatchSetStatus">
+                                        Set status ({{ selected.length }})
+                                    </Button>
                                     <Button size="small"
                                             :disabled="selected.length < 1"
                                             @click="onBatchAccept">
@@ -134,9 +141,10 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                    }}</span>
+                                }}</span>
                             </div>
-                            <div class="flex gap-2 justify-start items-start basis-[400px] opacity-0 group-hover:opacity-100">
+                            <div
+                                 class="flex gap-2 justify-start items-start basis-[400px] opacity-0 group-hover:opacity-100">
                                 <LoadingButton size="small"
                                                append_icon="chevron-right"
                                                severity="secondary"
@@ -163,7 +171,7 @@
                             <div class="flex flex-col justify-end items-end basis-[30px] group-hover:opacity-100"
                                  :class="{ 'opacity-0': !batch_mode }">
                                 <ItemCheckbox :value="item.id"
-                                              class="outline-2 outline-surface-200"
+                                              class="outline-0 outline-surface-200"
                                               @click.stop="() => null"
                                               size="large">
                                 </ItemCheckbox>
@@ -295,6 +303,12 @@ function cancelBatch() {
 
 async function onBatchAccept() {
     await acceptTestcase(selected.value);
+    selected.value = [];
+    nextTick(() => { batch_mode.value = false; });
+}
+
+async function onBatchSetStatus() {
+    await setTestcaseStatus(selected.value);
     selected.value = [];
     nextTick(() => { batch_mode.value = false; });
 }
