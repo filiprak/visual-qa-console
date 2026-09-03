@@ -23,6 +23,19 @@ describe('pipelines service', () => {
     it('returns list', async () => {
         await createSampleReport();
 
+        // Report marks testcases as `new` when no baseline exists,
+        // so set the intended statuses explicitly for pipeline aggregation.
+        await login('reviewer');
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'passed', testcase_ids: [1, 3] },
+        });
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'failed', testcase_ids: [2, 4] },
+        });
+        await logout();
+
         const response = await request('/api/v1/pipelines', {
             method: 'GET',
         });
@@ -103,6 +116,19 @@ describe('pipelines service', () => {
                 ],
             },
         });
+
+        // Report marks testcases as `new` when no baseline exists,
+        // so set the intended statuses explicitly for pipeline aggregation.
+        await login('reviewer');
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'passed', testcase_ids: [1, 2, 3] },
+        });
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'approved', testcase_ids: [4] },
+        });
+        await logout();
 
         const response = await request('/api/v1/pipelines', {
             method: 'GET',
@@ -185,6 +211,15 @@ describe('pipelines service', () => {
             },
         });
 
+        // Report marks testcases as `new` when no baseline exists,
+        // so set the intended statuses explicitly for pipeline aggregation.
+        await login('reviewer');
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'passed', testcase_ids: [1, 4] },
+        });
+        await logout();
+
         const response = await request('/api/v1/pipelines', {
             method: 'GET',
         });
@@ -265,6 +300,19 @@ describe('pipelines service', () => {
                 ],
             },
         });
+
+        // Report marks testcases as `new` when no baseline exists,
+        // so set the intended statuses explicitly for pipeline aggregation.
+        await login('reviewer');
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'passed', testcase_ids: [1, 3, 4] },
+        });
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: { status: 'reported', testcase_ids: [2] },
+        });
+        await logout();
 
         const response = await request('/api/v1/pipelines', {
             method: 'GET',

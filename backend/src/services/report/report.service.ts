@@ -22,6 +22,33 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
         return this.app.get('db');
     }
 
+    async findMatchedIndexes(
+        pipelineName: string,
+        testcases: Array<{ name: string; group: string }>,
+        transaction?: KnexAdapterTransaction,
+    ): Promise<Set<number>> {
+        const matched = new Set<number>();
+        if (testcases.length < 1) return matched;
+
+        const BATCH_SIZE = 500;
+        for (let offset = 0; offset < testcases.length; offset += BATCH_SIZE) {
+            const chunk = testcases.slice(offset, offset + BATCH_SIZE);
+            const result = await this.app.service('/api/v1/baselines/match').create(
+                {
+                    pipeline_name: pipelineName,
+                    testcases: chunk,
+                },
+                { transaction },
+            );
+            chunk.forEach((_, index) => {
+                if (result[index]?.baseline) {
+                    matched.add(offset + index);
+                }
+            });
+        }
+        return matched;
+    }
+
     async create(data: Report, params: Params & { transaction: KnexAdapterTransaction }) {
         let pipeline: Pipeline | undefined;
 
@@ -55,17 +82,29 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
             );
         }
         if (data.testcases.length > 0) {
+            const prepared = data.testcases.map((i) => ({
+                ...i,
+                group: i.group || 'default',
+                unique_key: testcaseKey(pipeline.name, i.name, i.group),
+                pipeline_id: pipeline.id,
+                created_at: utcNow(),
+                updated_at: utcNow(),
+            }));
+
+            const matched = await this.findMatchedIndexes(
+                pipeline.name,
+                prepared.map((i) => ({ name: i.name, group: i.group })),
+                params.transaction,
+            );
+
+            prepared.forEach((testcase, index) => {
+                if (!matched.has(index)) {
+                    testcase.status = 'new';
+                }
+            });
+
             await this.app.service('/api/v1/testcases').createOrPatch(
-                [
-                    ...data.testcases.map((i) => ({
-                        ...i,
-                        group: i.group || 'default',
-                        unique_key: testcaseKey(pipeline.name, i.name, i.group),
-                        pipeline_id: pipeline.id,
-                        created_at: utcNow(),
-                        updated_at: utcNow(),
-                    })),
-                ],
+                prepared,
                 { transaction: params.transaction },
             );
         }
