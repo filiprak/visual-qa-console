@@ -28,7 +28,7 @@ export function useReview() {
             await api.review.create({
                 testcase_ids,
                 skip_baseline_update,
-                accepted: true,
+                status: 'approved',
             });
             toast.add({
                 summary: 'Testcase(s) accepted',
