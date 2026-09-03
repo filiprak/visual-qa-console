@@ -12,7 +12,7 @@
                 <div class="grow-1">Name</div>
                 <div class="basis-[200px]">Branch</div>
                 <div class="basis-[200px]">Commit SHA</div>
-                <div class="basis-[200px]">Tests</div>
+                <div class="basis-[300px]">Summary</div>
                 <div class="basis-[200px]">Created</div>
             </div>
             <DataPaginated :service="api.pipelines"
@@ -44,14 +44,26 @@
                                     {{ item.commit_sha }}
                                 </Tag>
                             </div>
-                            <div class="flex flex-col justify-start items-start basis-[200px]">
-                                <span>Total: {{ item.details.total }}</span>
-                                <span class="text-xs text-yellow-600"
-                                      v-if="item.details.failed">
-                                    <Icon name="exclamation-triangle"
-                                          size="0.7rem" /> Failed tests: {{ item.details.failed }}
+                            <div class="flex font-semibold flex-col justify-start items-start basis-[300px]">
+                                <span class="font-normal">{{ item.details.total }} (total)</span>
+                                <span class="inline-flex gap-3 mt-1" v-if="item.details.failed || item.details.new || item.details.reported">
+                                    <span class="text-xs text-red-600"
+                                          v-if="item.details.failed">
+                                        <Icon name="exclamation-triangle"
+                                              size="0.7rem" /> Failed: {{ item.details.failed }}
+                                    </span>
+                                    <span class="text-xs text-blue-400"
+                                          v-if="item.details.new">
+                                        <Icon name="plus"
+                                              size="0.7rem" /> New: {{ item.details.new }}
+                                    </span>
+                                    <span class="text-xs text-orange-400"
+                                          v-if="item.details.reported">
+                                        <Icon name="info-circle"
+                                              size="0.7rem" /> Reported: {{ item.details.reported }}
+                                    </span>
                                 </span>
-                                <span class="text-xs"
+                                <span class="text-xs text-green-400"
                                       v-else>
                                     All passed!
                                 </span>
