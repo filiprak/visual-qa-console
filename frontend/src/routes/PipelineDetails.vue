@@ -122,7 +122,7 @@
                             <div class="basis-10 flex items-center">
                                 <img :src="item.result_img || fallback_url"
                                      class="block size-10 object-contain bg-surface-200 dark:bg-surface-800"
-                                     @mouseenter="showPreview($event, item.result_img, item.diff_img)"
+                                     @mouseenter="showPreview($event, item)"
                                      @mouseleave="hidePreview" />
                             </div>
                             <div class="grow-1"
@@ -141,7 +141,7 @@
                             <div class="flex flex-col justify-start items-start basis-[200px]">
                                 <span v-tooltip.top="format(item.updated_at)">{{
                                     fromNow(item.updated_at)
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div
                                  class="flex gap-2 justify-start items-start basis-[400px] opacity-0 group-hover:opacity-100">
@@ -200,11 +200,12 @@
         </div>
         <AlignedPopover ref="testcase_popover"
                         placement="right">
+            <div class="mb-3">{{ hovered_testcase?.name }}</div>
             <div class="flex gap-3">
-                <img :src="popover_result_img"
+                <img :src="hovered_testcase?.result_img"
                      class="image-preview max-w-100 max-h-150" />
-                <img v-if="popover_diff_img"
-                     :src="popover_diff_img"
+                <img v-if="hovered_testcase?.diff_img"
+                     :src="hovered_testcase?.diff_img"
                      class="image-preview max-w-100 max-h-150" />
             </div>
         </AlignedPopover>
@@ -281,21 +282,18 @@ const tabs_opts = computed(() => {
 });
 
 const testcase_popover = ref<AlignedPopoverMethods>()
-const popover_result_img = ref<string>()
-const popover_diff_img = ref<string>()
+const hovered_testcase = ref<TestCase>()
 
-const showPreview = (event: MouseEvent, result?: string, diff?: string) => {
-    if (result || diff) {
-        popover_result_img.value = result;
-        popover_diff_img.value = diff;
+const showPreview = (event: MouseEvent, testcase?: TestCase) => {
+    if (testcase?.result_img ||testcase?.diff_img) {
+        hovered_testcase.value = testcase;
         testcase_popover.value?.show(event);
     }
 }
 
 const hidePreview = () => {
     testcase_popover.value?.hide();
-    popover_result_img.value = undefined;
-    popover_diff_img.value = undefined;
+    hovered_testcase.value = undefined;
 }
 
 function cancelBatch() {
