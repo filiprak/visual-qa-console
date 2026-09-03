@@ -1,6 +1,6 @@
 {
     "name": "visual-qa-console",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A visual QA dashboard for reviewing UI screenshots with built-in accept/reject approval workflows.",
     "main": "./src/backend/index.ts",
     "type": "module",
