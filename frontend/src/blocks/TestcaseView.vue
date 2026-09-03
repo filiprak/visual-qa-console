@@ -41,7 +41,8 @@
                             <Icon name="times"></Icon>
                             Exit
                         </Button>
-                        <Button severity="secondary">
+                        <Button severity="secondary"
+                                @click="onReport">
                             <Icon name="flag"></Icon>
                             Report issue
                         </Button>
@@ -215,6 +216,24 @@ const { visible, options, id } = useTestcaseView();
 const { acceptTestcase } = useReview();
 const view = ref<'compare' | 'result' | 'diff' | 'baseline'>('compare');
 const loading = ref<boolean>(true);
+
+const report_link = computed(() => {
+    const title = `Fix visual test ${testcase.value?.group}`;
+    const description = [
+        `### Screenshot before (expected):`,
+        `![Expected](${baseline.value?.baseline_img})`,
+        `### Screenshot after (actual result):`,
+        `![Actual](${testcase.value?.result_img})`,
+        `### Screenshots diff:`,
+        `![Diff](${testcase.value?.diff_img})`,
+    ];
+
+    return `https://gitlab.ikol.com/issues/new?issue[title]=${encodeURIComponent(title)}&issue[description]=${encodeURIComponent(description.join('\n\n'))}`;
+});
+
+function onReport() {
+    window.open(report_link.value, '_blank');
+}
 
 function onErrorDetails() {
     if (!testcase.value?.failed_msg) return;
