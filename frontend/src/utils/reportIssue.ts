@@ -2,13 +2,12 @@ import type { ReportIssueValue } from '@/types';
 
 export const REPORT_ISSUE_KEY = 'report_issue';
 
-export const REPORT_TEMPLATE_VARS = ['GROUP', 'TEST', 'RESULT_URL', 'DIFF_URL', 'ACTUAL_URL'] as const;
+export const REPORT_TEMPLATE_VARS = ['GROUP', 'TEST', 'BASELINE_URL', 'DIFF_URL', 'ACTUAL_URL'] as const;
 export type ReportTemplateVar = (typeof REPORT_TEMPLATE_VARS)[number];
 
 export interface ReportIssueContext {
     group?: string;
     test?: string;
-    resultUrl?: string;
     diffUrl?: string;
     actualUrl?: string;
     baselineUrl?: string;
@@ -28,12 +27,11 @@ export function resolveTemplateVars(template: string, ctx: ReportIssueContext): 
     const map: Record<string, string> = {
         GROUP: ctx.group ?? '',
         TEST: ctx.test ?? '',
-        RESULT_URL: toAbsoluteUrl(ctx.resultUrl),
-        DIFF_URL: toAbsoluteUrl(ctx.diffUrl),
-        ACTUAL_URL: toAbsoluteUrl(ctx.actualUrl ?? ctx.resultUrl),
         BASELINE_URL: toAbsoluteUrl(ctx.baselineUrl),
+        DIFF_URL: toAbsoluteUrl(ctx.diffUrl),
+        ACTUAL_URL: toAbsoluteUrl(ctx.actualUrl),
     };
-    return template.replace(/\{(GROUP|TEST|RESULT_URL|DIFF_URL|ACTUAL_URL|BASELINE_URL)\}/g, (match, name: string) => {
+    return template.replace(/\{(GROUP|TEST|BASELINE_URL|DIFF_URL|ACTUAL_URL)\}/g, (match, name: string) => {
         return map[name] ?? match;
     });
 }
@@ -69,7 +67,7 @@ export function buildDefaultReportLink(ctx: ReportIssueContext & { baselineUrl?:
         `### Screenshot before (expected):`,
         `![Expected](${toAbsoluteUrl(ctx.baselineUrl)})`,
         `### Screenshot after (actual result):`,
-        `![Actual](${toAbsoluteUrl(ctx.resultUrl)})`,
+        `![Actual](${toAbsoluteUrl(ctx.actualUrl)})`,
         `### Screenshots diff:`,
         `![Diff](${toAbsoluteUrl(ctx.diffUrl)})`,
     ];

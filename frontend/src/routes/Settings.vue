@@ -18,7 +18,7 @@
                         Parameter values may use template variables:
                         <code class="font-mono">{GROUP}</code>,
                         <code class="font-mono">{TEST}</code>,
-                        <code class="font-mono">{RESULT_URL}</code>,
+                        <code class="font-mono">{BASELINE_URL}</code>,
                         <code class="font-mono">{DIFF_URL}</code>,
                         <code class="font-mono">{ACTUAL_URL}</code>.
                     </p>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="flex flex-col gap-1 grow">
                                 <Textarea v-model="param.value"
-                                          placeholder="value, e.g. Fix visual test {GROUP}/{TEST}&#10;&#10;Result: {RESULT_URL}&#10;Diff: {DIFF_URL}"
+                                          placeholder="value, e.g. Fix visual test {GROUP}/{TEST}&#10;&#10;Baseline: {BASELINE_URL}&#10;Diff: {DIFF_URL}&#10;Actual: {ACTUAL_URL}"
                                           :rows="10"
                                           autoResize
                                           fluid
@@ -100,8 +100,8 @@
                             </div>
                             <div><code class="font-mono font-semibold">{TEST}</code> <span
                                       class="text-muted-color">— testcase name, e.g. login flow</span></div>
-                            <div><code class="font-mono font-semibold">{RESULT_URL}</code> <span
-                                      class="text-muted-color">— result screenshot URL</span></div>
+                            <div><code class="font-mono font-semibold">{BASELINE_URL}</code> <span
+                                      class="text-muted-color">— baseline screenshot URL</span></div>
                             <div><code class="font-mono font-semibold">{DIFF_URL}</code> <span
                                       class="text-muted-color">— diff screenshot URL</span></div>
                             <div><code class="font-mono font-semibold">{ACTUAL_URL}</code> <span
@@ -181,10 +181,9 @@ const previewUrl = computed(() => {
         {
             group: 'portal.apps.auth.desktop',
             test: 'login flow',
-            resultUrl: 'https://example.com/login-flow.png',
+            baselineUrl: 'https://example.com/login-flow.baseline.png',
             diffUrl: 'https://example.com/login-flow.diff.png',
             actualUrl: 'https://example.com/login-flow.png',
-            baselineUrl: 'https://example.com/login-flow.baseline.png',
         },
     );
 });

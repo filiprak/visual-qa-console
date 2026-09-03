@@ -236,7 +236,6 @@ const report_link = computed(() => {
     const ctx = {
         group: testcase.value?.group ?? '',
         test: testcase.value?.name ?? '',
-        resultUrl: testcase.value?.result_img ?? '',
         diffUrl: testcase.value?.diff_img ?? '',
         actualUrl: testcase.value?.result_img ?? '',
         baselineUrl: baseline.value?.baseline_img ?? '',

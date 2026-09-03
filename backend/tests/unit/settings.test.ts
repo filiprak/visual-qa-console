@@ -21,7 +21,7 @@ const validReportIssue = {
     base_url: 'https://jira.example.com/browse/new',
     params: [
         { key: 'summary', value: 'Fix visual test {GROUP}/{TEST}' },
-        { key: 'description', value: 'Result: {RESULT_URL} Diff: {DIFF_URL} Actual: {ACTUAL_URL}' },
+        { key: 'description', value: 'Baseline: {BASELINE_URL} Diff: {DIFF_URL} Actual: {ACTUAL_URL}' },
     ],
 };
 
