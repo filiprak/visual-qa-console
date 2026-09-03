@@ -137,8 +137,7 @@
                                     }}</span>
                             </div>
                             <div class="flex gap-2 justify-start items-start basis-[400px] opacity-0 group-hover:opacity-100">
-                                <LoadingButton v-if="item.status == 'failed'"
-                                               size="small"
+                                <LoadingButton size="small"
                                                append_icon="chevron-right"
                                                severity="secondary"
                                                :loading="accepting"
@@ -146,14 +145,15 @@
                                     Details
                                 </LoadingButton>
                                 <LoadingButton size="small"
+                                               append_icon="pencil"
                                                severity="secondary"
                                                :loading="accepting"
                                                @click.stop.prevent="onSetTestcaseStatus(item)">
                                     Set status
                                 </LoadingButton>
-                                <LoadingButton v-if="item.status == 'failed'"
+                                <LoadingButton v-if="item.status != 'approved' && item.status !== 'passed'"
                                                size="small"
-                                               icon="check"
+                                               append_icon="check"
                                                severity="success"
                                                :loading="accepting"
                                                @click.stop.prevent="onAcceptTestcase(item)">

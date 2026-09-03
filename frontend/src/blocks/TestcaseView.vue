@@ -41,16 +41,15 @@
                             <Icon name="times"></Icon>
                             Exit
                         </Button>
-                        <Button v-if="testcase?.status == 'failed'"
-                                severity="secondary">
+                        <Button severity="secondary">
                             <Icon name="flag"></Icon>
                             Report issue
                         </Button>
-                        <LoadingButton v-if="testcase?.status == 'failed' || !baseline"
+                        <LoadingButton v-if="(testcase?.status !== 'passed' && testcase?.status !== 'approved') || !baseline"
                                        @click="onAccept"
                                        severity="success">
                             <Icon name="check"></Icon>
-                            Accept
+                            Approve
                         </LoadingButton>
                     </div>
                 </template>
