@@ -38,6 +38,12 @@ export function resolveTemplateVars(template: string, ctx: ReportIssueContext): 
     });
 }
 
+export function encodeQueryKey(key: string): string {
+    // Keep bracket notation like issue[title] readable (nested params),
+    // while still encoding other special characters.
+    return encodeURIComponent(key).replace(/%5B/gi, '[').replace(/%5D/gi, ']');
+}
+
 export function buildReportIssueUrl(
     config: ReportIssueValue | null | undefined,
     ctx: ReportIssueContext,
@@ -45,9 +51,9 @@ export function buildReportIssueUrl(
     const baseUrl = config?.base_url?.trim();
     if (!baseUrl) return null;
 
-    const params = (config?.params ?? []).filter((p) => p.key);
+    const params = (config?.params ?? []).filter((p) => p.key?.trim());
     const query = params
-        .map((p) => `${encodeURIComponent(p.key)}=${encodeURIComponent(resolveTemplateVars(p.value ?? '', ctx))}`)
+        .map((p) => `${encodeQueryKey(p.key.trim())}=${encodeURIComponent(resolveTemplateVars(p.value ?? '', ctx))}`)
         .join('&');
 
     if (!query) return baseUrl;

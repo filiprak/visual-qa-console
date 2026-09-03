@@ -68,7 +68,7 @@
                              class="flex gap-2 items-start">
                             <div class="flex flex-col gap-1 basis-[280px] shrink-0">
                                 <InputText v-model="param.key"
-                                           placeholder="param name, e.g. summary"
+                                           placeholder="param name, e.g. issue[title]"
                                            fluid
                                            :invalid="!!paramErrors[index]?.key" />
                                 <small class="text-red-500"
@@ -76,10 +76,11 @@
                             </div>
                             <div class="flex flex-col gap-1 grow">
                                 <Textarea v-model="param.value"
-                                          placeholder="value, e.g. Fix visual test {GROUP}/{TEST}"
-                                          rows="1"
+                                          placeholder="value, e.g. Fix visual test {GROUP}/{TEST}&#10;&#10;Result: {RESULT_URL}&#10;Diff: {DIFF_URL}"
+                                          :rows="10"
                                           autoResize
-                                          fluid />
+                                          fluid
+                                          class="param-value-textarea" />
                             </div>
                             <Button icon="pi pi-trash"
                                     severity="danger"
@@ -109,9 +110,12 @@
                     </div>
 
                     <div class="flex flex-col gap-2">
-                        <span class="font-semibold text-sm">Live preview (example values, URL-encoded)</span>
-                        <code v-if="previewUrl"
-                              class="text-xs break-all bg-surface-100 dark:bg-surface-800 rounded-lg p-3 font-mono">{{ previewUrl }}</code>
+                        <span class="font-semibold text-sm">Live preview (example values, URL-encoded) — click to open</span>
+                        <a v-if="previewUrl"
+                           :href="previewUrl"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="text-xs break-all bg-surface-100 dark:bg-surface-800 rounded-lg p-3 font-mono text-primary hover:underline block">{{ previewUrl }}</a>
                         <span v-else
                               class="text-sm text-muted-color italic">Enter a base URL to preview the generated
                             link.</span>
@@ -285,3 +289,10 @@ onBeforeMount(() => {
     loadSettings();
 });
 </script>
+<style scoped>
+.param-value-textarea {
+    min-height: 96px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+</style>
