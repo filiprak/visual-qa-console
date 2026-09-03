@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AlignedPopover: typeof import('./src/components/AlignedPopover.vue')['default']
     Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
     DataPaginated: typeof import('./src/components/DataPaginated.vue')['default']

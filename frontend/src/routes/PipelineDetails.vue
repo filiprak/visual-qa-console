@@ -198,7 +198,8 @@
                 </div>
             </div>
         </div>
-        <Popover ref="testcase_popover">
+        <AlignedPopover ref="testcase_popover"
+                        placement="right">
             <div class="flex gap-3">
                 <img :src="popover_result_img"
                      class="image-preview max-w-100 max-h-150" />
@@ -206,7 +207,7 @@
                      :src="popover_diff_img"
                      class="image-preview max-w-100 max-h-150" />
             </div>
-        </Popover>
+        </AlignedPopover>
     </div>
 </template>
 <script setup lang="ts">
@@ -228,7 +229,8 @@ import { useDebounce } from '../composables/useDebounce';
 import { useBatchCheckbox } from '../composables/useBatchCheckbox.ts';
 import { useDataView } from '../composables/useDataView.ts';
 import { truncateStr } from '../utils/func';
-import type { PopoverMethods } from 'primevue/popover';
+import AlignedPopover from '../components/AlignedPopover.vue';
+import type { AlignedPopoverMethods } from '../components/AlignedPopover.vue';
 import { useSetStatus } from '../composables/useSetStatus.ts';
 
 const fallback_url = '/placeholder.svg';
@@ -278,7 +280,7 @@ const tabs_opts = computed(() => {
     ];
 });
 
-const testcase_popover = ref<PopoverMethods>()
+const testcase_popover = ref<AlignedPopoverMethods>()
 const popover_result_img = ref<string>()
 const popover_diff_img = ref<string>()
 
