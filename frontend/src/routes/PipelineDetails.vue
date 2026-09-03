@@ -80,7 +80,7 @@
                                     <Button size="small"
                                             :disabled="selected.length < 1"
                                             @click="onBatchAccept">
-                                        Batch accept ({{ selected.length }})
+                                        Batch approve ({{ selected.length }})
                                     </Button>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                 <TestStatus :status="item.status"
                                             v-tooltip.top="(item.status == 'failed' ? truncateStr(item.failed_msg, 120) : '') || 'No status details'" />
                                 <Icon v-if="item.accepted_at"
-                                      v-tooltip.top="`Accepted at: ${format(item.accepted_at)}`"
+                                      v-tooltip.top="`Approved at: ${format(item.accepted_at)}`"
                                       class="text-green-700"
                                       name="user">
                                 </Icon>
@@ -151,7 +151,7 @@
                                                severity="success"
                                                :loading="accepting"
                                                @click.stop.prevent="onAcceptTestcase(item)">
-                                    Accept
+                                    Approve
                                 </LoadingButton>
                             </div>
                             <div class="flex flex-col justify-end items-end basis-[30px] group-hover:opacity-100"
