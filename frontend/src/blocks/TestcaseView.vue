@@ -19,7 +19,7 @@
                         <div class="flex items-center cursor-pointer"
                              @click="onErrorDetails">
                             <TestStatus :status="testcase.status" />
-                            <span v-if="testcase.status == 'failed' && testcase.failed_msg"
+                            <span v-if="testcase.status !== 'passed' && testcase.failed_msg"
                                   class="text-red-700 hover:text-red-600 font-semibold ml-3 inline-block whitespace-nowrap max-w-150 overflow-hidden text-ellipsis">
                                 {{ testcase.failed_msg }}
                             </span>
@@ -187,7 +187,7 @@ function formatSize(info: SampleData) {
 
 const { openDialog } = useDialog();
 const toast = useToast();
-const hide_diff = computed(() => testcase.value?.status == 'passed' || !baseline.value);
+const hide_diff = computed(() => testcase.value?.status == 'passed' || testcase.value?.status == 'new' || !baseline.value);
 const view_options = computed(() => {
     return [
         { label: 'Compare', value: 'compare', hide: hide_diff.value },
