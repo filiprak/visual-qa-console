@@ -25,7 +25,7 @@
         severity="warn"
     >
         <Icon name="times"> </Icon>
-        New
+        Reported
     </Tag>
     <Tag
         v-else

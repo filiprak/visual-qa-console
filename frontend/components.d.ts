@@ -24,6 +24,7 @@ declare module 'vue' {
     OverlayPanel: typeof import('primevue/overlaypanel')['default']
     Paginator: typeof import('primevue/paginator')['default']
     Popover: typeof import('primevue/popover')['default']
+    RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sample: typeof import('./src/components/Sample.vue')['default']

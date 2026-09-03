@@ -68,7 +68,7 @@
                         <div class="grow-1">Testcase name</div>
                         <div class="basis-[200px]">Status</div>
                         <div class="basis-[200px]">Last updated</div>
-                        <div class="basis-[200px]">Actions</div>
+                        <div class="basis-[400px]">Actions</div>
                     </template>
                     <template v-else>
                         <div class="grow-1 flex justify-between gap-3">
@@ -136,14 +136,20 @@
                                     fromNow(item.updated_at)
                                     }}</span>
                             </div>
-                            <div class="flex gap-2 justify-start items-start basis-[200px]">
+                            <div class="flex gap-2 justify-start items-start basis-[400px] opacity-0 group-hover:opacity-100">
                                 <LoadingButton v-if="item.status == 'failed'"
                                                size="small"
-                                               icon="eye"
+                                               append_icon="chevron-right"
                                                severity="secondary"
                                                :loading="accepting"
                                                @click.stop.prevent="onOpenTestcase(item)">
-                                    Review
+                                    Details
+                                </LoadingButton>
+                                <LoadingButton size="small"
+                                               severity="secondary"
+                                               :loading="accepting"
+                                               @click.stop.prevent="onSetTestcaseStatus(item)">
+                                    Set status
                                 </LoadingButton>
                                 <LoadingButton v-if="item.status == 'failed'"
                                                size="small"
@@ -215,6 +221,7 @@ import { useBatchCheckbox } from '../composables/useBatchCheckbox.ts';
 import { useDataView } from '../composables/useDataView.ts';
 import { truncateStr } from '../utils/func';
 import type { PopoverMethods } from 'primevue/popover';
+import { useSetStatus } from '../composables/useSetStatus.ts';
 
 const fallback_url = '/placeholder.svg';
 
@@ -250,6 +257,7 @@ const { selected,
 } = useBatchCheckbox(rows);
 const { openTestcase } = useTestcaseView();
 const { acceptTestcase, loading: accepting } = useReview();
+const { setTestcaseStatus, loading: setting_status } = useSetStatus();
 
 const tabs_opts = computed(() => {
     const details = pipeline.value?.details || {};
@@ -332,6 +340,10 @@ function groupTestcases(items: TestCase[]) {
 
 async function onAcceptTestcase(item: TestCase) {
     await acceptTestcase([item.id]);
+}
+
+async function onSetTestcaseStatus(item: TestCase) {
+    await setTestcaseStatus([item.id]);
 }
 
 async function load() {
