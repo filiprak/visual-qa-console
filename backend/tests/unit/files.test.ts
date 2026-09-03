@@ -117,7 +117,7 @@ describe('files service', () => {
         await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [1, 2],
             },
         });

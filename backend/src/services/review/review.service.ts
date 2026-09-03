@@ -30,7 +30,7 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                 .service('/api/v1/pipelines')
                 .get(testcase.pipeline_id, { transaction: params.transaction });
 
-            if (data.accepted) {
+            if (data.status == 'approved') {
                 if (!testcase.unique_key) {
                     throw new Error('Malformed testcase unique key');
                 }
@@ -58,6 +58,18 @@ export class ReviewService implements ServiceInterface<any, Partial<Review>> {
                     {
                         status: 'passed',
                         accepted_at: utcNow(),
+                        updated_at: utcNow(),
+                    },
+                    { transaction: params.transaction },
+                );
+            } else if (
+                data.status == 'new' ||
+                data.status == 'reported'
+            ) {
+                await this.app.service('/api/v1/testcases').patch(
+                    testcase.id,
+                    {
+                        status: data.status,
                         updated_at: utcNow(),
                     },
                     { transaction: params.transaction },

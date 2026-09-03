@@ -75,7 +75,7 @@ describe('review service', () => {
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [2, 9999],
             },
         });
@@ -163,7 +163,7 @@ describe('review service', () => {
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [2],
             },
         });
@@ -266,7 +266,7 @@ describe('review service', () => {
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 skip_baseline_update: true,
                 testcase_ids: [2],
             },
@@ -351,7 +351,7 @@ describe('review service', () => {
         const response = await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [1, 2],
             },
         });
@@ -470,7 +470,7 @@ describe('review service', () => {
         await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [2],
             },
         });
@@ -508,10 +508,104 @@ describe('review service', () => {
         await request('/api/v1/review', {
             method: 'POST',
             payload: {
-                accepted: true,
+                status: 'approved',
                 testcase_ids: [2],
             },
         });
+
+        const baselines2 = await request('/api/v1/baselines');
+        expect(baselines2.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "baseline_img": "https://example.com/forgot.png",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "group": "portal.apps.auth.desktop",
+                "id": 1,
+                "name": "forgot password email",
+                "pipeline_name": "my-pipeline",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|21:forgot password email",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+    });
+
+    it('allows to set reported status', async () => {
+        await login('reviewer');
+        await createSampleReport({ testcase_count: 2 });
+
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: {
+                status: 'approved',
+                testcase_ids: [2],
+            },
+        });
+
+        const baselines = await request('/api/v1/baselines');
+
+        expect(baselines.json).toMatchInlineSnapshot(
+            {
+                data: [
+                    {
+                        created_at: expectSqlTimestamp,
+                        updated_at: expectSqlTimestamp,
+                    },
+                ],
+            }, `
+          {
+            "data": [
+              {
+                "baseline_img": "https://example.com/forgot.png",
+                "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "group": "portal.apps.auth.desktop",
+                "id": 1,
+                "name": "forgot password email",
+                "pipeline_name": "my-pipeline",
+                "unique_key": "11:my-pipeline|24:portal.apps.auth.desktop|21:forgot password email",
+                "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+              },
+            ],
+            "limit": 30,
+            "skip": 0,
+            "total": 1,
+          }
+        `);
+
+        await request('/api/v1/review', {
+            method: 'POST',
+            payload: {
+                status: 'reported',
+                testcase_ids: [2],
+            },
+        });
+
+        const testcases = await request('/api/v1/testcases');
+        expect(testcases.json.data.map((i: any) => ({ status: i.status, id: i.id }))).toMatchInlineSnapshot(`
+          [
+            {
+              "id": 1,
+              "status": "passed",
+            },
+            {
+              "id": 2,
+              "status": "reported",
+            },
+          ]
+        `);
 
         const baselines2 = await request('/api/v1/baselines');
         expect(baselines2.json).toMatchInlineSnapshot(

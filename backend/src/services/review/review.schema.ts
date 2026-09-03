@@ -3,10 +3,9 @@ import { Type, type Static } from '@feathersjs/typebox';
 const schema = Type.Object(
     {
         status: Type.Union([
-            Type.Literal('passed'),
-            Type.Literal('failed'),
             Type.Literal('new'),
             Type.Literal('reported'),
+            Type.Literal('approved'),
         ]),
         skip_baseline_update: Type.Optional(Type.Boolean()),
         testcase_ids: Type.Array(Type.Number(), { maxItems: 200 }),
