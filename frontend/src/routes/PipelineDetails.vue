@@ -121,6 +121,7 @@
                              :key="item.id">
                             <div class="basis-10 flex items-center">
                                 <img :src="item.result_img || fallback_url"
+                                     loading="lazy"
                                      class="block size-10 object-contain bg-surface-200 dark:bg-surface-800"
                                      @mouseenter="showPreview($event, item)"
                                      @mouseleave="hidePreview" />
@@ -200,13 +201,26 @@
         </div>
         <AlignedPopover ref="testcase_popover"
                         placement="right">
-            <div class="mb-3">{{ hovered_testcase?.name }}</div>
+            <div class="mb-3 font-bold">{{ hovered_testcase?.group }} <span class="text-muted-color">/</span> <span class="text-muted-color font-normal">{{ hovered_testcase?.name }}</span></div>
+
             <div class="flex gap-3">
-                <img :src="hovered_testcase?.result_img"
-                     class="image-preview max-w-100 max-h-150" />
-                <img v-if="hovered_testcase?.diff_img"
-                     :src="hovered_testcase?.diff_img"
-                     class="image-preview max-w-100 max-h-150" />
+                <div v-if="hovered_testcase?.diff_img"
+                     class="flex flex-col gap-1">
+                    <div class="text-xs text-primary uppercase">Diff</div>
+                    <img :src="hovered_testcase.diff_img"
+                         class="image-preview max-w-100 max-h-150 outline-1 outline-surface-400" />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-xs text-primary uppercase">Result</div>
+                    <img :src="hovered_testcase?.result_img"
+                         class="image-preview max-w-100 max-h-150 outline-1 outline-surface-400" />
+                </div>
+                <div v-if="hovered_testcase?.diff_img && hovered_baseline_src"
+                     class="flex flex-col gap-1">
+                    <div class="text-xs text-primary uppercase">Baseline</div>
+                    <img :src="hovered_baseline_src"
+                         class="image-preview max-w-100 max-h-150 outline-1 outline-surface-400" />
+                </div>
             </div>
         </AlignedPopover>
     </div>
@@ -218,7 +232,7 @@ import Icon from '../components/Icon.vue';
 import Tag from 'primevue/tag';
 import { computed, nextTick, onBeforeMount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import type { Pipeline, TestCase } from '@/types';
+import type { Baseline, Pipeline, TestCase } from '@/types';
 import { api } from '../api';
 import { format, fromNow } from '../utils/dates.ts';
 import { useTestcaseView } from '../composables/useTestcaseView.ts';
@@ -283,10 +297,19 @@ const tabs_opts = computed(() => {
 
 const testcase_popover = ref<AlignedPopoverMethods>()
 const hovered_testcase = ref<TestCase>()
+const hovered_baseline = ref<Promise<Baseline | undefined>>()
+const hovered_baseline_src = ref<string>();
+
+watch(hovered_baseline, async (promise) => {
+    hovered_baseline_src.value = promise ? (await promise)?.baseline_img : undefined;
+})
 
 const showPreview = (event: MouseEvent, testcase?: TestCase) => {
-    if (testcase?.result_img ||testcase?.diff_img) {
+    if (testcase?.result_img || testcase?.diff_img) {
         hovered_testcase.value = testcase;
+        hovered_baseline.value = api.baselines.find({
+            query: { unique_key: testcase?.unique_key },
+        }).then(d => d.data.at(0));
         testcase_popover.value?.show(event);
     }
 }
@@ -294,6 +317,8 @@ const showPreview = (event: MouseEvent, testcase?: TestCase) => {
 const hidePreview = () => {
     testcase_popover.value?.hide();
     hovered_testcase.value = undefined;
+    hovered_baseline.value = undefined;
+    hovered_baseline_src.value = undefined;
 }
 
 function cancelBatch() {
