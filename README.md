@@ -96,6 +96,8 @@ curl -X POST http://localhost:8989/api/v1/report \
     "description": "Visual regression for UI components",
     "commit_sha": "abc1234",
     "branch_name": "master",
+    "shard_index": 1,
+    "max_shards": 3,
     "testcases": [
       {
         "name": "login flow",
@@ -116,6 +118,10 @@ curl -X POST http://localhost:8989/api/v1/report \
   }'
 ```
 Uploaded pipeline should be visible on pipelines list in the app.
+
+`shard_index` and `max_shards` are optional (but must be sent together). When tests are split into shards, each shard
+uploads its own report to the same pipeline (same `name`, `commit_sha` and `branch_name`) with its 1-based `shard_index`.
+The app counts distinct received shards and displays progress, e.g. `1/3 completed`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

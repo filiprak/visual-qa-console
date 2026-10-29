@@ -7,6 +7,8 @@ const schema = Type.Object(
         description: Type.Optional(Type.String({ maxLength: 1000 })),
         commit_sha: Type.String(),
         branch_name: Type.String(),
+        shard_index: Type.Optional(Type.Integer({ minimum: 1 })),
+        max_shards: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })),
         testcases: Type.Array(Type.Pick(testcaseSchema, ['name', 'status', 'failed_msg', 'group', 'diff_img', 'result_img']), {
             maxItems: 10000,
         }),
@@ -14,7 +16,7 @@ const schema = Type.Object(
     { additionalProperties: false },
 );
 
-export const dataSchema = Type.Pick(schema, ['name', 'description', 'commit_sha', 'branch_name', 'testcases']);
+export const dataSchema = Type.Pick(schema, ['name', 'description', 'commit_sha', 'branch_name', 'shard_index', 'max_shards', 'testcases']);
 export const publicSchema = schema;
 
 export type Report = Static<typeof publicSchema>;

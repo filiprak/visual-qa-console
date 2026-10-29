@@ -11,6 +11,8 @@ const sampleReport = () => ({
     // @ts-ignore
     commit_sha: process.argv[2] ?? generateShortSha(),
     branch_name: 'master',
+    shard_index: 1,
+    max_shards: 3,
     testcases: [
         {
             name: 'login flow',

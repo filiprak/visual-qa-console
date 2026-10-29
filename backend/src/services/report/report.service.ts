@@ -7,6 +7,7 @@ import { getValidateHooks } from '../../utils/hooks.js';
 import { utcNow } from '../../utils/dates.js';
 import { testcaseKey } from '../../utils/func.js';
 import type { KnexAdapterTransaction } from '@feathersjs/knex';
+import { errors } from '@feathersjs/errors';
 import { transactionHandler } from '../../hooks/transaction.hook.js';
 
 const ROUTE = '/api/v1/report';
@@ -52,6 +53,13 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
     async create(data: Report, params: Params & { transaction: KnexAdapterTransaction }) {
         let pipeline: Pipeline | undefined;
 
+        if ((data.shard_index === undefined) !== (data.max_shards === undefined)) {
+            throw new errors.BadRequest('shard_index and max_shards must be sent together');
+        }
+        if (data.shard_index !== undefined && data.max_shards !== undefined && data.shard_index > data.max_shards) {
+            throw new errors.BadRequest('shard_index cannot be greater than max_shards');
+        }
+
         const find_result = await this.app.service('/api/v1/pipelines').find({
             query: {
                 name: data.name,
@@ -67,6 +75,7 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
                     description: data.description ?? null,
                     commit_sha: data.commit_sha,
                     branch_name: data.branch_name,
+                    max_shards: data.max_shards ?? null,
                     created_at: utcNow(),
                     updated_at: utcNow(),
                 },
@@ -78,8 +87,16 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
                 pipeline.id,
                 {
                     ...(data.description !== undefined && { description: data.description }),
+                    ...(data.max_shards !== undefined && { max_shards: data.max_shards }),
                     updated_at: utcNow(),
                 },
+                { transaction: params.transaction },
+            );
+        }
+        if (data.shard_index !== undefined) {
+            await this.app.service('/api/v1/pipelines').addShard(
+                pipeline.id,
+                data.shard_index,
                 { transaction: params.transaction },
             );
         }

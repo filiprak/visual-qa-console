@@ -1,14 +1,35 @@
 import type { Application, HookContext } from '../../declarations.js';
 import { dataSchema, patchSchema, querySchema, type Pipeline } from './pipelines.schema.js';
 import { getValidateHooks } from '../../utils/hooks.js';
-import { KnexService } from '@feathersjs/knex';
+import { KnexService, type KnexAdapterParams } from '@feathersjs/knex';
 import { hooks, resolve, virtual } from '@feathersjs/schema';
 import { auth } from '../../hooks/auth.js';
+import { utcNow } from '../../utils/dates.js';
 
-export class PipelinesService extends KnexService<Pipeline> { }
+export class PipelinesService extends KnexService<Pipeline> {
+    async addShard(pipelineId: number, shardIndex: number, params?: KnexAdapterParams) {
+        return this.db(params)
+            .table('pipeline_shards')
+            .insert({
+                pipeline_id: pipelineId,
+                shard_index: shardIndex,
+                created_at: utcNow(),
+                updated_at: utcNow(),
+            })
+            .onConflict(['pipeline_id', 'shard_index'])
+            .merge(['updated_at']);
+    }
+}
 
 const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
     details: virtual(async (pipeline, context) => {
+        const shards = await context.service
+            .db(context.params)
+            .table('pipeline_shards')
+            .where('pipeline_id', pipeline.id)
+            .count({ count: '*' })
+            .first();
+
         const result = await context.service.db(context.params).client.raw(
             `
                 SELECT
@@ -36,6 +57,7 @@ const pipelineResolver = resolve<Pipeline, HookContext<PipelinesService>>({
 
         return {
             status: result.at(0)?.status || 'passed',
+            shards: Number(shards?.count ?? 0),
             groups: result.at(0)?.total_groups || 0,
             total: result.at(0)?.total_testcases || 0,
             passed: result.at(0)?.passed_testcases || 0,
@@ -52,6 +74,11 @@ const testcaseRemover = async (context: HookContext) => {
         await context.app
             .get('db')
             .table('testcases')
+            .where('pipeline_id', parseInt(context.arguments[0]))
+            .delete()
+        await context.app
+            .get('db')
+            .table('pipeline_shards')
             .where('pipeline_id', parseInt(context.arguments[0]))
             .delete()
     }

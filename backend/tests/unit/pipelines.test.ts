@@ -1,4 +1,5 @@
 import type { Application } from '../../src/declarations.js';
+import { db } from '../../src/db.js';
 import { createSampleReport } from '../seed.js';
 import { clearDb, expectSqlTimestamp, login, logout, request, setupServer, teardownServer } from '../utils.js';
 
@@ -62,10 +63,12 @@ describe('pipelines service', () => {
                   "new": 0,
                   "passed": 2,
                   "reported": 0,
+                  "shards": 0,
                   "status": "failed",
                   "total": 4,
                 },
                 "id": 1,
+                "max_shards": null,
                 "name": "my-pipeline",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               },
@@ -157,10 +160,12 @@ describe('pipelines service', () => {
                   "new": 0,
                   "passed": 3,
                   "reported": 0,
+                  "shards": 0,
                   "status": "passed",
                   "total": 4,
                 },
                 "id": 1,
+                "max_shards": null,
                 "name": "my-pipeline",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               },
@@ -248,10 +253,12 @@ describe('pipelines service', () => {
                   "new": 2,
                   "passed": 2,
                   "reported": 0,
+                  "shards": 0,
                   "status": "failed",
                   "total": 4,
                 },
                 "id": 1,
+                "max_shards": null,
                 "name": "my-pipeline",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               },
@@ -343,10 +350,12 @@ describe('pipelines service', () => {
                   "new": 0,
                   "passed": 3,
                   "reported": 1,
+                  "shards": 0,
                   "status": "failed",
                   "total": 4,
                 },
                 "id": 1,
+                "max_shards": null,
                 "name": "my-pipeline",
                 "updated_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
               },
@@ -417,6 +426,76 @@ describe('pipelines service', () => {
 
         await report('Updated description');
         expect((await request('/api/v1/pipelines/1')).json.description).toBe('Updated description');
+    });
+
+    it('counts received shards', async () => {
+        const report = (shard?: { shard_index: number; max_shards: number }) => request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                ...shard,
+                testcases: [],
+            },
+        });
+
+        expect((await report({ shard_index: 1, max_shards: 3 })).status).toBe(201);
+        let pipeline = (await request('/api/v1/pipelines/1')).json;
+        expect(pipeline.max_shards).toBe(3);
+        expect(pipeline.details.shards).toBe(1);
+
+        // re-uploaded shard is counted once
+        await report({ shard_index: 1, max_shards: 3 });
+        await report({ shard_index: 3, max_shards: 3 });
+        pipeline = (await request('/api/v1/pipelines/1')).json;
+        expect(pipeline.details.shards).toBe(2);
+
+        // report without shard info keeps shard state
+        await report();
+        pipeline = (await request('/api/v1/pipelines/1')).json;
+        expect(pipeline.max_shards).toBe(3);
+        expect(pipeline.details.shards).toBe(2);
+
+        await report({ shard_index: 2, max_shards: 3 });
+        pipeline = (await request('/api/v1/pipelines/1')).json;
+        expect(pipeline.details.shards).toBe(3);
+    });
+
+    it('rejects invalid shard info', async () => {
+        const report = (shard: Record<string, number>) => request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                ...shard,
+                testcases: [],
+            },
+        });
+
+        expect((await report({ shard_index: 1 })).status).toBe(400);
+        expect((await report({ max_shards: 3 })).status).toBe(400);
+        expect((await report({ shard_index: 4, max_shards: 3 })).status).toBe(400);
+        expect((await report({ shard_index: 0, max_shards: 3 })).status).toBe(400);
+        expect((await request('/api/v1/pipelines')).json.total).toBe(0);
+    });
+
+    it('removes shards with pipeline', async () => {
+        await request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                shard_index: 1,
+                max_shards: 2,
+                testcases: [],
+            },
+        });
+        await login('reviewer');
+        expect((await request('/api/v1/pipelines/1', { method: 'DELETE' })).status).toBe(200);
+        expect(await db.table('pipeline_shards').count({ count: '*' }).first()).toEqual({ count: 0 });
     });
 
 });

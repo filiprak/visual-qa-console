@@ -18,11 +18,21 @@ export async function up(knex: Knex) {
         table.text('description').nullable();
         table.string('commit_sha');
         table.string('branch_name');
+        table.integer('max_shards').nullable();
         table.timestamps(true, true);
 
         table.index(['commit_sha']);
         table.index(['branch_name']);
         table.index(['name', 'commit_sha', 'branch_name']);
+    });
+
+    await knex.schema.createTable('pipeline_shards', (table) => {
+        table.increments('id');
+        table.integer('pipeline_id');
+        table.integer('shard_index');
+        table.timestamps(true, true);
+
+        table.unique(['pipeline_id', 'shard_index']);
     });
 
     await knex.schema.createTable('testcases', (table) => {
@@ -71,6 +81,7 @@ export async function up(knex: Knex) {
 
 export async function down(knex: Knex) {
     await knex.schema.dropTable('pipelines');
+    await knex.schema.dropTable('pipeline_shards');
     await knex.schema.dropTable('testcases');
     await knex.schema.dropTable('baselines');
     await knex.schema.dropTable('users');

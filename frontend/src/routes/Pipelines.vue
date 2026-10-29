@@ -12,6 +12,7 @@
                 <div class="grow-1">Name</div>
                 <div class="basis-[200px]">Branch</div>
                 <div class="basis-[200px]">Commit SHA</div>
+                <div class="basis-[170px]">Shards</div>
                 <div class="basis-[300px]">Summary</div>
                 <div class="basis-[200px]">Created</div>
             </div>
@@ -55,6 +56,13 @@
                                 <Tag severity="warn">
                                     {{ item.commit_sha }}
                                 </Tag>
+                            </div>
+                            <div class="basis-[170px] pr-10">
+                                <ShardsProgress v-if="item.max_shards"
+                                                :received="item.details.shards"
+                                                :total="item.max_shards" />
+                                <span v-else
+                                      class="text-muted-color">-</span>
                             </div>
                             <div class="flex font-semibold flex-col justify-start items-start basis-[300px]">
                                 <span class="font-normal">{{ item.details.total }} (total)</span>
@@ -109,6 +117,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { api } from '../api';
 import { format, fromNow } from '../utils/dates.ts';
 import Icon from '../components/Icon.vue';
+import ShardsProgress from '../components/ShardsProgress.vue';
 import { useDataView } from '../composables/useDataView.ts';
 import type { Pipeline } from '@/types';
 

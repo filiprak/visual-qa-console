@@ -9,6 +9,12 @@
                 Commit <Tag severity="warn">{{ pipeline?.commit_sha }}</Tag>
                 on branch <span class="font-bold">{{ pipeline?.branch_name }}</span>
             </div>
+            <div v-if="pipeline?.max_shards"
+                 class="flex items-center gap-3 mb-6 max-w-[400px] text-muted-color">
+                Shards
+                <ShardsProgress :received="pipeline.details.shards"
+                                :total="pipeline.max_shards" />
+            </div>
             <div class="grid grid-cols-4 gap-3 mb-6">
                 <Panel header="Status">
                     <Tag v-if="pipeline?.details.status == 'passed'"
@@ -229,6 +235,7 @@
 import Panel from 'primevue/panel';
 import vTooltip from 'primevue/tooltip';
 import Icon from '../components/Icon.vue';
+import ShardsProgress from '../components/ShardsProgress.vue';
 import Tag from 'primevue/tag';
 import { computed, nextTick, onBeforeMount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
