@@ -4,6 +4,7 @@ const schema = Type.Object(
     {
         id: Type.Number(),
         name: Type.String(),
+        description: Type.Union([Type.String(), Type.Null()]),
         commit_sha: Type.String(),
         branch_name: Type.String(),
         details: Type.Object(
@@ -25,8 +26,8 @@ const schema = Type.Object(
     { additionalProperties: true },
 );
 
-export const dataSchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'updated_at', 'created_at']);
-export const patchSchema = Type.Partial(Type.Pick(schema, []));
+export const dataSchema = Type.Pick(schema, ['name', 'description', 'commit_sha', 'branch_name', 'updated_at', 'created_at']);
+export const patchSchema = Type.Partial(Type.Pick(schema, ['description']));
 export const querySchema = querySyntax(Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'created_at']));
 export const publicSchema = schema;
 

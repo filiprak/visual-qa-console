@@ -4,6 +4,7 @@ import { publicSchema as testcaseSchema } from '../testcases/testcases.schema.js
 const schema = Type.Object(
     {
         name: Type.String({ minLength: 3 }),
+        description: Type.Optional(Type.String({ maxLength: 1000 })),
         commit_sha: Type.String(),
         branch_name: Type.String(),
         testcases: Type.Array(Type.Pick(testcaseSchema, ['name', 'status', 'failed_msg', 'group', 'diff_img', 'result_img']), {
@@ -13,7 +14,7 @@ const schema = Type.Object(
     { additionalProperties: false },
 );
 
-export const dataSchema = Type.Pick(schema, ['name', 'commit_sha', 'branch_name', 'testcases']);
+export const dataSchema = Type.Pick(schema, ['name', 'description', 'commit_sha', 'branch_name', 'testcases']);
 export const publicSchema = schema;
 
 export type Report = Static<typeof publicSchema>;

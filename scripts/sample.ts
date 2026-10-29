@@ -7,6 +7,7 @@ const getMockImg = (id: number, type: string, w: number, h: number) =>
 
 const sampleReport = () => ({
     name: 'ui-components',
+    description: 'Visual regression for UI components',
     // @ts-ignore
     commit_sha: process.argv[2] ?? generateShortSha(),
     branch_name: 'master',

@@ -54,6 +54,7 @@ describe('pipelines service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 2,
@@ -148,6 +149,7 @@ describe('pipelines service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 1,
                   "failed": 0,
@@ -238,6 +240,7 @@ describe('pipelines service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -332,6 +335,7 @@ describe('pipelines service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -391,6 +395,28 @@ describe('pipelines service', () => {
 
         const response2 = await request('/api/v1/testcases');
         expect(response2.json.data).toHaveLength(4);
+    });
+
+    it('stores pipeline description and updates it on next report', async () => {
+        const report = (description?: string) => request('/api/v1/report', {
+            method: 'POST',
+            payload: {
+                name: 'my-pipeline',
+                ...(description !== undefined && { description }),
+                commit_sha: 'f7d93421',
+                branch_name: 'master',
+                testcases: [],
+            },
+        });
+
+        await report('Nightly visual regression');
+        expect((await request('/api/v1/pipelines/1')).json.description).toBe('Nightly visual regression');
+
+        await report();
+        expect((await request('/api/v1/pipelines/1')).json.description).toBe('Nightly visual regression');
+
+        await report('Updated description');
+        expect((await request('/api/v1/pipelines/1')).json.description).toBe('Updated description');
     });
 
 });

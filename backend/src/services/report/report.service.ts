@@ -64,6 +64,7 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
             pipeline = await this.app.service('/api/v1/pipelines').create(
                 {
                     name: data.name,
+                    description: data.description ?? null,
                     commit_sha: data.commit_sha,
                     branch_name: data.branch_name,
                     created_at: utcNow(),
@@ -76,6 +77,7 @@ export class ReportService implements ServiceInterface<any, Partial<Report>> {
             await this.app.service('/api/v1/pipelines').patch(
                 pipeline.id,
                 {
+                    ...(data.description !== undefined && { description: data.description }),
                     updated_at: utcNow(),
                 },
                 { transaction: params.transaction },

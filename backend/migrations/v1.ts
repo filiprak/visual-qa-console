@@ -15,6 +15,7 @@ export async function up(knex: Knex) {
     await knex.schema.createTable('pipelines', (table) => {
         table.increments('id');
         table.string('name');
+        table.text('description').nullable();
         table.string('commit_sha');
         table.string('branch_name');
         table.timestamps(true, true);

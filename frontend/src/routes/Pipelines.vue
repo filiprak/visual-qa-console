@@ -41,7 +41,13 @@
                                       class="text-red-600">
                                 </Icon>
                             </div>
-                            <div class="font-semibold grow-1 flex items-center gap-2">#{{ item.id }} {{ item.name }} <Tag v-if="isLatest(item)" severity="success" class="text-xs">latest run</Tag></div>
+                            <div class="grow-1 flex flex-col justify-start items-start">
+                                <div class="font-semibold flex items-center gap-2">#{{ item.id }} {{ item.name }} <Tag v-if="isLatest(item)" severity="success" class="text-xs">latest run</Tag></div>
+                                <span v-if="item.description"
+                                      class="text-xs text-muted-color mt-1">
+                                    {{ item.description }}
+                                </span>
+                            </div>
                             <div class="basis-[200px]">
                                 {{ item.branch_name }}
                             </div>

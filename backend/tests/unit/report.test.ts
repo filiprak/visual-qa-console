@@ -98,6 +98,7 @@ describe('report service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -224,6 +225,7 @@ describe('report service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -370,6 +372,7 @@ describe('report service', () => {
                 "branch_name": "master",
                 "commit_sha": "f7d93421",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -388,6 +391,7 @@ describe('report service', () => {
                 "branch_name": "master",
                 "commit_sha": "b6f87305",
                 "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+                "description": null,
                 "details": {
                   "approved": 0,
                   "failed": 0,
@@ -498,6 +502,7 @@ describe('report service', () => {
             "branch_name": "master",
             "commit_sha": "b6f87305",
             "created_at": StringMatching /\\^\\\\d\\{4\\}-\\\\d\\{2\\}-\\\\d\\{2\\} \\\\d\\{2\\}:\\\\d\\{2\\}:\\\\d\\{2\\}\\$/,
+            "description": null,
             "details": {
               "approved": 0,
               "failed": 0,

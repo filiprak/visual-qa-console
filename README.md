@@ -93,6 +93,7 @@ curl -X POST http://localhost:8989/api/v1/report \
   -H "Content-Type: application/json" \
   -d '{
     "name": "ui-components",
+    "description": "Visual regression for UI components",
     "commit_sha": "abc1234",
     "branch_name": "master",
     "testcases": [
